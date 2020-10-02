@@ -15,5 +15,5 @@ jobs:
         with:
           hosts: 'github@prohorovka.itgrco.com'
           privateKey: ${{ secrets.DEPLOY_ITG_KEY }}
-          command: /home/github/tb-stage/git-pull.sh
+          command: /usr/bin/ssh-agent bash -c 'ssh-add /root/.ssh/gh_deploy; cd /app/bundle; git pull origin main'
 
