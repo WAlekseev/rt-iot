@@ -13,7 +13,7 @@ jobs:
       - name: SSH Execute Commands
         uses: JimCronqvist/action-ssh@0.1.1
         with:
-          hosts: 'github_action@prohorovka.itgrco.com'
+          hosts: 'github@prohorovka.itgrco.com'
           privateKey: ${{ secrets.DEPLOY_ITG_KEY }}
           command: echo "yes" > /tmp/im_here
 
