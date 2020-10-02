@@ -7,8 +7,8 @@ on:
 
 jobs:
   deploy:
-  	name: Deploy on server
-	runs-on: alpine:latest
+    name: Deploy code on server
+    runs-on: ubuntu-latest
     steps:
       - name: SSH Execute Commands
         uses: JimCronqvist/action-ssh@0.1.1
