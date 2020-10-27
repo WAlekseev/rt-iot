@@ -251,100 +251,70 @@
 		_w.addEventListener ? _w.addEventListener("load", function() {document.body.addEventListener(_gaLtEvt, _gaLt, !1)}, !1)
 				: _w.attachEvent && _w.attachEvent("onload", function() {document.body.attachEvent("on" + _gaLtEvt, _gaLt)});
 	</script>
-	<!-- Google Tag Manager -->
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-567QDCQ');</script>
-	<!-- End Google Tag Manager -->
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-					(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		ga('create', 'UA-88383331-1', 'auto');
-		ga('send', 'pageview');
-	</script>
-	<!-- Start of HubSpot Embed Code -->
-	<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/4596551.js"></script>
-	<!-- End of HubSpot Embed Code -->
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-567QDCQ"
-				  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 <div id="cellophane" onclick="tb.toggleMenu()"></div>
+
 <header>
 	<a href="/" class="logo"></a>
-	<div id="githubButtonContainer">
-        <a class="github-button" href="https://github.com/thingsboard/thingsboard" data-show-count="true" aria-label="Star thingsboard/thingsboard on GitHub">Star</a>
-    </div>
-    <div class="nav-buttons nav-buttons-left" data-auto-burger="primary">
-        <a href="/installations/" class="button center-button" id="tryItNow" data-auto-burger-exclude>Try it now</a>
-        <!--a href="/docs/guides/" class="button center-button" id="guides" data-auto-burger-exclude>Guides</a-->
-        <!--a target="_blank" href="https://demo.thingsboard.io/signup" class="button center-button" id="liveDemo" data-auto-burger-exclude>Live demo</a-->
-    </div>
-    <div class="nav-buttons nav-buttons-right" data-auto-burger="primary">
-        <div class="nav-items">
-            <div class="nav-item-container">
-                <a href="javascript:void(0);" class="nav-item" id="solutions" onclick="tb.openMenu('solutionsNav', 'solutions')" data-auto-burger-exclude>Solutions</a>
-            </div>
-            <div class="nav-item-container">
-                <a href="javascript:void(0);" class="nav-item" id="customers" onclick="tb.openMenu('customersNav', 'customers')" data-auto-burger-exclude>Customers</a>
-            </div>
-            <div class="nav-item-container">
-                <a href="javascript:void(0);" class="nav-item" id="use_cases" onclick="tb.openMenu('useCasesNav', 'use_cases')" data-auto-burger-exclude>Use Cases</a>
-            </div>
-            <div class="nav-item-container">
-                <a href="javascript:void(0);" class="nav-item" id="partners_menu" onclick="tb.openMenu('partnersNav', 'partners_menu')" data-auto-burger-exclude>Partners</a>
-            </div>
-            <div class="nav-item-container">
-                <a href="javascript:void(0);" class="nav-item" id="about_us" onclick="tb.openMenu('aboutUsNav', 'about_us')" data-auto-burger-exclude>About Us</a>
-            </div>
-        </div>
-        <a href="/pricing/" class="button center-button" id="viewPricing" data-auto-burger-exclude>Pricing</a>
-        <a href="/docs/" class="button center-button" id="viewDocs" data-auto-burger-exclude>Docs</a>
-        <a href="/docs/guides/" class="button center-button" id="guides" data-auto-burger-exclude>Guides</a>
+	
+	<div class="nav-buttons nav-buttons-right" data-auto-burger="primary">
+				<div class="nav-items">
+						<div class="nav-item-container">
+								<a href="javascript:void(0);" class="nav-item" id="solutions" onclick="tb.openMenu('solutionsNav', 'solutions')" data-auto-burger-exclude>Решения</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="javascript:void(0);" class="nav-item" id="customers" onclick="tb.openMenu('customersNav', 'customers')" data-auto-burger-exclude>Заказчики</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="javascript:void(0);" class="nav-item" id="use_cases" onclick="tb.openMenu('useCasesNav', 'use_cases')" data-auto-burger-exclude>Сценарии</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="javascript:void(0);" class="nav-item" id="partners_menu" onclick="tb.openMenu('partnersNav', 'partners_menu')" data-auto-burger-exclude>Партнеры</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="javascript:void(0);" class="nav-item" id="about_us" onclick="tb.openMenu('aboutUsNav', 'about_us')" data-auto-burger-exclude>Платформа</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="/pricing/" class="nav-item" id="viewPricing" data-auto-burger-exclude>Стоимость</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="/docs/" class="nav-item" id="viewDocs" data-auto-burger-exclude>Документация</a>
+						</div>
+						<div class="nav-item-container">
+								<a href="/docs/guides/" class="nav-item" id="guides" data-auto-burger-exclude>Руководства</a>
+						</div>
+				</div>
 		<button id="hamburger" onclick="tb.toggleMenu()" data-auto-burger-exclude><div></div></button>
 	</div>
 
 	<nav id="mainNav">
 		<main id="headNav" data-auto-burger="primary">
 			<div class="nav-box">
-				<h3><a href="/docs/getting-started-guides/helloworld/">Get Started</a></h3>
+				<h3><a href="/docs/getting-started-guides/helloworld/">Введение</a></h3>
 			</div>
 			<!--div class="nav-box">
 				<h3><a href="/docs/">Documentation</a></h3>
 			</div-->
             <div class="nav-box">
-                <h3><a href="/docs/guides/">Guides</a></h3>
+                <h3><a href="/docs/guides/">Руководства</a></h3>
             </div>
 			<div class="nav-box">
-				<h3><a href="/iot-use-cases/">Use cases</a></h3>
+				<h3><a href="/iot-use-cases/">Варианты использования</a></h3>
 			</div>
 			<div class="nav-box">
-				<h3><a href="http://blog.thingsboard.io/">Blog</a></h3>
+				<h3><a href="http://blog.thingsboard.io/">Блог</a></h3>
 			</div>
 			<div class="nav-box">
-				<h3><a href="/docs/services/">Services</a></h3>
+				<h3><a href="/docs/services/">Сервисы</a></h3>
 			</div>
 			<div class="nav-box">
-				<h3><a href="/docs/contact-us/">Contact us</a></h3>
+				<h3><a href="/docs/contact-us/">Контакты</a></h3>
 			</div>
 		</main>
 		<main data-auto-burger="primary">
 			<div class="center">
 				<div class="social">
-					<a href="https://twitter.com/thingsboard" class="twitter"><span>Twitter</span></a>
-					<a href="https://github.com/thingsboard/thingsboard" class="github"><span>Github</span></a>
-					<a href="https://gitter.im/thingsboard/chat" class="gitter"><span>Gitter</span></a>
-					<a href="http://stackoverflow.com/questions/tagged/thingsboard" class="stack-overflow"><span>Stack Overflow</span></a>
-					<a href="https://groups.google.com/forum/#!forum/thingsboard" class="mailing-list"><span>Mailing List</span></a>
-					<a href="https://www.youtube.com/thingsboard" class="youtube"><span>YouTube Channel</span></a>
-					<a href="https://www.facebook.com/thingsboard" class="facebook"><span>Facebook Page</span></a>
 				</div>
 			</div>
 			<div class="clear" style="clear: both"></div>
@@ -353,43 +323,43 @@
 	<nav id="solutionsNav" class="nav-menu">
 		<main data-auto-burger="primary">
 			<div class="nav-box">
-				<img src="/images/head-solutions.svg">
+				<img src="/images/rtk-head-solutions2.svg">
 			</div>
 			<div class="nav-box">
 				<ul>
 					<a href="/products/" target="_self">
-						<li><strong>Products</strong></li>
+						<li><strong>Продукты</strong></li>
 					</a>
 					<a href="/docs/getting-started-guides/what-is-thingsboard/" target="_self">
-						<li><span>ThingsBoard Community Edition</span></li>
+						<li><span>Открытое решение</span></li>
 					</a>
 					<a href="/products/thingsboard-pe/" target="_self">
-						<li><span>ThingsBoard Professional Edition</span></li>
+						<li><span>Профессиональное решение</span></li>
 					</a>
 					<a href="/docs/iot-gateway/what-is-iot-gateway/" target="_self">
-						<li><span>ThingsBoard IoT Gateway</span></li>
+						<li><span>IoT шлюз</span></li>
 					</a>
 					<a href="/products/license-server/" target="_self">
-						<li><span>ThingsBoard License Server</span></li>
+						<li><span>Сервер лицензий</span></li>
 					</a>
 					<a href="/products/trendz/" target="_self">
-						<li><span>ThingsBoard Trendz Analytics</span></li>
+						<li><span>Аналитика</span></li>
 					</a>
 				</ul>
 			</div>
 			<div class="nav-box">
 				<ul>
 					<a href="/docs/services/" target="_self">
-						<li><strong>Services</strong></li>
+						<li><strong>Сервисы</strong></li>
 					</a>
 					<a href="/docs/services/support/" target="_self">
-						<li><span>Support</span></li>
+						<li><span>Поддержка</span></li>
 					</a>
 					<a href="/docs/services/trainings/" target="_self">
-						<li><span>Trainings</span></li>
+						<li><span>Обучение</span></li>
 					</a>
 					<a href="/docs/services/consulting/" target="_self">
-						<li><span>Professional services</span></li>
+						<li><span>Разработка</span></li>
 					</a>
 				</ul>
 			</div>
@@ -405,25 +375,25 @@
 			<div class="nav-box">
 				<ul>
 					<a href="/industries/" target="_self">
-						<li><strong>Industries</strong></li>
+						<li><strong>Промышленность</strong></li>
 					</a>
 					<a href="/industries/smart-energy/" target="_self">
-						<li><span>Smart Energy</span></li>
+						<li><span>Электроснабжение</span></li>
 					</a>
 					<a href="/industries/agriculture/" target="_self">
-						<li><span>Agriculture</span></li>
+						<li><span>Сельское хозяйство</span></li>
 					</a>
 					<a href="/industries/smart-buildings/" target="_self">
-						<li><span>Smart Buildings</span></li>
+						<li><span>Умные здания</span></li>
 					</a>
 					<a href="/industries/smart-city/" target="_self">
-						<li><span>Smart City</span></li>
+						<li><span>Умные города</span></li>
 					</a>
 					<a href="/industries/telecom/" target="_self">
-						<li><span>Telecom</span></li>
+						<li><span>Операторы связи</span></li>
 					</a>
 					<a href="/industries/industry40/" target="_self">
-						<li><span>Industry 4.0</span></li>
+						<li><span>Индустрия 4.0</span></li>
 					</a>
 				</ul>
 			</div>
@@ -439,19 +409,19 @@
 			<div class="nav-box">
 				<ul>
 					<a href="/iot-use-cases/" target="_self">
-						<li><strong>IoT use cases</strong></li>
+						<li><strong>Варианты использования</strong></li>
 					</a>
 					<a href="/smart-metering/" target="_self">
-						<li><span>Smart Metering</span></li>
+						<li><span>Интеллектуальный счётчик</span></li>
 					</a>
 					<a href="/smart-energy/" target="_self">
-						<li><span>Smart Energy</span></li>
+						<li><span>Умная энергетика</span></li>
 					</a>
 					<a href="/smart-farming/" target="_self">
-						<li><span>Smart Farming</span></li>
+						<li><span>Сельское хозяйство</span></li>
 					</a>
 					<a href="/fleet-tracking/" target="_self">
-						<li><span>Fleet Tracking</span></li>
+						<li><span>Логистика</span></li>
 					</a>
 				</ul>
 			</div>
@@ -467,10 +437,10 @@
             <div class="nav-box">
                 <ul>
                     <a href="/partners/hardware/" target="_self">
-                        <li><strong>Partners</strong></li>
+                        <li><strong>Участники</strong></li>
                     </a>
                     <a href="/partners/hardware/" target="_self">
-                        <li><span>Hardware partners</span></li>
+                        <li><span>Разработчики аппаратуры</span></li>
                     </a>
                 </ul>
             </div>
@@ -486,16 +456,16 @@
 			<div class="nav-box">
 				<ul>
 					<a href="/company/" target="_self">
-						<li><strong>Our Company</strong></li>
+						<li><strong>О компании</strong></li>
 					</a>
 					<a href="/docs/contact-us/" target="_self">
-						<li><span>Contact Us</span></li>
+						<li><span>Контакты</span></li>
 					</a>
 					<a href="/mediakit/" target="_self">
-						<li><span>Media Kit</span></li>
+						<li><span>Медиа ресурсы</span></li>
 					</a>
 					<a href="https://blog.thingsboard.io/">
-						<li><span>Blog</span></li>
+						<li><span>Блог платформы</span></li>
 					</a>
 				</ul>
 			</div>
