@@ -13,7 +13,7 @@
 	<meta name="twitter:description" content="{{ description }}"/>
 	{% endif %}
 	{% if !page.no_canonical %}<link rel="canonical" href="https://thingsboard.io{{page.url}}" />{% endif %}
-	<link rel="shortcut icon" type="image/png" href="/images/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="/images/favicon.ico">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet">
@@ -200,276 +200,67 @@
 		}
 
 	</script>
-	<script type="text/javascript">
-		function _gaLt(event) {
-			/* If GA is blocked or not loaded, or not main|middle|touch click then don't track */
-			if (!ga.hasOwnProperty("loaded") || ga.loaded != true || (event.which != 1 && event.which != 2)) {
-				return;
-			}
-			var el = event.srcElement || event.target;
-
-			while (el && (typeof el.tagName == 'undefined' || el.tagName.toLowerCase() != 'a' || !el.href)) {
-				el = el.parentNode;
-			}
-			if (el && el.href) {
-				var link = el.href;
-				if ((link.indexOf(location.host) == -1 || link.indexOf('.' + location.host) > 0) && !link.match(/^javascript\:/i)) {
-					var target = (el.target && !el.target.match(/^_(self|parent|top)$/i)) ? el.target : false;
-					if (event.ctrlKey || event.shiftKey || event.metaKey || event.which == 2) {
-						target = "_blank";
-					}
-
-					var hbrun = false; // tracker has not yet run
-					var hitBack = function() {
-						if (hbrun) return;
-						hbrun = true;
-						window.location.href = link;
-					};
-
-					if (target) {
-						ga(
-								"send", "event", "Outgoing Links", link,
-								document.location.pathname + document.location.search
-						);
-					} else {
-						event.preventDefault ? event.preventDefault() : event.returnValue = !1;
-						ga(
-								"send", "event", "Outgoing Links", link,
-								document.location.pathname + document.location.search, {
-									"hitCallback": hitBack
-								}
-						);
-
-						setTimeout(hitBack, 1000);
-					}
-				}
-			}
-		}
-
-		var _w = window;
-		var _gaLtEvt = ("ontouchstart" in _w) ? "click" : "mousedown";
-		_w.addEventListener ? _w.addEventListener("load", function() {document.body.addEventListener(_gaLtEvt, _gaLt, !1)}, !1)
-				: _w.attachEvent && _w.attachEvent("onload", function() {document.body.attachEvent("on" + _gaLtEvt, _gaLt)});
-	</script>
 </head>
 <body>
 <div id="cellophane" onclick="tb.toggleMenu()"></div>
 
-<header>
-	<a href="/" class="logo"></a>
-	
-	<div class="nav-buttons nav-buttons-right" data-auto-burger="primary">
-				<div class="nav-items">
-						<div class="nav-item-container">
-								<a href="javascript:void(0);" class="nav-item" id="solutions" onclick="tb.openMenu('solutionsNav', 'solutions')" data-auto-burger-exclude>Решения</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="javascript:void(0);" class="nav-item" id="customers" onclick="tb.openMenu('customersNav', 'customers')" data-auto-burger-exclude>Заказчики</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="javascript:void(0);" class="nav-item" id="use_cases" onclick="tb.openMenu('useCasesNav', 'use_cases')" data-auto-burger-exclude>Сценарии</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="javascript:void(0);" class="nav-item" id="partners_menu" onclick="tb.openMenu('partnersNav', 'partners_menu')" data-auto-burger-exclude>Партнеры</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="javascript:void(0);" class="nav-item" id="about_us" onclick="tb.openMenu('aboutUsNav', 'about_us')" data-auto-burger-exclude>Платформа</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="/pricing/" class="nav-item" id="viewPricing" data-auto-burger-exclude>Стоимость</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="/docs/" class="nav-item" id="viewDocs" data-auto-burger-exclude>Документация</a>
-						</div>
-						<div class="nav-item-container">
-								<a href="/docs/guides/" class="nav-item" id="guides" data-auto-burger-exclude>Руководства</a>
-						</div>
+<header id="rt-menu-header-fc">
+	<div class="p-devider">
+		<div class="p-row-1st-canvas">
+			<div class="p-row-1st-spacer">
+				<div class="p-row-1st-fc">
+					<div class="p-top-menu-container">
+						<nav class="p-top-menu-row-items-fc">
+							<nav class="p-top-menu-left-i">
+								<div class="p-top-menu-items-logo">
+									<a href="/" class="logo"></a>
+								</div>
+							</nav>
+							<nav class="p-top-menu-center-i">
+								<div class="p-top-menu-left-fc">
+									<div>
+										<a href="/" class="p-top-menu-link-item"><span>Для меня</span></a>
+										<a href="/" class="p-top-menu-link-item"><span>Для бизнеса</span></a>
+										<a href="/" class="p-top-menu-link-item p-top-menu-link-item-active"><span>Для операторов</span></a>
+										<a href="/" class="p-top-menu-link-item"><span>Для инвесторов</span></a>
+									</div>
+								</div>
+							</nav>
+							<nav class="p-top-menu-right-i">
+								<div class="p-top-menu-right">
+									<a class="p-top-menu-right-geo-link">
+										<svg width="12" height="12" viewBox="0 0 12 12"><path d="M11.9609 0.74932L7.59493 11.6535C7.55268 11.7612 7.47741 11.8526 7.37996 11.9146C7.2825 11.9767 7.16789 12.0062 7.05262 11.9989C6.93734 11.9916 6.82735 11.9479 6.73847 11.8741C6.64959 11.8002 6.58641 11.7001 6.55801 11.588L5.33554 6.67126L0.411585 5.4352C0.299625 5.40678 0.199565 5.34354 0.125795 5.25457C0.0520255 5.1656 0.00836547 5.05549 0.00108547 4.9401C-0.00619453 4.82471 0.0232855 4.70998 0.0852755 4.61242C0.147275 4.51487 0.238595 4.43953 0.346095 4.39723L11.2514 0.0391198C11.3506 -0.000620276 11.4593 -0.0103403 11.5639 0.0111397C11.6686 0.0326298 11.7646 0.0843898 11.8402 0.16001C11.9157 0.23562 11.9674 0.33177 11.9889 0.43652C12.0103 0.54128 12.0006 0.65004 11.9609 0.74932Z" class=""></path></svg>
+										<span class="p-top-menu-link-item">Москва</span>
+									</a>
+								</div>
+							</nav>
+						</nav>
+					</div>
 				</div>
-		<button id="hamburger" onclick="tb.toggleMenu()" data-auto-burger-exclude><div></div></button>
+			</div>
+		</div>
+		<div class="p-row-2nd-canvas">
+			<div class="p-row-2nd-spacer">
+				<div class="p-row-2nd-fc">
+					<nav class="p-top-menu-tabs-parts-fc">
+						<div class="p-top-menu-tabs-left">
+							<div class="p-top-menu-tab-item-wrapper-fc">
+								<a href="/" class="p-top-menu-tab">IoT платформа</a>
+								<a href="/" class="p-top-menu-tab">Голосовые услуги</a>
+								<a href="/" class="p-top-menu-tab">Услуги дата</a>
+								<a href="/" class="p-top-menu-tab">Инфраструктура Ростелеком</a>
+								<a href="/" class="p-top-menu-tab">Предложения для сотрудничества</a>
+							</div>
+						</div>
+						<div class="p-top-menu-tabs-right">
+							<a href="/" class="p-top-menu-tab-cablink">
+								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.875 2.88954C7.875 3.88672 7.03552 4.6951 6 4.6951C4.96448 4.6951 4.125 3.88672 4.125 2.88954C4.125 1.89236 4.96448 1.08398 6 1.08398C7.03552 1.08398 7.875 1.89236 7.875 2.88954ZM9 2.88889C9 4.48438 7.65683 5.77778 6 5.77778C4.34314 5.77778 3 4.48438 3 2.88889C3 1.2934 4.34314 0 6 0C7.65683 0 9 1.2934 9 2.88889ZM1.125 12.9575C1.125 12.9717 1.12507 12.9858 1.12523 13H0.00018L0 12.9575C0 9.79001 2.71066 7.22222 6 7.22222C9.28935 7.22222 12 9.79001 12 12.9575L11.9998 13H10.8748C10.8749 12.9858 10.875 12.9717 10.875 12.9575C10.875 10.3987 8.67885 8.30556 6 8.30556C3.32115 8.30556 1.125 10.3987 1.125 12.9575Z" fill="#101828"></path></svg>
+								<span class="p-top-menu-tab-cablink-item">Кабинет оператора</span>
+							</a>
+						</div>							
+					</nav>
+				</div>
+			</div>
+		</div>
 	</div>
-
-	<nav id="mainNav">
-		<main id="headNav" data-auto-burger="primary">
-			<div class="nav-box">
-				<h3><a href="/docs/getting-started-guides/helloworld/">Введение</a></h3>
-			</div>
-			<!--div class="nav-box">
-				<h3><a href="/docs/">Documentation</a></h3>
-			</div-->
-            <div class="nav-box">
-                <h3><a href="/docs/guides/">Руководства</a></h3>
-            </div>
-			<div class="nav-box">
-				<h3><a href="/iot-use-cases/">Варианты использования</a></h3>
-			</div>
-			<div class="nav-box">
-				<h3><a href="http://blog.thingsboard.io/">Блог</a></h3>
-			</div>
-			<div class="nav-box">
-				<h3><a href="/docs/services/">Сервисы</a></h3>
-			</div>
-			<div class="nav-box">
-				<h3><a href="/docs/contact-us/">Контакты</a></h3>
-			</div>
-		</main>
-		<main data-auto-burger="primary">
-			<div class="center">
-				<div class="social">
-				</div>
-			</div>
-			<div class="clear" style="clear: both"></div>
-		</main>
-	</nav>
-	<nav id="solutionsNav" class="nav-menu">
-		<main data-auto-burger="primary">
-			<div class="nav-box">
-				<img src="/images/rtk-head-solutions2.svg">
-			</div>
-			<div class="nav-box">
-				<ul>
-					<a href="/products/" target="_self">
-						<li><strong>Продукты</strong></li>
-					</a>
-					<a href="/docs/getting-started-guides/what-is-thingsboard/" target="_self">
-						<li><span>Открытое решение</span></li>
-					</a>
-					<a href="/products/thingsboard-pe/" target="_self">
-						<li><span>Профессиональное решение</span></li>
-					</a>
-					<a href="/docs/iot-gateway/what-is-iot-gateway/" target="_self">
-						<li><span>IoT шлюз</span></li>
-					</a>
-					<a href="/products/license-server/" target="_self">
-						<li><span>Сервер лицензий</span></li>
-					</a>
-					<a href="/products/trendz/" target="_self">
-						<li><span>Аналитика</span></li>
-					</a>
-				</ul>
-			</div>
-			<div class="nav-box">
-				<ul>
-					<a href="/docs/services/" target="_self">
-						<li><strong>Сервисы</strong></li>
-					</a>
-					<a href="/docs/services/support/" target="_self">
-						<li><span>Поддержка</span></li>
-					</a>
-					<a href="/docs/services/trainings/" target="_self">
-						<li><span>Обучение</span></li>
-					</a>
-					<a href="/docs/services/consulting/" target="_self">
-						<li><span>Разработка</span></li>
-					</a>
-				</ul>
-			</div>
-		</main>
-	</nav>
-	<nav id="customersNav" class="nav-menu">
-		<main data-auto-burger="primary">
-			<div class="nav-box">
-				<img src="/images/head-customers.svg">
-			</div>
-			<div class="nav-box">
-			</div>
-			<div class="nav-box">
-				<ul>
-					<a href="/industries/" target="_self">
-						<li><strong>Промышленность</strong></li>
-					</a>
-					<a href="/industries/smart-energy/" target="_self">
-						<li><span>Электроснабжение</span></li>
-					</a>
-					<a href="/industries/agriculture/" target="_self">
-						<li><span>Сельское хозяйство</span></li>
-					</a>
-					<a href="/industries/smart-buildings/" target="_self">
-						<li><span>Умные здания</span></li>
-					</a>
-					<a href="/industries/smart-city/" target="_self">
-						<li><span>Умные города</span></li>
-					</a>
-					<a href="/industries/telecom/" target="_self">
-						<li><span>Операторы связи</span></li>
-					</a>
-					<a href="/industries/industry40/" target="_self">
-						<li><span>Индустрия 4.0</span></li>
-					</a>
-				</ul>
-			</div>
-		</main>
-	</nav>
-	<nav id="useCasesNav" class="nav-menu">
-		<main data-auto-burger="primary">
-			<div class="nav-box">
-				<img src="/images/head-use-cases.svg">
-			</div>
-			<div class="nav-box">
-			</div>
-			<div class="nav-box">
-				<ul>
-					<a href="/iot-use-cases/" target="_self">
-						<li><strong>Варианты использования</strong></li>
-					</a>
-					<a href="/smart-metering/" target="_self">
-						<li><span>Интеллектуальный счётчик</span></li>
-					</a>
-					<a href="/smart-energy/" target="_self">
-						<li><span>Умная энергетика</span></li>
-					</a>
-					<a href="/smart-farming/" target="_self">
-						<li><span>Сельское хозяйство</span></li>
-					</a>
-					<a href="/fleet-tracking/" target="_self">
-						<li><span>Логистика</span></li>
-					</a>
-				</ul>
-			</div>
-		</main>
-	</nav>
-    <nav id="partnersNav" class="nav-menu">
-        <main data-auto-burger="primary">
-            <div class="nav-box">
-                <img src="/images/head-partners.svg">
-            </div>
-            <div class="nav-box">
-            </div>
-            <div class="nav-box">
-                <ul>
-                    <a href="/partners/hardware/" target="_self">
-                        <li><strong>Участники</strong></li>
-                    </a>
-                    <a href="/partners/hardware/" target="_self">
-                        <li><span>Разработчики аппаратуры</span></li>
-                    </a>
-                </ul>
-            </div>
-        </main>
-    </nav>
-	<nav id="aboutUsNav" class="nav-menu">
-		<main data-auto-burger="primary">
-			<div class="nav-box">
-				<img src="/images/head-about-us.svg">
-			</div>
-			<div class="nav-box">
-			</div>
-			<div class="nav-box">
-				<ul>
-					<a href="/company/" target="_self">
-						<li><strong>О компании</strong></li>
-					</a>
-					<a href="/docs/contact-us/" target="_self">
-						<li><span>Контакты</span></li>
-					</a>
-					<a href="/mediakit/" target="_self">
-						<li><span>Медиа ресурсы</span></li>
-					</a>
-					<a href="https://blog.thingsboard.io/">
-						<li><span>Блог платформы</span></li>
-					</a>
-				</ul>
-			</div>
-
-		</main>
-	</nav>
 </header>

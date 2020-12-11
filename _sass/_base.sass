@@ -67,9 +67,15 @@ $vendor-strip-font-size: 16px
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//*
+//	border: red solid 1px
+
+*
+	font-family: RT Fonts
+
 body
 	background-color: white
-	line-height: 1.32
+	line-height: 1.5
 
 section
 	position: relative
@@ -82,12 +88,16 @@ section, header, footer
 		display: block
 
 p
+	font-family: RT Fonts
 	font-size: 14px
 	font-weight: 400
 	margin: 0
 
+a
+	font-family: RT Fonts
 
 .button
+	font-family: RT Fonts
 	display: inline-block
 	border-radius: 3px
 	padding: 0 10px
@@ -117,6 +127,7 @@ p
 
 .nav-item
 	text-transform: uppercase
+	font-family: RT Fonts
 	color: #000000
 	padding: 15px 6px
 	font-size: 16px
@@ -152,44 +163,270 @@ p
 
 
 // HEADER
-header
-	position: fixed
-	top: 0
-	left: 0
-	width: 100%
-	z-index: 8888
+//header
+	//position: fixed
+	//top: 0
+	//left: 0
+	//width: 100%
+	//z-index: 8888
 	//background-image: url(/images/texture.png)
 	//background-color: $dark-grey
 	//opacity: 0.95
 	//background-color: transparent
 	//box-shadow: 0 0 0 transparent
 	//box-shadow: 0 1px 2px $medium-grey
-	overflow: hidden
-	transition: 0.3s
-	text-align: center
-	background-color: #fff
-	color: #000000
-	&::after
-		transition: 0.3s
-		content: ""
+	//overflow: hidden
+	//transition: 0.3s
+	//text-align: center
+	//background-color: #fff
+	//color: #000000
+	//&::after
+	//	transition: 0.3s
+	//	content: ""
 //		background: $dark-grey url(/images/texture.png)
-		opacity: 0.95
-		top: 0
-		left: 0
-		bottom: 0
-		right: 0
+	//	opacity: 0.95
+	//	top: 0
+	//	left: 0
+	//	bottom: 0
+	//	right: 0
+	//	position: absolute
+	//	z-index: -1
+
+#rt-menu-header-fc
+	background: #fff
+	display: flex
+	flex-wrap: nowrap
+	flex-direction: column
+	margin: 0 auto
+	max-width: 100%
+	width: 100%
+	position: absolute
+	z-index: 100
+
+.p-devider 
+	box-shadow: 0px 0px 5px rgba(16, 24, 40, 0.2)
+	font-size: 16px
+	min-height: 100%
+	position: relative
+	width: 100%
+	z-index: 1000
+
+.p-row-1st-spacer, .p-row-2nd-spacer
+	width: 100%
+	max-width: 1600px
+	margin-left: auto
+	margin-right: auto
+	padding-left: 70px
+	padding-right: 70px
+	transition-timing-function: ease-in-out
+	transition-duration: 3s
+	transition-property: opacity,visibility
+
+.p-row-1st-canvas
+	width: 100%
+	border-bottom: 1px solid rgba(16, 24, 40, 0.1)
+
+.p-row-1st-fc
+	min-height: 30px
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	background: #fff
+	color: #575D68
+	//border-bottom: 1px solid rgba(16, 24, 40, 0.1)
+	width: 100%
+
+.p-top-menu-fc 
+	display: flex
+	align-items: flex-end
+	width: 100%
+
+.p-top-menu-container 
+	width: 100%
+	max-width: 1600px
+	margin-left: auto
+	margin-right: auto
+	//padding-left: 70px
+	//padding-right: 70px
+	transition-timing-function: ease-in-out
+	transition-duration: 3s
+	transition-property: opacity,visibility
+
+.p-top-menu-row-items-fc
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	justify-content: left
+	align-items: flex-end
+	padding-bottom: 11px
+	padding-top: 8px
+	position: relative
+
+.p-top-menu-items-logo
+	margin-right: 27px
+
+.p-top-menu-left-fc
+	font-size: 16px
+	display: flex
+	align-items: flex-end
+	position: relative
+	margin-bottom: -2px
+
+.p-top-menu-link-item
+	color: rgba(16, 24, 40, 0.7)
+	font-family: RT Fonts
+	font-size: 14px
+	margin-left: 14px
+	//padding: 0 5px
+	position: relative
+	text-decoration: none
+	user-select: 'none'
+	white-space: nowrap
+	display: inline
+	&:hover
+		text-decoration: none !important
+		color: #70f
+
+.p-top-menu-link-item-active
+	&:after
+		content: ""
+		display: block
+		background: #70f
 		position: absolute
-		z-index: -1
+		width: 100%
+		height: 2px
+		top: 29px
+		left: 0
+
+.p-top-menu-row-tab-items-fc
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	justify-content: left
+	align-items: flex-end
+	padding-bottom: 11px
+	padding-top: 8px
+	position: relative
+
+.p-top-menu-right
+	display: flex
+	align-items: flex-end
+
+.p-top-menu-right-i
+	margin-left: auto
+
+.p-top-menu-right-geo-link
+	cursor: pointer
+	display: inline-flex
+	align-items: center
+	vertical-align: middle
+
+.p-row-2nd-canvas
+	width: 100%	
+
+.p-row-2nd-fc
+	min-height: 60px
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	background: #fff
+	color: #575D68
+	//border-bottom: 1px solid rgba(16, 24, 40, 0.1)
+	width: 100%
+	align-items: center
+
+.p-top-menu-tabs-parts-fc
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	justify-content: left
+	align-items: flex-end
+	position: relative
+	width: 100%
+
+.p-top-menu-tabs-items-fc
+	display: flex
+	align-items: center
+
+.p-top-menu-tabs-right
+	display: flex
+	height: 50px
+	margin-left: auto
+	
+.p-top-menu-tab-item-wrapper-fc
+	height: 50px
+	overflow-x: auto
+	flex-grow: 1
+	scrollbar-width: none
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	align-items: center
+	overflow-x: auto
+	overflow-y: hidden
+	width: 100%
+
+.p-top-menu-tab
+	font-weight: 400 !important
+	font-size: 18px
+	margin-top: 0 !important
+	color: #101828
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	align-items: center
+	line-height: normal
+	position: relative
+	text-decoration: none !important
+	max-width: 100%
+	text-overflow: ellipsis
+	white-space: nowrap
+	overflow: hidden
+	z-index: 2
+	padding-right: 24px
+	&:hover
+		text-decoration: none !important
+		color: #70f
+
+.p-top-menu-tab-cablink
+	font-weight: 400 !important
+	font-size: 14px
+	margin-top: 0 !important
+	color: #101828
+	display: flex
+	flex-direction: row
+	flex-wrap: nowrap
+	align-items: center
+	line-height: normal
+	position: relative
+	text-decoration: none !important
+	max-width: 100%
+	text-overflow: ellipsis
+	white-space: nowrap
+	overflow: hidden
+	z-index: 2
+	//padding: 0 16px
+	&:hover
+		text-decoration: none !important
+		color: #70f
+
+.p-top-menu-tab-cablink-item
+	font-weight: 400 !important
+	font-size: 16px
+	margin-left: 5px
+
+
+
+
 .logo
 	position: relative
-	float: left
 	display: block
 	width: 140px
-	height: 60px
+	height: 40px
 	top: 0
 	left: 0
 	transform: none
-	background-image: url(/images/rt/rtk_logo.png)
+	background-image: url(/images/rt/rt_logo_grey.svg)
 	background-size: contain
 	background-position: center center
 	background-repeat: no-repeat
@@ -473,10 +710,37 @@ header
 #hero
 	//background-image: url(/images/texture.png)
 	//background-color: $dark-grey
-	text-align: center
+	//text-align: center
 	padding-left: 0
 	padding-right: 0
+	padding-top: 24px
+	padding-bottom: 24px
 	margin-bottom: 0
+	#rt-card-container
+		font-family: RT Fonts
+		margin-top: 20px
+		position: relative
+		#rt-card img
+			border-radius: 8px
+			min-height: 622px
+			max-height: 622px
+		#rt-card a
+			position: absolute
+			top: 93%
+			left: 78%
+			transform: translate(-50%, -50%)
+			-ms-transform: translate(-50%, -50%)
+			border: none
+			cursor: pointer
+			border-radius: 5px
+			text-align: center
+		#rt-card span
+			font-family: RT Fonts
+			position: absolute
+			top: 89%
+			left: 6%
+			color: white
+
 
 #docs
 	#hero
@@ -612,7 +876,7 @@ footer
 			.form-group
 				.form-control
 					background-color: transparent !important
-					font-family: "Roboto",sans-serif
+					font-family: "RT Fonts", "Roboto",sans-serif
 					padding: 10px
 					font-size: 16px
 					line-height: 16px
