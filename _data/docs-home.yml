@@ -1,23 +1,23 @@
-bigheader: "ThingsBoard Documentation"
+bigheader: "Разделы"
 abstract: "Documentation for using ThingsBoard IoT Platform."
 toc:
-- title: ThingsBoard Documentation
+- title: Разделы
   path: /docs/
-- title: What is ThingsBoard?
+- title: Общие сведения
   path: /docs/getting-started-guides/what-is-thingsboard/
-- title: How to connect your device?
+- title: Диаграмма подключений
   path: /docs/getting-started-guides/connectivity/
-- title: Features
+- title: Функции
   section:
-  - title: Entities and relations
+  - title: Сущности платформы
     path: /docs/user-guide/entities-and-relations/
-  - title: Working with device attributes
+  - title: Работа с атрибутами
     path: /docs/user-guide/attributes/
-  - title: Working with telemetry data
+  - title: Работа с данными телеметрии
     path: /docs/user-guide/telemetry/
-  - title: Working with alarms
+  - title: Работа с сигналами тревоги
     path: /docs/user-guide/alarms/
-  - title: Device Connectivity Status
+  - title: Статус подключения устройств
     path: /docs/user-guide/device-connectivity-status/
   - title: Claiming Devices
     path: /docs/user-guide/claiming-devices/

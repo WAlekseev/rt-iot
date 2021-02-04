@@ -1,9 +1,7 @@
 ---
 layout: docwithnav
-assignees:
-- ikulikov
-title: Connectivity diagram
-description: Understand how to connect your IoT devices to ThingsBoard
+title: Диаграмма подключений платформы
+tion: Диаграмма подключений платформы
 
 ---
 
@@ -14,8 +12,9 @@ description: Understand how to connect your IoT devices to ThingsBoard
   </td>
   <td>
       <br/>  
-      <p>ThingsBoard provides a lot of device connectivity options. The diagram below is designed to provide visual overview of existing options and help you to choose the correct option for your devices. 
-         In case your have not found out how to connect your device using the diagram or something is not clear, please <a href="/docs/contact-us/">contact us</a> and help us to improve this guide.</p>
+      <p>
+На платформе реализовано множество вариантов подключения устройств. Диаграмма, представленная ниже, предназначена для обзора этих вариантов и помощи в выборе правильного способа подключения устройства. Если у вас возникают трудности с подключением ваших устройств, пожалуйста, свяжитесь с командой проекта способами, указанными на <a href="http://iot.rt.ru/">сайте</a>.
+</p>
       <br/>  
  </td>
 </tr>
@@ -25,4 +24,3 @@ description: Understand how to connect your IoT devices to ThingsBoard
 graphId="connectivityGraph" 
 file="resources/connectivity.mm" 
 links-json="resources/connectivity-links.json" %}
-

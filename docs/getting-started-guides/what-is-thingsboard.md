@@ -1,46 +1,28 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: What is ThingsBoard?
-description: ThingsBoard key features and advantages for the rapid development of IoT projects and applications.
+title: Общие сведения о IoT платформе Ростелеком.
+description: Общие сведения о IoT платформе Ростелеком.
 ---
 
 
-ThingsBoard is an open-source IoT platform that enables rapid development, management and scaling of IoT projects. 
-Our goal is to provide the out-of-the-box IoT cloud or on-premises solution that will enable server-side infrastructure for your IoT applications. 
+IoT платформа Ростелеком это решение, которое позволит быстро разрабатывать, сопровождать и масштабировать IoT проекты. 
+Наша цель – предоставить разработчикам IoT приложений готовую среду создания и запуска приложений, а также обеспечить передачу данных с IoT устройств.
 
-#### Features
 
-With ThingsBoard, you are able to:
+#### Функции.
 
- - Provision devices, assets and customers and define relations between them.
- - Collect and visualize data from devices and assets. 
- - Analyze incoming telemetry and trigger alarms with complex event processing.
- - Control your devices using remote procedure calls (RPC).
- - Build work-flows based on device life-cycle event, REST API event, RPC request, etc
- - Design dynamic and responsive dashboards and present device or asset telemetry  and insights to your customers  
- - Enable use-case specific features using customizable rule chains.
- - Push device data to other systems.
- - Much more...
- 
-See [**ThingsBoard features list**](/docs/#community-edition-features) for more features and useful links to the specific feature documentation. 
+С помощью платформы вы сможете:
 
-<object width="80%" data="/images/reference/thingsboard-architecture.svg"></object>
+- Обеспечить связь между устройствами, объектами и конечными клиентами.
+- Собирать и визуализировать данные, получаемые с устройств и объектов.
+- Анализировать поступающие телеметрические данные и отслеживать сигналы тревоги
+- Управлять устройствами, используя RPC
+- Выстроить режим работы устройств на основе его жизненного цикла, REST API-событий, RPC-запросов и т.д.
+- Создавать гибкие и динамичные дашборды, с помощью которых предоставлять конечным пользователям телеметрические данные и аналитику.
+- Активировать специфические функции с помощью настраиваемых цепочек правил.
+- Передавать данные с устройств в смежные системы
+- Многое другое...
 
-#### Architecture
+#### Готовы начать?
 
-ThingsBoard is designed to be:
-
-* **scalable**: horizontally scalable platform, build using leading open-source technologies.
-* **fault-tolerant**: no single-point-of-failure, every node in the cluster is identical.
-* **robust and efficient**: single server node can handle tens or even hundreds thousands of devices depending on use-case. 
-ThingsBoard cluster can handle millions of devices.
-* **customizable**: adding new functionality is easy with customizable widgets and rule engine nodes.
-* **durable**: never lose your data.
-
-See [**ThingsBoard Architecture**](/docs/reference) for more details.
-
-#### Ready to get started?
-
-<p><a href="/docs/getting-started-guides/helloworld" class="button">Hello World Application</a></p>
+<p><a href="http://iot.rt.ru/login" class="button">IoT платформа Ростелеком</a></p>

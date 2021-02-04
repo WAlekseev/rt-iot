@@ -1,82 +1,53 @@
 ---
 layout: docwithnav
-title: ThingsBoard Documentation
-description: ThingsBoard documentation - learn about the platform and get your IoT projects running on ThingsBoard
+title: Документация к IoT платформе Ростелеком
+description: Документация к IoT платформе Ростелеком
 ---
 
-<p>The ThingsBoard documentation can help you set up ThingsBoard, learn about the platform and get your IoT projects running on ThingsBoard.</p>
+<p>Эта документация позволит вам изучить возможности IoT платформы Ростелеком и поможет создать собственные приложения, работающие на платформе.</p>
 
-<a style="margin: 10px;" href="/docs/getting-started-guides/what-is-thingsboard/" class="button">ThingsBoard Overview</a>
-<a style="margin: 10px;" href="/docs/getting-started-guides/helloworld/" class="button">Getting started</a>
-<a style="margin: 10px;" href="/docs/guides/" class="button">&nbsp;&nbsp;&nbsp;Guides&nbsp;&nbsp;&nbsp;</a>
-
-<h2>Community Edition Features</h2>
+<h2>Возможности IoT платформы Ростелеком.</h2>
 
 <ul>
-<li><b><a href="/docs/user-guide/attributes/">Attributes</a></b> - platform ability to assign custom key-value attributes to your entities (e.g configuration, data processing, visualization parameters).</li>
-<li><b><a href="/docs/user-guide/telemetry/">Telemetry</a></b> - API for collection of time-series data and related use cases.</li>
-<li><b><a href="/docs/user-guide/rpc/">Entities and relations</a></b> - platform ability to model physical world objects (e.g. devices and assets) and relations between them.</li>
-<li><b><a href="/docs/guides#AnchorIDDataVisualization">Data visualization</a></b> - covers data visualization capabilities: Widgets, Dashboards, Dashboard states.</li>
-<li><b><a href="/docs/user-guide/rule-engine-2-0/re-getting-started/">Rule engine</a></b> - covers data processing & actions on incoming telemetry and events.</li>
-<li><b><a href="/docs/user-guide/rpc/">RPC</a></b> - API and widgets to push commands from your apps and dashboards to devices and vice versa.</li>
-<li><b><a href="/docs/user-guide/audit-log/">Audit log</a></b> - tracking of user activity and API calls usage.</li>
-<li><b><a href="/docs/user-guide/api-limits/">API Limits</a></b> - controlling API usage, by limiting number of requests from single host during single time unit.</li>
-</ul>
+<li><b><a href="/docs/user-guide/attributes/">Атрибуты</a></b> - возможность платформы назначать объектам настраиваемые атрибуты «ключ – значение» (например, конфигурации, параметры обработки данных и визуализации и др.)</li>
+<li><b><a href="/docs/user-guide/telemetry/">Телеметрия</a></b> - API  для сбора временных рядов данных и связанных с ними сценариев использования.</li>
+<li><b><a href="/docs/user-guide/rpc/">Сущности и связи</a></b> - возможность платформы моделировать устройства и объекты реального мира, а также связи между ними.</li>
+<li><b><a href="/docs/guides#AnchorIDDataVisualization">Визуализация данных</a></b> - платформа предоставляет различные способы визуализации данных. Виджеты, дашборды, дашборды состояний.</li>
+<li><b><a href="/docs/user-guide/rule-engine-2-0/re-getting-started/">Движок правил</a></b> - обработка данных и инициация действий на основе телеметрии и событий, возникающих на устройстве.</li>
+<li><b><a href="/docs/user-guide/rpc/">RPC</a></b> - API и виджеты для передачи команд из приложений и дашбордов на устройства и наоборот.</li>
+<li><b><a href="/docs/user-guide/audit-log/">Журнал аудита</a></b> - отслеживание активности пользователей и вызовов API.</li>
+<li><b><a href="/docs/user-guide/api-limits/">Лимиты API</a></b> - контроль использования API с помощью лимитирования количества запросов с одного хоста в течение определенного времени.</li>
 
-<h2>Professional Edition Features</h2>
-
-<ul>
-<li><b><a href="/docs/user-guide/white-labeling/">White-labeling</a></b> - configure your company or product logo, color scheme and mail tempates in 2 minutes.</li>
-<li><b><a href="/docs/user-guide/integrations/">Platform Integrations</a></b> - connect devices using connectivity solutions like NB IoT, LoRaWAN and SigFox, specific payload formats or various IoT Platforms</li>
+<li><b><a href="/docs/user-guide/white-labeling/">White-labeling</a></b> - возможность настройки логотипов, цветовых схем, шаблонов сообщений в приложениях.</li>
+<li><b><a href="/docs/user-guide/integrations/">Интеграция</a></b> - возможность подключения устройств по NB-IoT, LoRaWAN и SigFox, возможность интеграции по протоколам </li>
     <ul>
         <li><b><a href="/docs/user-guide/integrations/http/">HTTP</a></b></li>
         <li><b><a href="/docs/user-guide/integrations/mqtt/">MQTT</a></b></li>
         <li><b><a href="/docs/user-guide/integrations/opc-ua/">OPC-UA</a></b></li>
         <li><b><a href="/docs/user-guide/integrations/sigfox/">SigFox</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/thingpark/">ThingPark</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/ttn/">TheThingsNetwork</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/azure-event-hub/">Azure Event Hub</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/azure-iot-hub/">Azure IoT Hub</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/ibm-watson-iot/">IBM Watson IoT</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/aws-iot/">AWS IoT</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/aws-kinesis/">AWS Kinesis</a></b></li>
     </ul>
-<li><b><a href="/docs/user-guide/groups/">Device & asset groups</a></b> - configure multiple custom device & asset groups.</li>
-<li><b><a href="/docs/user-guide/scheduler/">Scheduler</a></b> - schedule various types of events (i.e. configuration updates, report generation, rpc commands) with flexible configuration options.</li>
-<li><b><a href="/docs/user-guide/reporting/">Reporting</a></b> - generate reports using existing dashboards and distribute them to end-users via email.</li>
-<li><b><a href="/docs/user-guide/csv-xls-data-export/">CSV/XLS data export</a></b> - export data from widgets to CSV or XLS.</li>
-<li><b><a href="/docs/user-guide/file-storage/">File Storage</a></b> - ability to store binary content (files) in the DB.</li>
+<li><b><a href="/docs/user-guide/groups/">Группировка устройств и объектов</a></b> - возможность настройки множества групп устройств и объектов.</li>
+<li><b><a href="/docs/user-guide/scheduler/">Планировщик</a></b> - возможность планирования различных событий (обновление конфигурации, формирования отчетов, rpc-команды) с гибкими параметрами настройки.</li>
+<li><b><a href="/docs/user-guide/reporting/">Отчеты</a></b> - возможность создания отчетов с помощью дашбордов и рассылка их конечным пользователям по электронной почте.</li>
+<li><b><a href="/docs/user-guide/csv-xls-data-export/">Экспорт данных в формате CSV/XLS</a></b> - возможность экспорта данных из виджетов в CSV или XLS файлы.</li>
+<li><b><a href="/docs/user-guide/file-storage/">Хранилище данных</a></b> - возможность хранить исходные данные в БД.</li>
 </ul>
 
-<h2>Security</h2>
+<h2>Безопасность</h2>
 
-<p>Contains description of available device authentication <b><a href="/docs/user-guide/device-credentials/">options</a></b>.</p>
+<p>Здесь содержатся описания доступных опций аутентификации устройств. <b><a href="/docs/user-guide/device-credentials/">опции</a></b>.</p>
 
-<h2>Samples</h2>
-
-<p>Contains a list of hardware platform specific <b><a href="/docs/samples/">samples</a></b>.</p>
 
 <h2>API</h2>
 
-<p>Contains a list of device connectivity and server-side platform specific <b><a href="/docs/samples/">API</a></b>.</p>
+<p>Здесь содержится описание серверной части <b><a href="/docs/samples/">API</a></b>.</p>
 
-<h2>IoT Gateway</h2>
+<h2>IoT шлюзы</h2>
 
-<p>Contains comprehensive documentation about ThingsBoard <b><a href="/docs/iot-gateway/">IoT Gateway</a></b>.</p>
+<p>Здесь содержится документация о<b><a href="/docs/iot-gateway/">IoT шлюзах платформы</a></b>.</p>
 
-<h2>Video Tutorials</h2>
+<h2>Видеоуроки</h2>
 
-<p>The ThingsBoard Youtube <b><a href="https://www.youtube.com/channel/UCDb9fsV-YR4JmnipAMGsVAQ/videos">channel</a></b> contains useful video tutorials that cover various platform features.</p>
-
-<h2>Trendz Analytics Features</h2>
-
-<ul>    
-    <li><b><a href="/docs/trendz/prediction">Forecast timeseries</a></b> - predict system behaviour and forecast utilisation</li>
-    <li><b><a href="/docs/trendz/calculated-fields">Calculated fields</a></b> - define, monitor and compare custom KPIs</li>
-    <li><b><a href="/docs/trendz/states">States</a></b> - track how much time equipment spent in different states</li>
-    <li><b><a href="/docs/trendz/data-filtering">Filtering</a></b> - clear and filter data by any field</li>
-    <li><b><a href="/docs/trendz/visualizations-overview">Advanced visualisations</a></b> - create heatmaps, scatter plots and compare utilities</li>
-    <li><b><a href="/docs/trendz/data-grouping-aggregation">Grouping and aggregation</a></b> - aggregate data on different levels in few minutes</li>
-</ul>
+<p>На нашем <b><a href="https://www.youtube.com/channel/UCDb9fsV-YR4JmnipAMGsVAQ/videos">youtube-канале</a></b> можно посмотреть видеоуроки, посвященные различным особенностям платформы.</p>
 
 <p>Comprehensive documentation about ThingsBoard <b><a href="/docs/trendz/">Trendz Analytics</a></b>.</p>

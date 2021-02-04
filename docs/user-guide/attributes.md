@@ -1,20 +1,18 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Working with IoT device attributes
-description: IoT device management using ThingsBoard attributes feature
+title: Работа с атрибутами IoT-устройств
+description: Работа с атрибутами IoT-устройств
 
 ---
 
 * TOC
 {:toc}
 
-ThingsBoard provides the ability to assign custom attributes to your entities and manage these attributes.
-Attributes are treated key-value pairs. Flexibility and simplicity of the key-value format allow easy and seamless integration with almost any IoT device on the market.
+Платформа предоставляет возможность назначать пользовательские атрибуты сущностям и управлять ими. Атрибуты описываются парами ключ-значение. 
+Гибкость и простота формата ключ-значение обеспечивает легкую и бесшовную интеграцию практически с любым IoT-устройством на рынке.
 
 
-## Video Tutorial
+## Видеоурок
 
 <div id="video">
   <div id="video_wrapper">
@@ -23,84 +21,79 @@ Attributes are treated key-value pairs. Flexibility and simplicity of the key-va
 </div>
 
 
-## Attribute types
+## Типы атрибутов
 
-Attributes are separated into three main groups:
+Атрибуты делятся на три основные группы:
 
- - **server-side** - attributes are reported and managed by the server-side application. Not visible to the device application.
-   Some secret data that may be used by thingsboard rules but should not be available to the device.
-   Any ThingsBoard entity supports server-side attributes: Device, Asset, Customer, Tenant, Rules, etc.
+ - **server-side** - атрибутом управляет и обменивается с ним данными серверное приложение. Недоступно для приложения устройства. .
+   Некоторые конфиденциальные данные, которые могут использоваться платформой, но не должны быть доступны устройству. Любая сущность платформы поддерживает server-side атрибуты: устройство, объект, клиент, тенант, правила  и т. д.
    
    {:refdef: style="text-align: center;"}
    ![image](/images/user-guide/server-side-attributes.svg)
    {: refdef}  
 
- - **client-side** - see device specific attributes 
- - **shared** - see device specific attributes
+ - **client-side** - см. раздел специфические атрибуты устройств
+ - **shared** - см. раздел специфические атрибуты устройств
 
 
-## Device specific Attribute types
+## Специфические атрибуты устройств
 
-All attributes may be used in [Rule Engine](/docs/user-guide/rule-engine) components: filters, processors, and actions.
-This guide provides the overview of the features listed above and some useful links to get more details.  
+Все атрибуты могут быть использованы в компонентах движка правил: фильтрах, процессорах и действиях.
+В этом руководстве представлен обзор перечисленных выше функций и некоторые полезные ссылки для получения более подробной информации.
 
-Device specific attributes are separated into two main groups:
+
+Специфические атрибуты устройства разделены на две основные группы:
  
- - **client-side** - attributes are reported and managed by the device application. 
-   For example current software/firmware version, hardware specification, etc.     
+ - **client-side** - атрибутом управляет и обменивается с ним данными приложение устройства. Например, текущая версия прошивки, спецификация оборудования и т. д.     
 
    {:refdef: style="text-align: center;"}
    ![image](/images/user-guide/client-side-attributes.svg)
    {: refdef}  
         
- - **shared** - attributes are reported and managed by the server-side application. Visible to the device application.
-   For example customer subscription plan, target software/firmware version.
+ - **shared** - атрибутом управляет и обменивается с ним данными серверное приложение, видимое для приложения устройства. Например, план подписки клиента, целевая версия прошивки.
    
    {:refdef: style="text-align: center;"}
    ![image](/images/user-guide/shared-attributes.svg)
    {: refdef}  
 
-## Device attributes API
+## API атрибутов устройства
 
-ThingsBoard provides following API to device applications:
+Платформа предоставляет следующий API для приложений на устройстве:
  
- - upload *client-side* attributes to the server
- - request *client-side* and *shared* attributes from the server.
- - subscribe to updates of *shared* attributes.
+ - загрузка *client-side* атрибутов на сервер.
+ - запрос *client-side* и *shared* атрибутов с сервера.
+ - подписка на обновление *shared* атрибутов.
 
-Attributes API is specific for each supported network protocol.
-You can review API and examples in corresponding reference page:
+API атрибутов специфичен для каждого поддерживаемого сетевого протокола. Ознакомиться с API и примерами вы можете в соответствующих разделах документации:
 
- - [MQTT API reference](/docs/reference/mqtt-api/#attributes-api)
- - [CoAP API reference](/docs/reference/coap-api/#attributes-api)
- - [HTTP API reference](/docs/reference/http-api/#attributes-api)
+ - [описание MQTT API](/docs/reference/mqtt-api/#attributes-api)
+ - [описание CoAP API](/docs/reference/coap-api/#attributes-api)
+ - [описание HTTP API](/docs/reference/http-api/#attributes-api)
   
-## Telemetry Service
+## Сервис телеметрии
 
-Telemetry Service is responsible for persisting attributes data to internal data storage; 
-provides server-side API to query and subscribe for attribute updates. 
+Сервис телеметрии отвечает за сохранение данных атрибутов во внутреннем хранилище; предоставляет серверный API для запроса и подписки на обновления атрибутов. 
 
-### Internal data storage
+### Внутренняя база данных
 
-ThingsBoard uses either Cassandra NoSQL database or SQL database to store all data.
+Платформа использует Cassandra NoSQL или SQL БД для хранения всех данных
+
+Кроме возможности запроса данных напрямую, платформа предоставляет набор RESTful и Websocket API, которые упрощают этот процесс с учетом политик безопасности:
+
+ - тенант-администратор может управлять атрибутами для всех сущностей, принадлежащих соответствующему теннанту.
+ - клиент может управлять атрибутами только для сущностей, назначенных соответствующему клиенту.
   
-Although you can query the database directly, ThingsBoard provides a set of RESTful and Websocket API that simplify this process and apply certain security policies:
- 
- - Tenant Administrator user is able to manage attributes for all entities that belong to the corresponding tenant.
- - Customer user is able to manage attributes only for entities that are assigned to the corresponding customer.
-  
-### Data Query API
+### API запроса данных
 
-Telemetry Service provides following REST API to fetch entity data:
+Сервис телеметрии предоставляет следующий REST API для получения данных с сущностей:
 
 ![image](/images/user-guide/telemetry-service/rest-api.png)
 
-**NOTE:** The API listed above is available via Swagger UI, please review general [REST API](/docs/reference/rest-api/) documentation for more details.
-The API is backward compatible with TB v1.0+ and this is the main reason why API call URLs contain "plugin".
+**Примечание:** API, приведенный выше, доступен через Swagger UI, пожалуйста, ознакомьтесь с общей документацией REST API для получения более подробной информации. 
 
-#### Attribute keys API
+#### API ключей атрибутов
 
-You can fetch list of all *attribute keys* for particular *entity type* and *entity id* using GET request to the following URL  
+Вы можете получить список всех ключей атрибутов для конкретного типа и идентификатора сущности с помощью GET-запроса по следующему URL: 
  
 ```shell
 http(s)://host:port/api/plugins/telemetry/{entityType}/{entityId}/keys/attributes
@@ -111,11 +104,11 @@ A,get-attributes-keys.sh,shell,resources/get-attributes-keys.sh,/docs/user-guide
 B,get-attributes-keys-result.json,json,resources/get-attributes-keys-result.json,/docs/user-guide/resources/get-attributes-keys-result.json{% endcapture %}
 {% include tabs.html %}
 
-Supported entity types are: TENANT, CUSTOMER, USER, RULE, DASHBOARD, ASSET, DEVICE, ALARM
+Поддерживаемые типы сущностей: TENANT, CUSTOMER, USER, RULE, DASHBOARD, ASSET, DEVICE, ALARM
 
-#### Attribute values API
+#### API значений атрибутов
 
-You can fetch list of latest values for particular *entity type* and *entity id* using GET request to the following URL  
+Вы можете получить список последних значений для конкретного типа и идентификатора сущности с помощью GET-запроса по следующему URL:  
  
 ```shell
 http(s)://host:port/api/plugins/telemetry/{entityType}/{entityId}/values/attributes?keys=key1,key2,key3
@@ -126,26 +119,24 @@ A,get-attributes-values.sh,shell,resources/get-attributes-values.sh,/docs/user-g
 B,get-attributes-values-result.json,json,resources/get-attributes-values-result.json,/docs/user-guide/resources/get-attributes-values-result.json{% endcapture %}
 {% include tabs.html %}
 
-Supported entity types are: TENANT, CUSTOMER, USER, RULE, DASHBOARD, ASSET, DEVICE, ALARM
+Поддерживаемые типы сущностей: TENANT, CUSTOMER, USER, RULE, DASHBOARD, ASSET, DEVICE, ALARM
 
-### Telemetry Rule Node
+### Телеметрия узлов правил
 
-There are Rule Nodes in the Rule Engine that allows to work with Telemetry Service. Please find more details in node description:
+В движке правил есть узлы правил (Rule Nodes), которые позволяют работать с Сервисом Телеметрии. Более подробную информацию вы найдете в описании узла:
 
-- [**Enrichment Nodes - load latest telemetry for entity**](/docs/user-guide/rule-engine-2-0/enrichment-nodes/)
-- [**Save Timeseries**](/docs/user-guide/rule-engine-2-0/action-nodes/#save-timeseries-node)
-- [**Save Attributes**](/docs/user-guide/rule-engine-2-0/action-nodes/#save-attributes-node)
+## Визуализация данных
 
-## Data visualization
+Платформа предоставляет возможность настраивать и кастомизировать дашборды для визуализации данных. Эта тема рассматривается в отдельном руководстве.  
+<p><a href="/docs/user-guide/visualization" class="button">Руководство по визуализации данных</a></p>
 
-ThingsBoard provides the ability to configure and customize dashboards for data visualization.
-This topic is covered in a separate guide.    
-<p><a href="/docs/user-guide/visualization" class="button">Data Visualization guide</a></p>
+Платформа позволяет настраивать кастомные IoT-дашборды. Каждый IoT-дашборд может иметь несколько виджетов, которые визуализируют данные с нескольких устройств. После создания IoT-дашборда вы можете присвоить ее одному из клиентов вашего IoT-приложения
+IoT-дашборды не требовательны к ресурсам, и их у вас может быть множество. Например, вы можете автоматически создавать дашборд для каждого нового клиента на основе данных с зарегистрированных IoT-устройств. Или вы можете изменить дашборд с помощью скрипта, когда новое устройство присваивается клиенту. Все эти действия могут быть выполнены вручную или автоматизированы с помощью REST API.
 
-## Rule engine
 
-ThingsBoard provides the ability to configure data processing rules.
-Device attributes can be used inside rule filters. This allows applying rules based on certain device properties.
-You can find more details in a separate guide.
-<p><a href="/docs/user-guide/rule-engine" class="button">Rule Engine guide</a></p>
+## Движок правил
+
+Платформа предоставляет возможность настройки правил обработки данных. Атрибуты устройства можно использовать внутри фильтров правил. Это позволяет применять правила, основанные на определенных свойствах устройства. Более подробную информацию вы можете найти в отдельном руководстве.
+
+<p><a href="/docs/user-guide/rule-engine" class="button">Описание движка правил.</a></p>
     

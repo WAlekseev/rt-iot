@@ -1,48 +1,109 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Working with IoT device alarms
-description: IoT device alarm management using ThingsBoard alarms feature
+title: Работа с сигналами тревоги IoT-устройств
+description: Работа с сигналами тревоги IoT-устройств
+entityAlarms:
+    0:
+        image: /images/user-guide/alarms/alarm-entity-details.png
+        
+alarmWidgetDataSettings:
+    0:
+        image: /images/user-guide/alarms/basic-widget-settings.png
+    1:
+        image: /images/user-guide/alarms/advanced-widget-settings.png        
 
 ---
 
 * TOC
 {:toc}
 
-ThingsBoard provides the ability to create and manage alarms related to your entities: devices, assets, customers, etc.
+Платформа позволяет создавать и управлять сигналами тревоги, связанными с вашими сущностями: устройствами, объектами, клиентами и т. д.
+Например, вы можете настроить платформу на автоматическое создание сигналов тревоги, когда показания датчика температуры выше определенного порога. 
+Конечно, это очень упрощенный случай, и реальные сценарии могут быть намного сложнее.
 
-### Alarm Lifecycle
 
-Alarms have a lifecycle. Each Alarm can be cleared and acknowledged. By default, an alarm is not in the active and unacknowledged state.
+## Концепция сигналов тревоги
 
-### Alarm Originator, Type, and Propagation
+**Инициатор**
 
-Alarm Originator is an entity that is responsible for triggering an alarm. By default, an alarm is propagated to all related entities (parent relations only).
-An alarm is identified by start time, originator and type. There can't be two active alarms for a same type and originator.
+Инициатор тревоги - это объект, вызвавший тревогу. Например, если платформа получает показания температуры от устройства A и вызывает тревогу «Высокая температура», потому что показание превышает пороговое значение, тогда устройство A является источником тревоги
 
-### Alarm Severity
+**Тип**
 
-One of the following alarm severities is supported: CRITICAL, MAJOR, MINOR, WARNING, INDETERMINATE.
+Тип тревоги помогает определить основную причину тревоги. Например, «Высокая температура» или «Низкая влажность» - это два разных сигнала тревоги.
 
-### Alarm Updates
+**Уровень важности**
 
-Alarm entity may be updated by external applications or ThingsBoard rules. Alarm keeps track of both clear and acknowledge time and latest change as an end time.
+У каждого сигнала тревоги есть уровень важности: критический, серьезный, незначительный, предупреждающий или неопределенный (сортировка по приоритету в порядке убывания).
 
-### Alarm REST API
+**Жизненный цикл**
 
-ThingsBoard provides REST API to manage and query alarms. See demo environment [Alarm REST API](https://demo.thingsboard.io/swagger-ui.html#/alarm-controller) and general [REST API](/docs/reference/rest-api/) documentation for more details.
+Сигнал тревоги может быть активным или сброшенным. Когда платформа создает сигнал, она сохраняет время начала и окончания будильника. По умолчанию время начала и окончания одинаковы. Если условие срабатывания сигнала повторяется, платформа обновит время окончания. Платформа может автоматически сбрасывать тревогу, когда происходит событие, соответствующее условию сброса тревоги. Условие сброса сигнала тревоги не является обязательным. Пользователь может сбросить тревогу вручную.
 
-### Alarm Rules
-It is possible to create, update and clear alarm using ThingsBoard [rule engine](/docs/user-guide/rule-engine-2-0/re-getting-started/).
+Помимо активного и сброшенного состояния сигнала тревоги, платформа также отслеживает, подтвердил ли его кто-то. Подтверждение тревоги возможно через виджет панели управления или вкладку сведений об объекте.        
 
-Please find more details about Alarm Rule Nodes:
+Подводя итог, можно выделить 4 возможных значения поля "**status**": 
 
-- [Create Alarm](/docs/user-guide/rule-engine-2-0/action-nodes/#create-alarm-node).
-- [Clear Alarm](/docs/user-guide/rule-engine-2-0/action-nodes/#clear-alarm-node).
+ * Активный неподтвержденный (ACTIVE_UNACK) - тревога не сброшена и еще не подтверждена;
+ * Активный подтверждены (ACTIVE_ACK) - тревога не сброшена, но уже подтверждена;
+ * Сброшенный неподтвержденный(CLEARED_UNACK) - тревога уже сброшена, но еще не подтверждена;
+ * Сброшенный подтвержденный (CLEARED_ACK) - тревога уже сброшена и подтверждена;;
+ 
+**Уникальность сигналов тревоги**
 
-Also, in this step-by-step guide you can see how to create/update/clear Alarms in real-life scenarios:
+Платформа идентифицирует тревогу, используя комбинацию источника, типа и времени начала. Таким образом, в один момент времени должен быть только один активный сигнал тревоги с одним и тем же источником, типом и временем начала.
 
-- [Work with Alarms](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/).
+Предположим, вы настроили правила сигнализации для создания сигнализации «Высокая температура», когда температура выше 20. И вы также настроили правила сигнализации для сброса сигнализации «Высокая температура», когда температура меньше или равна 20.
 
-    
+Предполагая следующую последовательность событий:
+
+12:00 - температура равна 18
+12:30 - температура равна 22
+13:00 - температура равна 25
+13:30 - температура равна 18
+ 
+Будет создан один сигнал тревоги «Высокая температура» с временем начала = 12:30 и временем окончания = 13:00.
+ 
+**Распространение на родительские объекты**
+
+Предположим, у вас есть топология, в которой у одного тенанта 1000 клиентов, а у каждого клиента 1000 устройств. Таким образом, в вашей системе имеется 1 миллион устройств. Вы можете создать дашборд, отображающий все активные аварийные сигналы на уровне тенаната и клиента. Чтобы упростить запросы к базе данных и сократить время загрузки, платформа поддерживает распространение сигнала тревоги. Когда создается сигнал тревоги, мы можем указать, должен ли он быть видимым для родительских объектов или нет. Мы также можем дополнительно указать отношения, которые должны присутствовать между родительскими объектами и отправителем, чтобы сигнал тревоги распространялся.
+
+Теперь, когда вы знаете теорию, приступим к практическим занятиям.       
+
+## FAQ и инструкции по сигналам тревоги
+
+### Как создать сигнал тревоги?
+
+Самый **простой путь** по созданию [**сигналов тревоги**](/docs/user-guide/device-profiles/#alarm-rules).
+
+Альтернативная опция - настроить вашу логику в [движке правил](/docs/user-guide/rule-engine-2-0/re-getting-started/) и испиользовать [ссоздание сигналов тревоги](/docs/user-guide/rule-engine-2-0/action-nodes/#create-alarm-node) и [сброс сигналов](/docs/user-guide/rule-engine-2-0/action-nodes/#clear-alarm-node). 
+Вы можете найти соответствующие примеры [здесь](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/).
+
+### Как найти сигналы тревоги для определенного устройства или объекта?
+
+Нажмите на картинку, чтобы открыть инструкцию:
+
+{% include images-gallery.html imageCollection="entityAlarms" %}
+
+### Как визуализировать сигнал тревоги на дашборде?
+
+Посмотрите эту [инструкцию](/docs/getting-started-guides/helloworld/#step-35-add-alarm-widget) по добавлению виджета сигнала тревоги на дашборд. 
+
+Вы также можете изучить настройки источника данных и расширенные настройки виджета.
+
+Настройки источника данных позволяют:
+
+ * Использовать фильтр статусов любыми комбинацию из подтвержден/неподтвержден/активен/сброшен.
+ * Использовать фильтр серьезности любыми комбинациями уровней серьезности.
+ * Использовать список типов сигналов тревог. 
+ * Включать или отключать поиск распространенных тревог (по умолчанию отключено)
+ 
+{% include images-gallery.html imageCollection="alarmWidgetDataSettings" %}
+ 
+### Как отправлять уведомления при создании или сбросе тревоги?
+
+Пожалуйста изучите документацию [здесь](/docs/user-guide/device-profiles/#notifications-about-alarms).  
+
+### Как сделать запрос сигналов тревог с помощью REST API? 
+
+Платформа позволяет использовать REST API для управления и запроса сигналов тревог. Более подробно это описано в документации к [REST API](/docs/reference/rest-api/).
