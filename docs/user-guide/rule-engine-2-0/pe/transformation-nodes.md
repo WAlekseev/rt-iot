@@ -1,76 +1,53 @@
 ---
 layout: docwithnav
-title: Transformation Nodes
-description: Rule Engine 2.0 Transformation Nodes
+title: Узлы трансформации
+description: Узлы трансформации
 
 ---
-
-{% assign feature = "PE Transformation Nodes" %}{% include templates/pe-feature-banner.md %}
-
-Transformation Nodes that are specific to ThingsBoard PE. Used for changing incoming Message fields like Originator, Message Type, Payload and Metadata.
 
 * TOC
 {:toc}
 
-# Duplicate To Group Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Дублирование групповых узлов
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/transformation-duplicate-to-group.png)
 
-Duplicates message to all entities belonging to specific [Entity Group](/docs/user-guide/groups/).
+Дублирует сообщение всем сущностям, принадлежащим к определенной группе.
 
-Entities are fetched from Entity Group detected according to the configuration. 
+Сущности извлекаются из группы, обнаруженной в соответствии с конфигурацией.
 
-Entity Group can be specified directly or can be message originator entity itself. 
+Группа сущностей может быть задана напрямую или может быть самой сущностью-отправителем сообщения.
 
-For each entity from group new message is created with entity as originator and message parameters copied from original message.
+Для каждой сущности из группы создается новое сообщение с сущностью в качестве отправителя и параметрами, скопированными из исходного сообщения.
 
-Configuration:
+
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/transformation-duplicate-to-group-config.png)
 
-- **Entity group is message originator** - if set, message originator will be considered as Entity Group used to fetch entities. 
-In this case incoming message will be routed via **Failure** chain if message originator type is not Entity Group.  
-- **Target entity group** - specific target Entity Group used to fetch entities.
+- **Entity group is message originator** - если параметр установлен, то отправитель сообщения будет рассматриваться как группа сущностей, используемая для извлечения сущностей. В этом случае, если отправитель сообщения не является группой сущностей, входящее сообщение будет передано по Failure chain
+- **Target entity group** - целевая группа сущностей – конкретная целевая группа сущностей, используемая для их извлечения.
 
-New messages will be duplicated to group entities and forwarded via **Success** chain if target Entity Group is detected successfully and contains at least one entity.
-Otherwise original message will be forwarded via **Failure** chain.   
+Новые сообщения будут дублироваться на группы сущностей и пересылаться по Success chain, если целевая группа сущностей обнаружена успешно и содержит хотя бы одну сущность. В противном случае исходное сообщение будет передано по Failure chain. 
 
 <br/>
 
 # Duplicate To Related Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/transformation-duplicate-to-related.png)
 
-Duplicates message to related entities fetched by relation query.
+Дублирует сообщение связанным сущностям, извлеченным с помощью связанного запроса.
 
-Related Entities found using configured relation direction and Relation Type. 
+Связанные сущности, найденные с помощью настроенного направления связи и её типа.
 
-For each found related entity new message is created with related entity as originator and message parameters copied from original message.
+Для каждой найденной связанной сущности создается новое сообщение с соответствующей сущностью в качестве отправителя и параметрами, скопированными из исходного сообщения
 
-Configuration:
+Настройка:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/transformation-duplicate-to-related-config.png)
 
-- **Relations query** - query used to find new entities starting from incoming message originator. 
-In ‘Relations query’ configuration Administrator can select required **Direction** and **relation depth level**. Also set of **Relation filters** can be configured with required Relation type and Entity Types. 
+- **Relations query** - запрос, используемый для поиска новых сущностей, начиная с отправителя входящего сообщения. В конфигурации «Relation query» администратор может выбрать требуемое направление и уровень глубины отношений. Также фильтры отношений могут быть настроены под требуемый тип отношений и сущностей.
+Новые сообщения будут дублироваться найденными сущностями и пересылаться по Success chain, если хотя бы одна сущность будет найдена с помощью запроса связей. В противном случае исходное сообщение будет передано по Failure chain.
 
-New messages will be duplicated to found entities and forwarded via **Success** chain if at least one entity will be found using Relations Query.
-Otherwise original message will be forwarded via **Failure** chain.
 
 <br/>

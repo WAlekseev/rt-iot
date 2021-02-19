@@ -1,43 +1,36 @@
 ---
 layout: docwithnav
-title: UDP Integration
-description: UDP Integration Guide 
-
+title: UDP интеграция
+description: руководство по UDP интеграции 
 ---
-
-{% assign feature = "Platform Integrations" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
-## Overview
+## Обзор
 
-UDP Integration allows to stream data from devices which use a UDP protocol to ThingsBoard and converts payloads of these devices into the ThingsBoard format.
+UDP интеграция позволяет передавать данные с устройств, которые используют протокол UDP, на IoT платформу Ростелеком и конвертировать полезную нагрузку этих устройств в поддерживаемый платформой формат.
 
-
-**Please note** UDP Integration can be started only as [Remote Integration](/docs/user-guide/integrations/remote-integrations). It could be started on the same machine, where TB instance is running, or you can start in on another machine, that has access over the network to the TB instance.  
-
-Please review the integration diagram to learn more.
+Для получения большей информации изучите диаграмму интеграции.
 
 ![image](/images/user-guide/integrations/udp-integration.svg)
 
-## UDP Integration Configuration
+## Настройка UDP интеграции
 
-### Prerequisites
+### Предусловия
 
-In this tutorial, we will use:
+В данном руководстве мы воспользуемся:
 
- - ThingsBoard Professional Edition instance — [cloud.thingsboard.io](https://cloud.thingsboard.io);
- - UDP Integration, running externally and connected to the cloud ThingsBoard PE instance;
- - **echo** command which intended to display a line of text, and will redirect it's output to **netcat** (**nc**) utility;
- - **netcat** (**nc**) utility to establish UDP connections, receive data from there and transfer them;    
+ - UDP интеграцией, которая запущена удалённо и подключена к облачной платформе;
+ - командой **echo**, которая предназначена для отображения строки текста и перенаправления результатов в утилиту **netcat** (**nc**);
+ - утилитой **netcat** (**nc**) для установки UDP-связей, получения и преобразования данных;    
 
-Let's assume that we have a sensor which is sending current temperature and humidity readings.
-Our sensor device **SN-001** publishes it's temperature and humidity readings to UDP Integration on **11560** port to the machine where UDP Integration is running.
+Предположим, что у нас есть датчик, который посылает текущие показания температуры и влажности.
+Наш датчик **SN-001** публикует температуру и показатели влажности в UDP интеграцию по порту **11560** в машину, где данная интеграция запущена.
 
-For demo purposes we assume that our device is smart enough to send data in 3 different payload types:
- - **Text** - in this case payload is **SN-001,default,temperature,25.7,humidity,69**
- - **JSON** - in this case payload is 
+Для наглядного примера предположим, что наше устройство достаточно умное для отправки данных в трёх разных форматах полезной нагрузки:
+ - **Text** - в этом случае полезная нагрузка выглядит так - **SN-001,default,temperature,25.7,humidity,69**
+ - **JSON** - в этом случае полезная нагрузка выглядит так
  
 ```json
 [
@@ -49,100 +42,97 @@ For demo purposes we assume that our device is smart enough to send data in 3 di
   }
 ]
 ```
- - **Binary** - in this case binary payload is **\x53\x4e\x2d\x30\x30\x31\x64\x65\x66\x61\x75\x6c\x74\x32\x35\x2e\x37** (in HEX string). 
-  Here is the description of the bytes in this payload:
-    - **0-5** bytes - **\x53\x4e\x2d\x30\x30\x31** - device name. If we convert it to text - **SN-001**;
-    - **6-12** bytes - **\x64\x65\x66\x61\x75\x6c\x74** - device type. If we convert it to text - **default**;
-    - **13-16** bytes - **\x32\x35\x2e\x37** - temperature telemetry. If we convert it to text - **25.7**;
+ - **Двоичный формат** - **\x53\x4e\x2d\x30\x30\x31\x64\x65\x66\x61\x75\x6c\x74\x32\x35\x2e\x37** (шестнадцатиричная строка). 
+ Описание байтов в этой полезной нагрузке:
+    - **0-5** байт - **\x53\x4e\x2d\x30\x30\x31** - имя устройства. Если мы конвертируем его в текстовый формат - **SN-001**;
+    - **6-12** байт - **\x64\x65\x66\x61\x75\x6c\x74** - тип устройства. В текстовом формате - **default**;
+    - **13-16** байт - **\x32\x35\x2e\x37** - телеметрия температуры. В текстовом формате - **25.7**;
 
-  - **Hex** - in this case payload is hexadecimal string **534e2d30303164656661756c7432352e373639**. 
-   Here is the description of the bytes in this payload:
-     - **0-5** bytes - **534e2d303031** - device name. If we convert it to text - **SN-001**;
-     - **6-12** byte - **64656661756c74** - device type. If we convert it to text - **default**;   
-     - **13-16** byte - **32352e37** - temperature telemetry. If we convert it to text: - **25.7**;    
-     - **17-18** byte - **3639** - humidity telemetry. If we convert it to text: - **69**;    
+  - **Hex** - в этом случае полезная нагрузка передается шестнадцатиричной строкой **534e2d30303164656661756c7432352e373639**. 
+   Описание байтов в этой полезной нагрузке:
+     - **0-5** байт - **534e2d303031** - имя устройства. В текстовом формате - **SN-001**;
+     - **6-12** байт - **64656661756c74** - тип устройства. В текстовом формате - **default**;   
+     - **13-16** байт - **32352e37** - телеметрия температуры. В текстовом формате - **25.7**;    
+     - **17-18** байт - **3639** - телеметрия влажности. В текстовом формате - **69**;    
     
-You can select payload type based on your device capabilities and business cases.
+Вы можете выбрать тип полезной нагрузки в зависимости от возможностей вашего устройства и бизнес-кейсов.
  
-**Please note** that on the machine, where UDP Integration is running, port **11560** must be opened for incoming connections - **nc** utility must be able to connect to UDP socket.
-In case you are running it locally, it should be fine without any additional changes. 
+ **Внимание**: порт **11560**, который используется на машине, в которой запущена UDP интеграция, должен быть открыт для входящих связей - должно быть возможным подключить утилиту **nc** к UDP сокету.
+Если вы запускаете интеграцию локально, она должна успешно работать без каких-либо дополнительных изменений.
 
-### Uplink Converter
+### Конвертер данных от устройства
 
-Before setting up an **UDP integration**, you need to create an **Uplink Converter** that is a script for parsing and transforming the data received by UDP integration.
+Перед тем, как запускать **UDP интеграцию**, нужно создать **Конвертер от устройства**: скрипт для парсинга и преобразования данных, получаемых через UDP интеграцию.
 
-To create an **Uplink Converter** go to **Data Converters** section and Click **Add new data converter —> Create new converter**.
-Name it **"UDP Uplink Converter"** and select type **Uplink**. Use debug mode for now.
+Чтобы создать конвертер, перейдите в раздел **Конвертеры данных** и нажмите **Добавить новый конвертер данных —> Создать новый конвертер**.
+Назовите его как **"UDP Uplink Converter"** и выберите тип **Uplink**. Включите режим отладки.
 
-**NOTE** Although the Debug mode is very useful for development and troubleshooting, leaving it enabled in production mode may tremendously increase the disk space, used by the database, because all the debugging data is stored there. It is highly recommended to turn the Debug mode off when done debugging. 
+**Примечание**: режим отладки необходим для процесса разработки и устранения неисправностей, однако, оставляя данный режим включенным, вы рискуете значительно увеличить дисковое пространство, используемое базой данных. Так как все данные, полученные в данном режиме, записываются на этот диск. Поэтому настоятельно рекомендуем выключать режим сразу по завершении процесса отладки.
 
-Choose device payload type to for decoder configuration
+Выберете формат данных полезной нагрузки сообщения для настройки декодера
 
 {% capture uplinkpayload %}
-Text payload<br/>%,%text%,%templates/integration/udp/udp-uplink-converter-text.md%br%
-JSON payload<br/>%,%json%,%templates/integration/udp/udp-uplink-converter-json.md%br%
-Binary payload<br/>%,%binary%,%templates/integration/udp/udp-uplink-converter-binary.md%br%
-Hex payload<br/>%,%hex%,%templates/integration/udp/udp-uplink-converter-hex.md{% endcapture %}
+Текстовый<br/>%,%text%,%templates/integration/udp/udp-uplink-converter-text.md%br%
+JSON<br/>%,%json%,%templates/integration/udp/udp-uplink-converter-json.md%br%
+Двоичный<br/>%,%binary%,%templates/integration/udp/udp-uplink-converter-binary.md%br%
+Hex<br/>%,%hex%,%templates/integration/udp/udp-uplink-converter-hex.md{% endcapture %}
 
 {% include content-toggle.html content-toggle-id="udpintegartionuplinkpayload" toggle-spec=uplinkpayload %}
 
-#### Downlink Converter
+#### Конвертер данных к устройству
 
-**Currently UDP integration does not support Downlink functionality**
+**На данный момент UDP интеграция не поддерживает данный функционал**
 
-### UDP Integration Setup
+### Установка UDP интеграции
 
-Go to **Integrations** section and click **Add new integration** button. Name it **UDP Integration**, select type **UDP**, turn the Debug mode on and from drop-down menus add recently created Uplink converter.
+Перейдите в раздел **Интеграции** и нажмите кнопку **Добавить новую интеграцию**. Назовите ее **UDP Integration**, выберете тип **UDP**, включите режим отладки и в раскрывающемся меню добавьте недавно созданный конвертер данных от устройства.
 
-As you mentioned **Execute remotely** is checked and can not be modified - UDP Integration can be only **remote** type.
+Функция **Выполнять удаленно** включена и не может быть изменена - UDP интеграция может быть только под типом**remote**.
 
-Please note down **Integration key** and **Integration secret** - we will use these values later in the configuration on the remote UDP Integration itself.
+Запишите **Ключ интеграции** и **Секрет интеграции** - эти значения понадобятся в дальнейшем для настройки удаленной UPD интеграции.
 
 ![image](/images/user-guide/integrations/udp/udp-integration-setup.png)
 
-By default UDP Integration will use **11560** port, but you can change this to any available port in your case. 
+По умолчанию UDP интеграция будет использовать порт **11560**, но вы можете поменять его на любой доступный порт. 
 
-We leave other options by default, but there is brief description of them:
-- **Enable broadcast - integration will accepts broadcast address packets** - a flag indicating that integration will accept UDP packets that were sent to broadcast address;
-- **Size of the buffer for inbound socket** - the size in KBytes of the socket data receive buffer;
+Остальные настройки мы оставляем по умолчанию. Короткое описание данных настроек:
+- **Включить broadcast - интеграция будет принимать пакеты адресов broadcast** - флаг, указывающий, что интеграция будет принимать UDP-пакеты, отправленные на широковещательный адрес;
+- **Размер буфера для входящего сокета** - размер в KBytes буфера приема данных сокетаr;
 
-Choose device payload type for **Handler Configuration**
+Выберете тип данных полезной нагрузки сообщения для **Настройки обработчика**
 
 {% capture handlerconfiguration %}
-Text payload<br/>%,%text%,%templates/integration/udp/udp-handler-configuration-text.md%br%
-JSON payload<br/>%,%json%,%templates/integration/udp/udp-handler-configuration-json.md%br%
-Binary payload<br/>%,%binary%,%templates/integration/udp/udp-handler-configuration-binary.md%br%
-Hex payload<br/>%,%hex%,%templates/integration/udp/udp-handler-configuration-hex.md{% endcapture %}
+Текстовый<br/>%,%text%,%templates/integration/udp/udp-handler-configuration-text.md%br%
+JSON<br/>%,%json%,%templates/integration/udp/udp-handler-configuration-json.md%br%
+Двоичный<br/>%,%binary%,%templates/integration/udp/udp-handler-configuration-binary.md%br%
+Hex<br/>%,%hex%,%templates/integration/udp/udp-handler-configuration-hex.md{% endcapture %}
 
 {% include content-toggle.html content-toggle-id="udpintegrationhandlerconfiguration" toggle-spec=handlerconfiguration %}
 
-Click **Add** to save the Integration.
+Нажмите **Добавить** для сохранения интеграции.
 
-#### Installing and running external UDP Integration
+#### Установка и запуск внешней UDP интеграции
 
-Please refer to the [Remote Integration guide](/docs/user-guide/integrations/remote-integrations) and install UDP Integration service locally or on separate machine.
+В руководстве [Удаленная интеграция](/docs/user-guide/integrations/remote-integrations) можно найти необходимую информацию для установки сервиса UPD интеграции локально или на отдельной машине.
 
-Please use **Integration key** and **Integration secret** from the above section for your UDP Integration configuration.  
+Используйте **Ключ интеграции** и **Секрет интеграции** из раздела выше для настройки вашей UDP интеграции.  
 
-### Send Uplink message
+### Отправка сообщения от устройства
 
-Once ThingsBoard UDP Integration has been created, the UDP server starts, and then it waits for data from the devices.
+Когда создается UPS интеграция, запускается UDP сервер. И затем он ожидает получения данных с устройств.
 
-Choose device payload type to send uplink message
+Выберите тип данных полезной нагрузки для сообщений от устройства
 
 {% capture senduplink %}
-Text payload<br/>%,%text%,%templates/integration/udp/udp-send-uplink-text.md%br%
-JSON payload<br/>%,%json%,%templates/integration/udp/udp-send-uplink-json.md%br%
-Binary payload<br/>%,%binary%,%templates/integration/udp/udp-send-uplink-binary.md%br%
-Hex payload<br/>%,%hex%,%templates/integration/udp/udp-send-uplink-hex.md{% endcapture %}
+Текстовый<br/>%,%text%,%templates/integration/udp/udp-send-uplink-text.md%br%
+JSON<br/>%,%json%,%templates/integration/udp/udp-send-uplink-json.md%br%
+Двоичный<br/>%,%binary%,%templates/integration/udp/udp-send-uplink-binary.md%br%
+Hex<br/>%,%hex%,%templates/integration/udp/udp-send-uplink-hex.md{% endcapture %}
 
 {% include content-toggle.html content-toggle-id="udpintegrationsenduplink" toggle-spec=senduplink %}
 
-Once you go to **Device Groups -> All** you should find a **SN-001** device provisioned by the Integration.
-Click on the device, go to **Latest Telemetry** tab to see "temperature" key and its value (25.7) there.
+Перейдя в **Группы устройств -> All**, вам нужно найти устройство **SN-001**, которое  работает с интеграцией.
+Нажмите на устройство, перейдите в **Последнюю телеметрию**. Там вы увидите ключ "temperature" и его значение (25.7).
 
-If your payload contains **humidity** telemetry, you should see "humidity" key and its value (69) there as well.
+Если полезная нагрузка содержит телеметрию **humidity** telemetry, вы сможете увидеть ключ "humidity" и его значение (69).
 
-## Next steps
-
-{% assign currentGuide = "ConnectYourDevice" %}{% include templates/guides-banner.md %}

@@ -1,369 +1,292 @@
 ---
 layout: docwithnav
-title: Enrichment Nodes
-description: Rule Engine 2.0 Enrichment Nodes
-
+title: Узлы обогащения
+description: Документация к IoT платформе Ростелеком
 ---
 
-Enrichment Nodes are used to update meta-data of the incoming Message.
+Узлы данного типа используются для обновления метаданных входящих сообщений.
 
 * TOC
 {:toc}
 
 ##### Customer attributes
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-customer-attributes.png)
 
-Node finds Customer of the Message Originator entity and adds Customers Attributes or Latest Telemetry value into Message Metadata. 
+Узел находит пользователя, который относится к отправителю сообщения, и добавляет пользовательские атрибуты или последнее телеметрическое значение в метаданные сообщения.
 
-Administrator can configure the mapping between original attribute name and Metadata attribute name.
+Администратор может настроить сопоставление между исходным названием атрибута и названием атрибута метаданных.
 
-There is **Latest Telemetry** checkbox in the Node configuration. 
-If this checkbox selected, Node will fetch Latest telemetry for configured keys. Otherwise, Node will fetch server scope attributes.
+В настройках узла есть флажок **Последняя телеметрия**. Если флажок установлен, узел будет получать последнюю телеметрию для настроенных ключей. В противном случае узел будет получать атрибуты области действия сервера.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-customer-attributes-config.png)
 
-Outbound Message Metadata will contain configured attributes if they exist.
-To access fetched attributes in other nodes you can use this template '<code>metadata.temperature</code>'
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они есть. Чтобы получить доступ к извлеченным атрибутам в других узлах, вы можете использовать шаблон '<code>metadata.temperature</code>'
 
-Following Message Originator types are allowed: **Customer**, **User**, **Asset**, **Device**.
+Допускаются следующие типы отправителей сообщений: **Клиент**, **Пользователь**, **Актив**, **Устройство**.
  
-If unsupported Originator type found, an error is thrown.
+Если обнаружен неподдерживаемый тип отправителя, возникнет ошибка.
 
-If Originator does not have assigned Customer Entity **Failure** chain is used, otherwise **Success** chain.
+Если у отправителя нет назначенной сущности Клиент, используется цепочка **Failure**, в противном случае - цепочка **Success**.
 
-You can see the real life example, where this node is used, in the next tutorial:
+В следующем руководстве вы можете увидеть пример, где используется этот узел:
 
-- [Send Email](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
+- [Отправка электронного письма](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
 
 ##### Device attributes
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-device-attributes.png)
 
-Node finds Related Device of the Message Originator entity using configured query and adds Attributes (client\shared\server scope) 
-and Latest Telemetry value into Message Metadata.
+С помощью настроенного запроса узел находит устройство, которое связано с сущностью отправителя сообщения, и добавляет атрибуты (клиент\общий доступ\область действия сервера) и последнее значение телеметрии в метаданные сообщения.
 
-Attributes are added into metadata with scope prefix:
+Атрибуты добавляются с префиксом области действия:
 
-- shared attribute -> <code>shared_</code>
-- client attribute -> <code>cs_</code>
-- server attribute -> <code>ss_</code>
-- telemetry -> no prefix used 
+- Общий атрибут -> <code>shared_</code>
+- Клиентский атрибут -> <code>cs_</code>
+- Серверный атрибут -> <code>ss_</code>
+- Телеметрия -> без префикса
 
-For example, shared attribute 'version' will be added into Metadata with the name 'shared_version'. Client attributes will use 'cs_' prefix. 
-Server attributes use 'ss_' prefix. Latest telemetry value added into Message Metadata as is, without prefix.
+Например, общий атрибут 'version' будет добавлен в метаданные с именем «shared_version». В атрибутах клиента будет использоваться префикс ‘cs_'.
+Атрибуты сервера используют префикс ‘ss_’. Последнее значение телеметрии будет добавлено в метаданные сообщения в том формате, в котором было передано, без префикса.
 
-In 'Device relations query' configuration Administrator can select required **Direction** and **relation depth level**.
-Also **Relation type** can be configured with required set of **Device types**.
+В настройке "Запрос отношений устройств" администратор может выбрать необходимое **направление** и **уровень глубины связи**. 
+Также тип связи может быть настроен для необходимых **типов устройств**.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-device-attributes-config.png)
 
-If multiple Related Entities were found, **_only the first Entity is used_** for attributes enrichment, other entities will be discarded.
+Если найдено несколько связанных сущностей, то для дополнения атрибутов используется **только первая сущность**, остальные - не используются.
 
-**Failure** chain is used if no Related Entity was found, otherwise - **Success** chain.
+Цепочка**Failure** используется, если не было найдено ни одной связанной сущности, в противном случае - цепочка **Success**.
 
-If attribute or telemetry was not found, it is not added into Message Metadata and still routed via **Success** chain.
+Если атрибут или телеметрия не были найдены, они не добавляются в метаданные сообщения, и оно по-прежнему направляется по цепочке **Success**.
 
-Outbound Message Metadata will contain configured attributes only if they exist.
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они существуют.
 
-To access fetched attributes in other nodes you can use this template '<code>metadata.temperature</code>'
+Для доступа к извлеченным атрибутам в других узлах вы можете использовать шаблон '<code>metadata.temperature</code>'
 
-**Note:** Since TB Version 2.3.1 the rule node has the ability to enable/disable reporting **Failure** if at least one selected key doesn't exist in the outbound message.
+**Примечание**:  узел правил может включать/отключать генерирование отчета об **ошибке**, если хотя бы один выбранный ключ не существует в исходящем сообщении.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-orignator-and-device-attributes-tell-failure.png)
 
-##### Originator attributes
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Атрибуты отправителя
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-attributes.png)
 
-Add Message Originator Attributes (client\shared\server scope) and Latest Telemetry value into Message Metadata. 
+Вы можете добавить атрибуты отправителя сообщения (клиентская\общая\серверная область действия) и последнюю телеметрию в метаданные сообщения.
 
-Attributes are added into metadata with scope prefix:
+Атрибуты добавляются с префиксом области действия:
 
-- shared attribute -> <code>shared_</code>
-- client attribute -> <code>cs_</code>
-- server attribute -> <code>ss_</code>
-- telemetry -> no prefix used 
+- Общий атрибут -> <code>shared_</code>
+- Клиентский атрибут -> <code>cs_</code>
+- Серверный атрибут -> <code>ss_</code>
+- Телеметрия -> без префикса
 
-For example, shared attribute 'version' will be added into Metadata with the name 'shared_version'. Client attributes will use 'cs_' prefix. 
-Server attributes use 'ss_' prefix. Latest telemetry value added into Message Metadata as is, without prefix.
+Например, общий атрибут 'version' будет добавлен в метаданные с названием «shared_version». Атрибуты клиента будут использовать префикс ‘cs_'. Серверные атрибуты используют префикс ‘ss_’. Последнее значение телеметрии добавляется в метаданные сообщения в том формате, в котором приходит, без префикса.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-attributes-config.png)
 
-Outbound Message Metadata will contain configured attributes if they exist.
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они есть.
 
-To access fetched attributes in other nodes you can use this template '<code>metadata.cs_temperature</code>'
+Для доступа к извлеченным атрибутам в других узлах вы можете использовать шаблон '<code>metadata.cs_temperature</code>'
 
-**Note:** Since TB Version 2.3.1 the rule node has the ability to enable/disable reporting **Failure** if at least one selected key doesn't exist in the outbound message.
+**Примечание**:  узел правил может включать/отключать генерирование отчета об **ошибке**, если хотя бы один выбранный ключ не существует в исходящем сообщении.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-orignator-and-device-attributes-tell-failure.png)
 
-You can see the real life example, where this node is used, in the following tutorials:
+В следующих руководствах вы можете увидеть пример, где используется этот узел:
 
-- [Transform telemetry using previous record](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/)
-- [Send Email](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
+- [Преобразование телеметрии с использованием предыдущих записей](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/)
+- [Отправка электронного письма](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
 
-##### Originator fields
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
+##### Поля отправителя
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-fields.png)
 
-Node fetches fields values of the Message Originator entity and adds them into Message Metadata. 
-Administrator can configure the mapping between field name and Metadata attribute name.
-If specified field is not part of Message Originator entity fields it will be ignored.
+Узел получает значения полей сущности отправителя и добавляет их в метаданные сообщения. Администратор может настроить сопоставление между именем поля и именем атрибута метаданных. Если указанное поле не передается в сущности отправителя сообщения, оно будет проигнорировано.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-fields-config.png)
 
-Following Message Originator types are allowed: **Tenant**, **Customer**, **User**, **Asset**, **Device**, **Alarm**, **Rule Chain**.
+Доступны следующие типы отправителей сообщений: **Тенант**, **Клиент**, **Пользователь**, **Актив**, **Устройство**, **Сигнал тревоги**, **Цепочка правил**.
 
-**Failure** chain is used If unsupported Originator type found, otherwise - **Success** chain.
+Цепочка **Failure** используется, если найден неподдерживаемый тип отправителя, в противном случае - цепочка **Success**.
 
-If field value was not found, it is not added into Message Metadata and still routed via **Success** chain.
+Если значение поля не было найдено, оно не добавляется в метаданные сообщения, и сообщение дальше направляется по цепочке **Success**.
 
-Outbound Message Metadata will contain configured attributes only if they exist.
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они есть в сообщении. 
 
-To access fetched attributes in other nodes you can use this template '<code>metadata.devType</code>'
+Для доступа к извлеченным атрибутам в других узлах вы можете использовать шаблон '<code>metadata.devType</code>'
 
-##### Related attributes
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Связанные атрибуты
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-related-attributes.png)
 
-Node finds Related Entity of the Message Originator entity using configured query and adds Attributes or Latest Telemetry value into Message Metadata.
+Узел находит связанную сущность отправителя сообщения с помощью настроенного запроса и добавляет атрибуты или последнее значение телеметрии в метаданные сообщения.
  
-Administrator can configure the mapping between original attribute name and Metadata attribute name.
+Администратор может настроить сопоставление между исходным именем атрибута и именем атрибута метаданных.
 
-In 'Relations query' configuration Administrator can select required **Direction** and **relation depth level**. 
-Also set of **Relation filters** can be configured with required Relation type and Entity Types.
+В настройке "Запрос связей" администратор может выбрать необходимое **направление** и **уровень глубины связей**.
+Также вы можете настроить **фильтры связей** по требуемым типам отношений и сущностей.
 
-There is **Latest Telemetry** checkbox in the Node configuration. If this checkbox selected, Node will fetch Latest telemetry for configured keys. 
-Otherwise, Node will fetch server scope attributes.
+В настройке узла есть флаг **Последняя телеметрия**. Если этот флажок установлен, узел будет получать последнюю телеметрию для настроенных ключей. В противном случае узел будет извлекать атрибуты области действия сервера.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-related-attributes-config.png)
 
-If multiple Related Entities are found, **_only first Entity is used_** for attributes enrichment, other entities are discarded.
+Если найдено несколько связанных сущностей, то для дополнения атрибутов используется **только первая сущность**, остальные - не учитываются.
 
-If no Related Entity found **Failure** chain is used, otherwise **Success** chain.
+Если не найдена связанная сущность, используется цепочка **Failure**, в противном случае - цепочка **Success**.
 
-Outbound Message Metadata will contain configured attributes if they exist.
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они есть.
 
-To access fetched attributes in other nodes you can use this template '<code>metadata.tempo</code>'
+Для доступа к извлеченным атрибутам в других узлах вы можете использовать шаблон '<code>metadata.tempo</code>'
 
-You can see the real life example, where this node is used, in the next tutorial:
+В следующем руководстве вы можете увидеть пример, где используется этот узел:
 
-- [Reply to RPC Calls](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/#add-related-attributes-node)
+- [Ответ на RPC-вызовы](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/#add-related-attributes-node)
 
-##### Tenant attributes
+##### Атрибуты тенанта
 
 <table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-tenant-attributes.png)
 
-Node finds Tenant of the Message Originator entity and adds Tenant Attributes or Latest Telemetry value into Message Metadata. 
+Узел находит тенанта, который связан с отправителем сообщения, и добавляет тенанту в метаданные атрибуты или значения последних телеметрических данных.
 
-Administrator can configure the mapping between original attribute name and Metadata attribute name.
+Администратор может настроить сопоставление между исходным именем атрибута и именем атрибута метаданных.
 
-There is **Latest Telemetry** checkbox in the Node configuration. If this checkbox selected, Node will fetch Latest telemetry for configured keys. Otherwise, Node will fetch server scope attributes.
+В настройках узла есть флажок **Последняя телеметрия**. Если этот флажок установлен, узел будет получать последнюю телеметрию для настроенных ключей. В противном случае узел будет получать атрибуты области действия сервера.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-tenant-attributes-config.png)
 
-Outbound Message Metadata will contain configured attributes if they exist. To access fetched attributes in other nodes you can use this template '<code>metadata.tempo</code>'
+Метаданные исходящего сообщения будут содержать настроенные атрибуты, если они есть. Чтобы получить доступ к извлеченным атрибутам в других узлах, вы можете использовать шаблон '<code>metadata.tempo</code>'
 
-Following Message Originator types are allowed: **Tenant**, **Customer**, **User**, **Asset**, **Device**, **Alarm**, **Rule Chain**.
+Доступны следующие типы отправителей сообщений: **Тенант**, **Клиент**, **Пользователь**, **Актив**, **Устройство**, **Сигнал тревоги**, **Цепочка правил**.
 
-If unsupported Originator type found, an error is thrown.
+Если обнаружен неподдерживаемый тип отправителя, возникнет ошибка. 
 
-**Failure** chain is used if Originator does not have assigned Tenant Entity, otherwise - **Success** chain.
+Если у отправителя сообщения нет назначенного тенанта, флоу будет направлено по цепочке **Failure**. В ином случае – по цепочке **Success**.
 
-##### Originator telemetry
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Телеметрия отправителя
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-telemetry.png)
 
-Adds Message Originator telemetry values from particular time range that was selected in node configuration to the Message Metadata. 
+Добавляет в метаданные сообщения те значения телеметрии отправителя, которые находятся в рамках определенного временного диапазона, заданного в настройках узла.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-telemetry-config.png)
 
-Telemetry values added to Message Metadata without prefix.
+Телеметрические значения добавляются в метаданные сообщений без префикса.
 
-The rule node has three fetch modes:
+У узла правил есть три режима выборки:
 
- - FIRST: retrieves telemetry from the database that is closest to the beginning of the time range
+ - Первый: извлекает из базы данных ту телеметрию, которая находится ближе всего к началу временного диапазона
 
- - LAST: retrieves telemetry from the database that is closest to the end of the time range
+ - Последний: извлекает из базы данных ту телеметрию, которая находится ближе всего к концу временного диапазона
 
- - ALL: retrieves all telemetry from the database, which is in the specified time range.
+ - Все: извлекает из базы данных всю телеметрию, которая находится в указанном временном диапазоне.
  
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-telemetry-fetch-mode.png)
 
-If selected fetch mode **FIRST** or **LAST**, Outbound Message Metadata would contain JSON elements(key/value)
+Если выбран Первый или Последний режим, метаданные исходящего сообщения будут содержать элементы JSON (ключ/значение)
 
-Otherwise if the selected fetch mode **ALL**, telemetry would be fetched as an array.
-
-<table  style="width: 60%">
-   <thead>
-     <tr>
-	 <td><strong><em>Note:</em></strong></td>
-     </tr>
-   </thead>
-   <tbody>
-     <tr>
-	<td>
-	<p>The rule node can extract a limit size of records into array: 1000 records</p>
-	</td>
-     </tr>
-   </tbody>
-</table>
-
-This array will contain JSON objects with the timestamp and value. 
+В противном случае, если выбран режим Все, телеметрия будет получена в виде массива.
 
 <table  style="width: 60%">
    <thead>
      <tr>
-	 <td><strong><em>Note:</em></strong></td>
+     <td><strong><em>Примечание:</em></strong></td>
      </tr>
    </thead>
    <tbody>
      <tr>
-	<td>
-	<p>End of the interval must always be less than the beginning of the interval.</p>
-	</td>
+    <td>
+    <p>Узел правил может извлечь максимум 1000 записей</p>
+    </td>
      </tr>
    </tbody>
 </table>
 
-If selected checkbox: **Use metadata interval patterns**, rule node will use Start Interval and End Interval patterns from metadata.
+Этот массив будет содержать JSON-объекты с временной меткой и значением.
 
-Patterns units sets in the milliseconds since the UNIX epoch (January 1, 1970 00:00:00 UTC)
+<table  style="width: 60%">
+   <thead>
+     <tr>
+     <td><strong><em>Примечание:</em></strong></td>
+     </tr>
+   </thead>
+   <tbody>
+     <tr>
+    <td>
+    <p>Конец интервала всегда должен быть меньше начала интервала.</p>
+    </td>
+     </tr>
+   </tbody>
+</table>
+
+Если установлен флажок  **Использовать шаблоны интервалов метаданных**, узел правил будет использовать шаблоны начала и конца интервала из метаданных.
+
+Единицы измерения паттернов измеряются в миллисекундах, точка отсчета с начала с эпохи UNIX (1 января 1970 года 00:00:00 UTC)
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-telemetry-patterns.png)
 
- - If any pattern will be absent in the Message metadata, the outbound message will be routed via **failure** chain.
+ - Если какой-либо шаблон будет отсутствовать в метаданных сообщения, исходящее сообщение будет направлено по цепочке **failure**.
  
- - In addition, if any pattern will have invalid data type, the outbound message will be also routed via **failure** chain.
+ - Кроме того, если какой-либо шаблон будет содержать недопустимый тип данных, исходящее сообщение также будет направлено по цепочке **failure**.
 
-Outbound Message Metadata will contain configured telemetry fields if they exist and belong to the selected range.
+В метаданных исходящего сообщения будут передаваться настроенные поля телеметрии, если они есть и входят в рамки выбранного диапазона.
 
-If attribute or telemetry was not found, it is not added into Message Metadata and still routed via **Success** chain. 
+Если атрибут или телеметрия не были найдены, они не добавятся в метаданные сообщения, и сообщение дальше отправится по цепочке **Success**.
  
-To access fetched telemetry in other nodes you can use this template: <code>JSON.parse(metadata.temperature)</code>
+Для доступа к извлеченной телеметрии в других узлах вы можете использовать шаблон: <code>JSON.parse(metadata.temperature)</code>
 
-**Note:** Since TB Version 2.3 the rule node has the ability to choose telemetry sampling order when selected Fetch mode: **ALL**.
+**Примечание:** начиная с версии платформы 2.3, узел правил может применить тот или иной порядок выборки телеметрии при включенном режиме выборки Все.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-originator-telemetry-order-by.png)
 
-You can see the real-life example, where this node is used, in the following tutorials:
+В следующем руководстве вы можете увидеть пример, где используется этот узел:
 
-- [Telemetry delta calculation](/docs/user-guide/rule-engine-2-0/tutorials/telemetry-delta-validation/)
+- [Расчет дельты телеметрии](/docs/user-guide/rule-engine-2-0/tutorials/telemetry-delta-validation/)
 
-##### Tenant details
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Детали тенанта
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-tenant-details.png)
 
-Rule Node Adds fields from Tenant details to the message body or metadata.
+Узел правил добавляет поля из сведений о тенанте в тело или метаданные сообщения.
 
-There is **Add selected details to the message metadata** checkbox in the Node configuration. If this checkbox selected, existing fields will be added to the message metadata instead of message data.
+В настройках узла есть флажок **Добавить выбранные сведения в метаданные сообщения**. Если этот флажок установлен, то существующие поля будут добавлены в метаданные сообщения вместо данных сообщения.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-tenant-details-config.png)
 
-Selected details are added into metadata with prefix: **tenant_**. Outbound Message will contain configured details if they exist.
+Выбранные сведения добавляются в метаданные с префиксом: **tenant_**. Исходящее сообщение будет содержать заданные в настройках сведения, если они существуют.
 
-To access fetched details in other nodes you can use one of the following template: 
+Для доступа к извлеченным сведениям в других узлах можно использовать один из следующих шаблонов:
 
 - <code>metadata.tenant_address</code>
 
 - <code>msg.tenant_address</code>
 
-**Failure** chain is used if Originator does not have assigned Tenant Entity, otherwise - **Success** chain.
+Цепочка **Failure** используется, если у отправителя нет назначенной сущности тенанта, в противном случае - цепочка **Success**.
 
-##### Customer details
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Детали клиента
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-customer-details.png)
 
-Rule Node Adds fields from Customer details to the message body or metadata.
+Узел правил добавляет поля из сведений о клиенте в тело или метаданные сообщения.
 
-There is **Add selected details to the message metadata** checkbox in the Node configuration. If this checkbox selected, existing fields will be added to the message metadata instead of message data.
+
+В настройках узла есть флажок **Добавить выбранные сведения в метаданные сообщения**. Если этот флажок установлен, то существующие поля будут добавлены в метаданные сообщения вместо данных сообщения.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/enrichment-customer-details-config.png)
 
-Selected details are added into metadata with prefix: **customer_**. Outbound Message will contain configured details if they exist.
+Выбранные сведения добавляются в метаданные с префиксом: **customer_**. Исходящее сообщение будет содержать настроенные сведения, если они существуют.
 
-To access fetched details in other nodes you can use one of the following template: 
+Для доступа к извлеченным сведениям в других узлах можно использовать один из следующих шаблонов:
 
 - <code>metadata.customer_email</code>
 
 - <code>msg.customer_email</code>
 
-Following Message Originator types are allowed: **Asset**, **Device**, **Entity View**.
+Разрешены следующие типы отправителей сообщений: **Объект**, **Устройство**, **Визуально представление сущности**.
   
-If unsupported Originator type found, an error is thrown.
+Если обнаружен неподдерживаемый тип отправителя, возникнет ошибка.
  
-If Originator does not have assigned Customer Entity **Failure** chain is used, otherwise **Success** chain.
+Если у отправителя нет назначенной сущности Клиент, используется цепочка **Failure**, в ином случае - цепочка **Success**.
+ 

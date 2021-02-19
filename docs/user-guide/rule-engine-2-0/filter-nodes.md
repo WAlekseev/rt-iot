@@ -1,158 +1,111 @@
 ---
 layout: docwithnav
-title: Filter Nodes
-description: Rule Engine 2.0 Filter Nodes
+title: Узлы фильтрации
+description: Узлы фильтрации
 
 ---
-
-Filter Nodes are used for Message filtering and routing.
+Данный функционал используется для фильтрации и маршрутизации сообщений.
 
 * TOC
 {:toc}
 
-##### Check Relation Filter Node
+##### Проверка связей узла фильтрации
 
 <table  style="width:12%">
    <thead>
      <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0.1</em></strong></td>
+     <td style="text-align: center"><strong><em>С версии IoT Ростелеком 2.3</em></strong></td>
      </tr>
    </thead>
 </table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-check-relation.png)
 
-Checks the relation from the selected entity to originator of the message by type and direction.
+Проверяет связь между выбранной сущности и отправителем сообщения по типу и направлению.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-check-relation-config.png)
 
-If relation exists - Message is sent via **True** chain, otherwise **False** chain is used.
+Если связь существует, сообщение отправляется по направлению **True**, в противном случае – по направлению **False**.
 
-**Note:** Since TB Version 2.3 the rule node has the ability to check the existence of relation to a specific entity or<br> to any entity based on direction and relation type by disabling the following checkbox in the rule node configuration:
+**Примечание**: Узел правил может проверять наличие связи с конкретным объектом или с любым объектом по направлению и типу связи. Для этого надо отключить флажок в настройках узла правил:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/check-relation-checkbox.png)
 
-In case that checkbox disabled and any relation exists - Message is sent via **True** chain, otherwise **False** chain is used.
+Если флажок не выставлен и существует какая-либо связь, сообщение отправится по направлению **True**, в противном случае – по направлению **False**.
 
-##### Check Existence Fields Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Проверка существующих полей в узле
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/check-existance-fields.png)
 
-Rule node checks the existence of the selected keys from incoming message data and metadata.
+Узел правил проверяет наличие выбранных ключей в данных и метаданных входящих сообщений.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/check-existance-fields-config.png)
 
-If selected checkbox **Check that all selected keys are present** and all keys in message data and metadata exists - send Message via **True** chain, otherwise, **False** chain is used.<br>
-In case that checkbox is not selected, and at least one of the keys from data or metadata of the message exists - send Message via **True** chain, otherwise, **False**  chain is used.
+<![endif]-->
 
-##### Message Type Filter Node
+Если установлен флажок **Проверить, что все выбранные ключи присутствуют** и что они существуют в данных и метаданных сообщения, Сообщение отправится по направлению **True**, в противном случае – по направлению **False**.
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+Если этот флажок не установлен и хотя бы один из ключей в данных или метаданных сообщения существует - сообщение отправится по направлению **True**, в противном случае – по направлению **False**.
+
+##### Узел переключения типов сообщений
+
+
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-message-type.png)
 
-In the Node configuration, administrator defines set of allowed Message Types for incoming Message. 
-There are [predefined Message Types](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types) in the system, like **Post attributes**, **Post telemetry**, **RPC Request**, etc.
-An administrator can also define any Custom Message Types in the node configuration.
+В настройках узла администратор определяет набор разрешенных типов входящих сообщений.
+В системе заданы [предопределенные типы сообщений](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types), такие как **Post-атрибуты**, **Post-телеметрия**, **RPC-запрос** и т. д. Также администратор может определить любые типы кастомных сообщений в настройках узла.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-message-type-config.png)
 
-If incoming Message Type is expected - Message is sent via **True** chain, otherwise **False** chain is used.
+Если тип входящего сообщения ожидаемый - сообщение отправится по направлению **True**, в противном случае – по направлению **False**.
 
 ##### Message Type Switch Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-message-type-switch.png)
 
-Route incoming messages by Message Type. If incoming Message has known [Message Type](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types) then it is sent to the corresponding chain, 
-otherwise, message is sent to **Other** chain.
+Направляет входящие сообщения по их типу. Если входящее сообщение имеет известный [тип](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types), то оно отправляется в соответствующую цепочку, в противном случае – в другую.
 
-If you use Custom Message Types than you can route those messages via **Other** chain of **Message Type Switch Node** 
-to the **Switch Node** or **Message Type Filter Node** configured with required routing logic.
+Если вы используете кастомные типы сообщений, вы можете направить их через **другую** цепочку, входящую в **узел переключения типов сообщений**, в **узел переключения** или **узел фильтрации по типу сообщений**, который настроен по требуемой логике маршрутизации.
 
-##### Originator Type Filter Node
+##### Узел фильтрации по типу отправителя
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-originator-type.png)
 
-In the Node configuration, administrator defines set of allowed Originator [Entity](/docs/user-guide/entities-and-relations/) types for incoming Message. 
+В настройках узла администратор определяет набор разрешенных типов [сущностей](/docs/user-guide/entities-and-relations/) отправителя для входящего сообщения.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-originator-type-config.png)
 
-If incoming Originator Type is expected - Message is sent via **True** chain, otherwise **False** chain is used.
+Если тип отправителя входит в ожидаемые - сообщение отправляется по направлению **True**, в противном случае – по направлению **False**.
 
-##### Originator Type Switch Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Узлы переключения типов отправителей
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-originator-type-switch.png)
 
-Routes incoming messages by Originator [Entity](/docs/user-guide/entities-and-relations/) type. 
+Направляет входящие сообщения по типу сущности [Отправитель](/docs/user-guide/entities-and-relations/).
 
-##### Script Filter Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Узел фильтрации скриптов
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-script.png)
 
-Evaluates incoming Message with configured JavaScript condition. 
+Анализирует входящее сообщение по настроенным JavaScript-условиям.
 
-JavaScript function receive 3 input parameters: 
+Функция JavaScript получает 3 входных параметра:
 
-- <code>msg</code> - is a Message payload.
-- <code>metadata</code> - is a Message metadata.
-- <code>msgType</code> - is a Message type.
+- <code>msg</code> - полезная нагрузка сообщения.
+- <code>metadata</code> - метаданные сообщения.
+- <code>msgType</code> - тип сообщения.
 
-Script should return Boolean value.
-If **True** - send Message via **True** chain, otherwise **False** chain is used.
+Скрипт должен вернуть булевое значение. Если возвращается **True** - сообщение отправится по направлению **True**, в противном случае – по направлению **False**.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-script-config.png)
  
-Message payload can be accessed via <code>msg</code> variable. For example <code>msg.temperature < 10;</code><br/> 
-Message metadata can be accessed via <code>metadata</code> variable. For example <code>metadata.customerName === 'John';</code><br/> 
-Message type can be accessed via <code>msgType</code> variable. For example <code>msgType === 'POST_TELEMETRY_REQUEST'</code><br/> 
+Полезная нагрузка сообщения может быть доступна через переменную <code>msg</code>. Например <code>msg.temperature < 10;</code><br/> 
+Метаданные могут быть доступны через переменную <code>metadata</code>. Например, <code>metadata.customerName === 'John';</code><br/> 
+Тип сообщения может быть доступен через переменную <code>msgType</code>. Например, <code>msgType === 'POST_TELEMETRY_REQUEST'</code><br/> 
 
-Full script example:
+Полный пример скрипта:
 
 {% highlight javascript %}
 if(msgType === 'POST_TELEMETRY_REQUEST') {
@@ -166,43 +119,33 @@ if(msgType === 'POST_TELEMETRY_REQUEST') {
 return false;
 {% endhighlight %}
 
-JavaScript condition can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Условие JavaScript можно проверить с помощью функции [Test JavaScript](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
-You can see the real life examples, where this node is used, in the next tutorials:
+Вы можете увидеть примеры, где используется этот узел, в следующих туториалах:
 
-- [Create and Clear Alarms](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
-- [Reply to RPC Calls](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/#add-filter-script-node)
+- [Создание и удаление сигналов тревоги](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
+- [Ответы на вызовы RPC](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/#add-filter-script-node)
 
-##### Switch Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Узел переключения
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-switch.png)
 
-Routes incoming Message to one OR multiple output chains. Node executes configured JavaScript function.
+Маршрутизирует входящие сообщения по одному или нескольким направлениям.
+Узел выполняет настроенную JavaScript-функцию, которая получает 3 входных параметра:
 
-JavaScript function receive 3 input parameters: 
-
-- <code>msg</code> - is a Message payload.
-- <code>metadata</code> - is a Message metadata.
-- <code>msgType</code> - is a Message type.
+- <code>msg</code> - полезная нагрузка сообщения.
+- <code>metadata</code> - метадата сообщения.
+- <code>msgType</code> - тип сообщения
  
-The script should return **_an array of next Relation names_** where Message should be routed.
-If returned array is empty - message will not be routed to any Node and discarded.
+Скрипт должен **_возвращать массив, состоящий из имен отношений_**, в которые должно будет направлено сообщение. Если возвращаемый массив пустой – сообщение не отправится ни в один узел и будет сброшено.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-switch-config.png)
 
-Message payload can be accessed via <code>msg</code> variable. For example <code>msg.temperature < 10;</code><br/> 
-Message metadata can be accessed via <code>metadata</code> variable. For example <code>metadata.customerName === 'John';</code><br/> 
-Message type can be accessed via <code>msgType</code> variable. For example <code>msgType === 'POST_TELEMETRY_REQUEST'</code><br/> 
+Полезная нагрузка сообщения может быть доступна через переменную <code>msg</code>. Например <code>msg.temperature < 10;</code><br/> 
+Метаданные могут быть доступны через переменную <code>metadata</code>. Например, <code>metadata.customerName === 'John';</code><br/> 
+Тип сообщения может быть доступен через переменную <code>msgType</code>. Например, <code>msgType === 'POST_TELEMETRY_REQUEST'</code><br/> 
 
-Full script example:
+Полный пример скрипта:
 
 {% highlight javascript %}
 if (msgType === 'POST_TELEMETRY_REQUEST') {
@@ -223,70 +166,59 @@ if (msgType === 'POST_TELEMETRY_REQUEST') {
 return [];
 {% endhighlight %}
 
-JavaScript switch function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функцию переключения JavaScript можно проверить с помощью [Test JavaScript](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
-In order to specify custom relation name **Custom** type should be selected. This will allow to input custom relation name.
-Custom relation names are case-insensitive.
+Для указания имени кастомного отношения следует выбрать тип **Кастомный**. Это позволит ввести пользовательское имя отношения. Имена таких отношений можно заполнять в любом регистре.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-switch-custom-relation.png)
 
-##### GPS Geofencing Filter Node
-
-<table  style="width:15%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+##### Узел фильтрации геозоны по GPS
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing.png)
 
-Filters incoming messages by GPS based parameters. Extracts latitude and longitude from data or metadata and checks if they are inside configured perimeter (geo fence).
+Фильтрует входящие сообщения по параметрам, которые генерируются на основе показателей GPS. Извлекает широту и долготу из данных или метаданных и проверяет, находятся ли они внутри настроенного периметра (гео-ограждение).
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-default-config.png)
 
-The rule node fetches perimeter information from message metadata by default. If **Fetch perimeter information from message metadata** is unchecked, additional information should be configured.
+Узел правил по умолчанию извлекает информацию о периметре из метаданных сообщения. Если флажок **Извлекать информацию о периметре из метаданных сообщения** снят, необходимо сделать дополнительные настройки.
 
 <br>
 
-###### Fetch perimeter information from message metadata
+###### **Получение информации о периметре из метаданных сообщения**
 
-There are two options of area definition based on the perimeter type:
+Существует два варианта определения площади в зависимости от типа периметра:
 
-- Polygon 
-           
-    Metadata of the incoming message must include key with name **perimeter** and following data structure:
+- Полигон 
+
+Метаданные входящего сообщения должны содержать ключ с именем **периметр** и иметь следующую структуру данных:
      
 {% highlight java %}[[lat1,lon1],[lat2,lon2], ... ,[latN,lonN]]{% endhighlight %}
  
-- Circle
+- Круг
                  
-
 {% highlight java %}"centerLatitude": "value1", "centerLongitude": "value2", "range": "value3"
 
-All values for these keys are in double-precision floating-point data type.
+Все значения для этих ключей имеют double-precision floating-point тип данных.
 
-The "rangeUnit" key requires specific value from a list of METER, KILOMETER, FOOT, MILE, NAUTICAL_MILE (capital letters obligatory).
+Ключ "rangeUnit" требует специального значения из списка: METER, KILOMETER, FOOT, MILE, NAUTICAL_MILE (обязательно большими буквами).
 {% endhighlight %}
 
-###### Fetch perimeter information from node configuration
+###### Получить информацию о периметре из конфигурации узла
  
-There are two options of area definition based on the perimeter type:
+Существует два варианта определения площади в зависимости от типа периметра:
  
-- Polygon 
+- Полигон
              
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-polygon-config.png)           
 
-- Circle
+- Круг
                   
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-circle-config.png)          
     
-if configured latitude and longitude are inside configured perimeter message sent via **True** chain, otherwise **False** chain is used.
+Если широта и долгота настроены внутри периметра сообщения, то сообщение будет отправлено по направлению **True**, в противном – по направлению **False**.
       
-**Failure** chain will to be used when:
+Направление **Failure** будет использоваться, когда:
 
-   - incoming message has no configured latitude or longitude key in data or metadata. 
-   - missing perimeter definition;     
-        
-    
+- во входящем сообщении в данных или метаданных не передается настроенный ключ «Широта» или «Долгота».
+- отсутствует значение «Периметра»;
+ 

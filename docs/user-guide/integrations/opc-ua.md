@@ -1,25 +1,22 @@
 ---
 layout: docwithnav
-title: OPC-UA Integration
-description: OPC-UA Integration Guide 
-
+title: OPC-UA интеграция
+description: OPC-UA интеграция
 ---
-
-{% assign feature = "Platform Integrations" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
 
-## Overview
+## Обзор
 
-OPC UA Integration allows you to stream data from the OPC UA server to ThingsBoard and converts the device payloads to the ThingsBoard format.
+Интеграция OPC UA позволяет передавать данные с сервера OPC UA на платформу и преобразовывать полезную нагрузку устройства в предусмотренный платформой формат
 
 ![image](/images/user-guide/integrations/opc-ua-integration.svg)
 
-### Video tutorial
+### Видео-урок
 
-See video tutorial below for step-by-step instruction how to setup OPC-UA Integration.
+Вы можете посмотреть данное видео, в котором содержится пошаговая инструкция по запуску OPC-UA интеграции
 
 <br/>
 <div id="video">  
@@ -28,29 +25,30 @@ See video tutorial below for step-by-step instruction how to setup OPC-UA Integr
     </div>
 </div> 
 
-### OPC-UA Integration Tutorial
+### Настройка интеграции OPC-UA
 
-In this tutorial, we will configure the integration between ThingsBoard and OPC-UA
-to get the Airconditioners data from the [OPC UA C++ Demo Server](https://www.unified-automation.com/downloads/opc-ua-servers/file/download/details/opc-ua-c-demo-server-v161-windows.html)
-and allow the user to switch on/off any Airconditioner using the Integration downlink feature.
+В данном руководстве вы найдете информацию для настройки интеграции между платформой и OPC-UA, чтобы получать данные кондиционеров с [OPC UA C++ Demo Server](https://www.unified-automation.com/downloads/opc-ua-servers/file/download/details/opc-ua-c-demo-server-v161-windows.html) и давать возможность пользователям включать и выключать кондиционер с помощью функции интеграции с устройством.
 
-#### Prerequisites
 
-- Download and install the [OPC UA C++ Demo Server](https://www.unified-automation.com/downloads/opc-ua-servers/file/download/details/opc-ua-c-demo-server-v161-windows.html).
-- After installation, launch the **UA Admin Dialog**.
-- Verify that the **Endpoint URL** is set correctly and remember the values of **Endpoint Host** and **Endpoint Port**. These values will be needed during the OPC-UA Integration setup.
+#### Условия
+
+- Скачайте и установите [OPC UA C++ Demo Server](https://www.unified-automation.com/downloads/opc-ua-servers/file/download/details/opc-ua-c-demo-server-v161-windows.html).
+- После установки запустите **диалоговое окно от имени Администратора**.
+- Подтвердите корректность **URL-адреса конечной точки** и запомните значения хоста и порта конечной точки. Эти значения понадобятся во время запуска интеграции OPC-UA.
 
 ![image](/images/user-guide/integrations/opc-ua/opc-ua-server-config.png)
 
-- Launch the **UaCPPServer**. The console dialog will open showing the server endpoints URLs.
+- Запустите **UaCPPServer**.  Откроется диалоговое окно консоли с URL-адресами конечных точек сервера.
 
-#### ThingsBoard setup
+#### Настройка платформы
 
-##### Uplink Data Converter
+##### Конвертер данных от устройства
 
-First, we need to create the Uplink Data converter that will be used for receiving the messages from the OPC UA server. The converter should transform the incoming payload into the required message format.
-The message must contain the **deviceName** and **deviceType**. These fields are used to submit the data to the correct device. If a device cannot not be found, a new device will be created.
-Here is how the payload from the OPC UA integration will look like:
+Сначала понадобится создать конвертер данных от устройства, который будет использоваться для получения сообщения с сервера OPC UA. Конвертер будет преобразовывать входящую полезную нагрузку сообщений в требуемый формат сообщения.
+В сообщении должны содержаться поля **deviceName** и **deviceType**. Они используются для отправки данных на конкретные устройства.  Если устройство не будет найдено, то создастся новое.
+Как будет выглядеть полезная нагрузка из интеграции OPC UA:
+
+
 
 Payload:
 {% highlight json %}
@@ -70,13 +68,13 @@ Metadata:
 }
 {% endhighlight %}
 
-We will take the **opcUaNode_name** metadata value and map it to the **deviceName** and set the **deviceType** as **airconditioner**.
+Мы возьмем значение метаданных **opcUaNode_name**, сопоставим его с **deviceName** и установим **airconditioner** в качестве **deviceType**.
 
-However, you can use another mapping in your specific use cases.
+Но вы можете использовать другое сопоставление в зависимости от ваших целей.
+Также мы получим значения полей **temperature**, **humidity** и **powerConsumption** и будем использовать их в качестве телеметрии устройства.
 
-Also, we will retrieve the values of the **temperature**, **humidity** and **powerConsumption** fields and use them as device telemetries.
+Далее переходим в **Конвертеры данных** и создаем новый конвертер **от устройства** с помощью следующей функции:
 
-Go to the **Data Converters** and create a new **uplink** Converter using this function:
 {% highlight javascript %}
 
 var data = decodeToJson(payload);
@@ -123,12 +121,11 @@ return result;
 
 ![image](/images/user-guide/integrations/opc-ua/uplink-converter.png)
 
-##### Downlink Data Converter
+##### Конвертер данных к устройству
 
-For sending Downlink messages from the Thingsboard to the OPC UA node, we need to define a
-downlink Converter.
+Для отправки сообщений на устройства с OPC UA узла, надо настроить конвертер данных к устройству.
 
- In general, the output from a Downlink converter should have the following structure:
+Вызов данных из данного конвертера должны иметь следующую структуру:
 
 {% highlight json %}
 [{
@@ -138,18 +135,20 @@ downlink Converter.
 }]
 {% endhighlight %}
 
-- **contentType** - defines how data will be encoded {TEXT \| JSON \| BINARY}. In case of OPC UA Integration, JSON is used by default.
-- **data** - the actual data that will be processed by OPC UA Integration and sent to the target OPC UA nodes:
-    - **writeValues** - array of write values methods:
-        - **nodeId** - target node in [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept) (`ns=<namespaceIndex>;<identifiertype>=<identifier>`)
-        - **value** - value to write
-    - **callMethods** - array of call methods:
-        - **objectId** - target object in [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept)
-        - **methodId** - target method in [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept)
-        - **args** - array of method input values
-- **metadata** - not used in case of OPC UA Integration and can be empty.
+- **contentType** - определяет кодировку данных {TEXT \| JSON \| BINARY}. Для интеграции OPC UA по умолчанию используется формат JSON.
+- **data** - актуальные данные, которые будут обработаны интеграцией OPC UA и отправлены в целевые узлы OPC UA:
+    - **writeValues** - массив, в котором передаются методы записи значений:
+        - **nodeId** - целевой узел в [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept) (`ns=<namespaceIndex>;<identifiertype>=<identifier>`)
+        - **value** - значение для записи
+    - **callMethods** - массив методов для вызовов:
+        - **objectId** - целевой объект в [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept) 
+        - **methodId** - целевой метод в [OPC UA NodeId format](http://documentation.unified-automation.com/uasdkhp/1.0.0/html/_l2_ua_node_ids.html#UaNodeIdsConcept) 
+        - **args** - массив входных значений метода
+- **metadata** - не используется в интеграции OPC UA, поле может быть пустым.
 
-Go to **Data Converters** and create a new **downlink** Converter using this function:
+Перейдите в **Конвертеры данных** и создайте новый конвертер данных **к устройству** с помощью следующей функции:
+
+
 
 {% highlight javascript %}
 var data = {
@@ -178,97 +177,97 @@ var result = {
 return result;
 {% endhighlight %}
 
-This converter will process the RPC command to the device using the method **setState**
-and a boolean **params** value to call the 'Start' or 'Stop' method of the Airconditioner.
+Этот конвертер будет обрабатывать RPC-команды к устройству с помощью метода **setState** и логического значения **params** для вызова метода "Старт" или "Стоп" для кондиционера.
 
-Destination node is detected using the **deviceName** field of the incoming message metadata.
+Узел назначения определяется с помощью поля **deviceName**, передающегося в метаданных входящего сообщения.
 
 ![image](/images/user-guide/integrations/opc-ua/downlink-converter.png)
 
 ##### OPC-UA Integration
 
-Next, we will create Integration with OPC UA server inside the ThingsBoard.
-Open the **Integrations** section and add a new Integration with a type **OPC-UA**
+Интеграция OPC-UA
 
-- Name: OPC-UA Airconditioners
-- Type: OPC-UA
-- Uplink data converter: Airconditioner Uplink
-- Downlink data converter: Airconditioner Downlink
-- Application name: \<empty\> (client application name)
-- Application uri: \<empty\> (client application uri)
-- Host: **Endpoint Host** (see [Prerequisites](/docs/user-guide/integrations/opc-ua/#prerequisites))
-- Port: **Endpoint Port** (see [Prerequisites](/docs/user-guide/integrations/opc-ua/#prerequisites))
-- Scan period in seconds: 10 (how often to rescan OPC UA nodes)
-- Timeout in milliseconds: 5000 (the timeout, in milliseconds, before failing a request to OPC UA server)
-- Security: None (can be *Basic128Rsa15 / Basic256 / Basic256Sha256 / None*)
-- Identity: Anonymous (can be *Anonymous / Username*)
-- Mapping:
-     - Device Node Pattern: `Objects\.BuildingAutomation\.AirConditioner_\d+$` (regular expression used to match scanned OPC UA Node FQNs/IDs to device name.)
-     - MappingType: Fully Qualified Name (can be *Fully Qualified Name* / *ID*)
-     - Subscription tags (list of node tags (**Path**) to subscribe with mappings to keys (**Key**) used in the output message):
-        - state - State
-        - temperature - Temperature
-        - humidity - Humidity
-        - powerConsumption - PowerConsumption
+Далее создадим Интеграцию OPC UA с сервером OPC UA.
+Откройте меню **Интеграции** и добавьте новую интеграцию с типом **OPC-UA**
+
+- Название: OPC-UA кондиционеры
+- Тип: OPC-UA
+- Конвертер данных (Uplink): Кондиционер Uplink
+- Конвертер данных (Downlink): Кондиционер Downlink
+- Название приложения: \<empty\> (название клиентского приложения)
+- Uri приложения: \<empty\> (uri клиентского приложения)
+- Хост: **Хост конечной точки** (подробнее [Предусловия](/docs/user-guide/integrations/opc-ua/#prerequisites))
+- Порт: **Порт конечной точки** (подробнее [Предусловия](/docs/user-guide/integrations/opc-ua/#prerequisites))
+- Период сканирования в секундах: 10 (как часто повторно сканировать узлы OPC UA)
+- Время ожидания в миллисекундах: 5000 (время ожидания в миллисекундах  до выставления статуса "сбой" для запроса на сервер OPC UA)
+- Безопасность: None (может быть *Basic128Rsa15 / Basic256 / Basic256Sha256 / None*)
+- Идентичность: Anonymous (может быть *Anonymous / Username*)
+- Сопоставление:
+     - Шаблон узла устройства: `Objects\.BuildingAutomation\.AirConditioner_\d+$` (регулярне выражение, которое используется для сопоставления отсканированных OPC UA Node FQNs/IDs с именем устройства.)
+     - MappingType: полное имя (может быть *Fully Qualified Name* / *ID*)
+     - Теги подписки (список тегов узла (**Путь**) для того, чтобы подписаться на ключи сопоставления  (**Ключ**), используется в выходных сообщениях):
+        - state - Состояние
+        - temperature - Температура
+        - humidity - Влажность
+        - powerConsumption - Энергопотребление
 
 ![image](/images/user-guide/integrations/opc-ua/opc-ua-integration-mapping.png)
 
-##### Airconditioners Rule Chain
+##### Цепочка правил для кондиционера
 
-To demonstrate OPC-UA Integration and Rule Engine capabilities, we will create a separate Rule Chain
-to process the uplink and downlink messages related to the OPC-UA Integration.
+Чтобы продемонстрировать возможности интеграции OPC-UA и движка правил, мы создадим раздельные цепочки правил для обработки сообщений от устройства и к устройству, которые связаны с интеграцией OPC-UA.
 
-Let´s create the **Airconditioners** Rule Chain.
+Создадим цепочку правил **Кондиционеры**.
 
- - Download the [**airconditioners.json**](/docs/user-guide/resources/airconditioners.json) file.
- - To import this JSON file, click the `+` button at the bottom right corner of the **Rule Chains** page and select the **Import rule chain**.
- - double-click on the **Airconditioners** integration downlink node and select **OPC-UA Airconditioners** in the **Integrations** field.
- - Apply and save all changes.
+ - Скачайте файл [**airconditioners.json**](/docs/user-guide/resources/airconditioners.json).
+ - Чтобы импортировать этот файл, кликните кнопку `+` справа на странице **Цепочка правил** и выберете опцию **Импортировать цепочку правил**.
+ - Дважды нажмите на узел интеграции к устройству **Кондиционеры** и выберете **OPC-UA Кондиционеры** в поле **Интеграции**.
+ - Подтвердите и сохраните изменения.
 
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-rule-chain.png)
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-integration-downlink.png)
 
- - Open and edit the **Root Rule Chain**.
- - Add the **rule chain** node.
- - Select the **Airconditioners** Rule Chain and connect it to the Message Type Switch Node using the following link labels:
+ - Откройте редактирование **Root Rule Chain**.
+ - Добавьте узел **rule chain**.
+ - Выберете цепочку правил **Кондиционеры** и соедините с узлом переключения типа сообщения с помощью следующих лэйблов:
 **Attributes Updated** / **Post telemetry** / **RPC Request to Device**.
 
 ![image](/images/user-guide/integrations/opc-ua/root-rule-chain.png)
 
-##### Airconditioners Dashboard
+##### Дашборд для кондиционеров
 
-To visualize the Airconditioners data and test RPC commands, we will create the **Airconditioners** dashboard.
+Для визуализации данных, поступающих с кондиционеров и тестирования RPC-команд мы создадим дашборд **Кондиционеры**.
 
- - Download the [**airconditioners_dashboard.json**](/docs/user-guide/resources/airconditioners_dashboard.json) file.
- - To import this JSON file, click the `+` button at the bottom right corner of the **Dashboards** page and select **Import dashboard**.
+ - Скачайте файл [**airconditioners_dashboard.json**](/docs/user-guide/resources/airconditioners_dashboard.json).
+ - Чтобы импортировать файл JSON, на странице **Дашборды** выберите опцию **Импортировать дашборд**.
 
-#### Validation
+#### Валидация
 
-To verify our integration,
+Чтобы проверить нашу интеграцию,
 
- - Go to the **Device groups** page. You will see the **Airconditioners** group.
- - When you open this group, you will see the 10 Airconditioner devices.
+ - Перейдите на страницу **Группы устройств**. Там вы увидите группу **Кондиционеры**.
+ - Когда вы откроете эту группу, вы увидите в списке 10 устройств с типом кондиционер.
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-group.png)
 
- - Open the details of one of the Airconditioners and select the **Latest Telemetry** tab.
- - You will see that telemetry values are frequently updated.
+ - Откройте Детали группы объектов, вкладку **Последняя телеметрия**.
+ - Вы увидите данные, обновляющиеся в режиме реального времени.
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioner-latest-telemetry.png)
 
- - Go to **Dashboards** and open the **Airconditioners** dashboard.
- - You will see the telemetry till the last minute from all the 10 airconditioners.
+ - Перейдите в раздел **Дашборды** и откройте дашборд **Кондиционеры**.
+ - Вы увидите телеметрические данные до последней минуты со всех кондиционеров.
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-dashboard.png)
 
- - Open the Airconditioner details page by clicking on the details button in the Entities widget.
+ - Откройте детали Кондиционеров, кликнув на кнопку детали в виджете сущностей.
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-dashboard-click-details.png)
 
- - You will find the Airconditioner status light green.
- - Try to switch off the airconditioner by clicking on the **On/Off Round switch**.
- - The Airconditioner status light will turn into grey, the temperature will start rising, the humidity will start increasing and the power consumption will stop.
+ - Статус кондиционера будет высвечиваться зеленым цветом.
+ - Попробуйте выключить кондиционер, нажав **Вкл/Выкл круговой переключатель**.
+ - Статус перейдет в серый цвет, температура начнет подниматься, показатели влажности начнут расти, а расход энергии прекратится.
 
 ![image](/images/user-guide/integrations/opc-ua/airconditioners-dashboard-details.png)
 
@@ -277,9 +276,4 @@ To verify our integration,
 - [Integration Overview](/docs/user-guide/integrations/) 
 - [Uplink Converters](/docs/user-guide/integrations/#uplink-data-converter) 
 - [DownLink Converters](/docs/user-guide/integrations/#downlink-data-converter) 
-- [Rule Engine](/docs/user-guide/rule-engine-2-0/re-getting-started/) 
-
-  
-## Next steps
-
-{% assign currentGuide = "ConnectYourDevice" %}{% include templates/guides-banner.md %}
+- [Rule Engine](/docs/user-guide/rule-engine-2-0/re-getting-started/)

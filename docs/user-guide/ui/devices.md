@@ -1,69 +1,62 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Devices
-description: ThingsBoard IoT Device management
-
+title: Устройства
+description: Устройства
 ---
 
-ThingsBoard support following device management features using Web UI and [REST API](/docs/reference/rest-api/).
+IoT-платформа Ростелеком поддерживает следующие функции управления устройствами с помощью Web UI и REST API.
 
 * TOC
 {:toc}
 
-## Add and delete devices
+## Добавление и удаление устройств
 
-Tenant administrator is able to register new devices or delete them from ThingsBoard.
+Тенант-администратор может регистрировать новые устройства или удалять их из IoT-платформы Ростелеком.
 
 ![image](/images/user-guide/ui/devices.png)
 
-## Manage device credentials
+## Управление учетными данными устройства
 
-Tenant administrator is able to manage device credentials. 
-Current release supports Access Token and X.509 Certificates based credentials.
+Тенант-администратор может управлять учетными данными устройства. Текущая версия поддерживает токен доступа и учетные данные на основе сертификатов X. 509.
 
 ![image](/images/user-guide/ui/manage-device-credentials.png)
 
-## Get Device Id
+## Получение идентификатора устройства
   
-Tenant administrator and customer users are able to copy device id to the clipboard using "Copy Device Id" button.
+Тенант-администратор и клиенты-пользователи могут скопировать идентификатор устройства в буфер обмена с помощью кнопки «Копировать ID устройства».
 
  ![image](/images/user-guide/ui/device-id.png)
 
-## Assign devices to customers
+## Назначение устройств клиентам
 
-Tenant administrator is able to assign devices to certain [customer](/docs/user-guide/ui/customers/).
-This will allow Customer users to fetch device data using REST APIs or Web UI.
+Тенант-администратор может назначить устройство определенному клиенту. Это позволит пользователям-клиентам извлекать данные устройств с помощью REST API или Web UI.
  
  ![image](/images/user-guide/ui/assign-device-to-customer.png)
 
-## Browse device attributes
+## Просмотр атрибутов устройства
 
-Tenant administrator and customer users are able to browse device [attributes](/docs/user-guide/attributes).
+Тенант-администраторы и клиенты-пользователи могут просматривать атрибуты устройств.
 
  ![image](/images/user-guide/ui/device-attributes.png)
 
-## Browse device telemetry
+## Просмотр телеметрии устройств
 
-Tenant administrator and customer users are able to browse device [telemetry data](/docs/user-guide/telemetry).
+Тенант-администраторы и клиенты-пользователи могут просматривать данные телеметрии устройства
 
  ![image](/images/user-guide/ui/device-telemetry.png)
 
-## Browse device alarms
+## Просмотр сигналов тревоги устройства
 
-Tenant administrator and customer users are able to browse device [alarms](/docs/user-guide/alarms).
+Тенант-администратор и клиенты-пользователи могут просматривать сигналы тревоги устройств.
 
  ![image](/images/user-guide/ui/device-alarms.png)
  
-## Browse device events
+## Просмотр событий устройства
   
-Tenant administrator and customer users are able to browse events related to a particular device using "Events" tab.
-Lifecycle events and statistics are coming soon.
+Тенант-администратор и клиенты-пользователи могут просматривать события, связанные с конкретным устройством, с помощью вкладки “События”. События жизненного цикла и статистика скоро появятся.
 
-## Manage device relations
+## Управление отношениями устройств
  
-Tenant administrator and customer users are able to manage device [relations](/docs/user-guide/entities-and-relations).
+Тенант-администратор и клиенты-пользователи могут управлять отношениями устройств.
 
  ![image](/images/user-guide/ui/device-relations.png)
- 

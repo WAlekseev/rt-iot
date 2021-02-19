@@ -1,11 +1,9 @@
 ---
 layout: docwithnav
-title: Transformation Nodes
-description: Rule Engine 2.0 Transformation Nodes
-
+title: Узлы преобразования
+description: Документация к IoT платформе Ростелеком
 ---
-
-Transformation Nodes are used for changing incoming Message fields like Originator, Message Type, Payload and Metadata.
+Узлы преобразования используются для изменения полей входящих сообщений, таких как Отправитель, Тип сообщения, Полезная нагрузка и Метаданные.
 
 * TOC
 {:toc}
@@ -13,63 +11,49 @@ Transformation Nodes are used for changing incoming Message fields like Originat
 
 # Change originator
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-change-originator.png)
 
-All incoming Messages in the Thingsboard have originator field that identifies an entity that submits Message. 
-It could be a Device, Asset, Customer, Tenant, etc.
+Все входящие сообщения на платформе имеют поле Инициатор, которое обозначает объект, отправляющий сообщение. 
+Это может быть Устройство, Актив, Клиент, Тенант и т.д.
 
-This node is used in cases when a submitted message should be processed as a message from another entity. 
-For example, Device submits telemetry and telemetry should be copied into higher level Asset or to a Customer. 
-In this case, Administrator should add this node before [**Save Timeseries**](/docs/user-guide/rule-engine-2-0/action-nodes/#save-timeseries-node) Node.
+Этот узел используется в тех случаях, когда отправленное сообщение должно быть обработано как сообщение от другой сущности.
+Например, устройство отправляет телеметрию, и телеметрия должна быть скопирована в Объект более высокого уровня или в Клиент.
+В этом случае администратор должен добавить этот узел перед узлом [**Save Timeseries**](/docs/user-guide/rule-engine-2-0/action-nodes/#save-timeseries-node).
 
-The originator can be changed to:
+Инициатор может быть изменен на:
 
-- Originator's Customer
-- Originator's Tenant
-- Related Entity that is identified by Relations Query
+- Клиента инициатора
+- Тенанта инициатора
+- Связанную сущность, которая определяется запросом связей
 
-In 'Relations query' configuration Administrator can select required **Direction** and **relation depth level**. 
-Also set of **Relation filters** can be configured with required Relation type and Entity Types.
+В настройке Запроса связей администратор может выбрать требуемое **направление** или **уровень глубины отношений**.
+Также **фильтры отношений** могут быть настроены по требуемым типам отношений и сущностей.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-change-originator-config.png)
 
-If multiple Related Entities are found, **_only the first Entity is used_** as new originator, other entities are discarded.
+Если найдено несколько связанных сущностей, то в качестве нового инициатора используется **только первая сущность**, остальные отбразываются.
 
-**Failure** chain is used if no Related Entity / Customer / Tenant was found, otherwise - **Success** chain.
+Цепочка **Failure**  используется, если не было найдено ни одной связанной сущности / клиента / тенанта, в противном случае - цепочка **Success**.
 
-Outbound Message will have new originator Id.
+В исходящее сообщение передастся новый идентификатор отправителя.
 
 <br/>
 
-# Script Transformation Node
+# Узел преобразования скрипта
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-script.png)
 
-Changes Message payload, Metadata or Message type using configured JavaScript function.
+Изменяет полезную нагрузку сообщения, метаданные или тип сообщения с помощью настроенной JavaScript- функции.
 
-JavaScript function receives 3 input parameters: 
+Функция получает 3 входных параметра:
 
-- <code>msg</code> - is a Message payload.
-- <code>metadata</code> - is a Message metadata.
-- <code>msgType</code> - is a Message type.
+- <code>msg</code> - полезная нагрузка сообщения.
+- <code>metadata</code> - метаданные сообщения.
+- <code>msgType</code> - тип сообщения.
 
-Script should return the following structure:
+Скрипт должен вернуть структуру:
 {% highlight java %}
 {   
     msg: new payload,
@@ -80,16 +64,16 @@ Script should return the following structure:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-script-config.png)
 
-All fields in resulting object are optional and will be taken from original message if not specified.
+Все поля в полученном объекте являются необязательными и будут взяты из исходного сообщения, если они не указаны.
 
-Outbound Message from this Node will be new Message that was constructed using configured JavaScript function.
+Исходящее сообщение с этого узла будет новым сообщением, созданным с помощью настроенной функции JavaScript.
 
-JavaScript transform function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функция преобразования JavaScript может быть проверена с помощью [Тестовой JavaScript-функции](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
 <br/>
-**Example**
+**Пример**
 
-Node receives Message with **payload**:
+Узел получает сообщение с **полезной нагрузкой**:
 {% highlight java %}
 {
     "temperature": 22.4,
@@ -97,22 +81,22 @@ Node receives Message with **payload**:
 }
 {% endhighlight %}
 
-Original **Metadata**:
+Исходные **метаданные**:
 {% highlight java %}
 { "sensorType" : "temperature" }
 {% endhighlight %}
 
 
-Original **Message Type** - POST_TELEMETRY_REQUEST
+Исходный **тип сообщения** - POST_TELEMETRY_REQUEST
 <br/>
 
-The following modifications should be performed:
+Необходимо выполнить следующие изменения:
 
-- change message type to 'CUSTOM_UPDATE' 
-- add additional attribute **_version_** into payload with value **_v1.1_**
-- change _**sensorType**_ attribute value in Metadata to **_roomTemp_**
+- изменить тип сообщения на 'CUSTOM_UPDATE' 
+- добавить дополнительный атрибут **_version_** в полезную нагрызку с версией **_v1.1_**
+- изменить в метаданных значение атрибута _**sensorType**_ на **_roomTemp_**
 
-The following transform function will perform all necessary modifications:
+Следующая функция преобразования выполнит все необходимые изменения:
 {% highlight java %}
 var newType = "CUSTOM_UPDATE";
 msg.version = "v1.1";
@@ -120,32 +104,24 @@ metadata.sensorType = "roomTemp"
 return {msg: msg, metadata: metadata, msgType: newType};
 {% endhighlight %}
 
-You can see real life example, how to use this node in those tutorials:
+В следующих руководствах вы можете ознакомиться с примером использования данного узла:
 
-- [Transform incoming telemetry](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/)
-- [Reply to RPC Calls](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md#add-transform-script-node)
+- [Преобразование входящей телеметрии](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/)
+- [Ответ на RPC-вызовы](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md#add-transform-script-node)
 
-# To Email Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел To Email
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-to-email.png)
 
-Transforms message to Email Message by populating email fields using values derived from Message metadata.
-Set 'SEND_EMAIL' output Message type that can be accepted later by [**Send Email Node**](/docs/user-guide/rule-engine-2-0/external-nodes/#send-email-node).
-All email fields can be configured to use values from metadata.
+Преобразует сообщение в письмо по электронной почте, заполняя поля письма значениями, полученными из метаданных сообщения. 
+Установите тип исходящего сообщения ‘SEND_EMAIL’, он может быть принят позже узлом  [**Send Email**](/docs/user-guide/rule-engine-2-0/external-nodes/#send-email-node).
+Все поля электронной почты можно настроить так, чтобы использовались значения из метаданных.
   
 ![image](/images/user-guide/rule-engine-2-0/nodes/transformation-to-email-config.png)
 
-For example incoming message has **deviceName** field in metadata and email body should contain its value.
+Например, входящее сообщение имеет поле **deviceName** в метаданных, а тело электронной почты должно содержать его значение.
 
-In this case value of **deviceName** can be referenced as <code>${deviceName}</code> like in the following example:
+В таком случае значение данного поля может указываться в формате <code>${deviceName}</code>. Пример:
 
  ```
  Device ${deviceName} has high temperature
@@ -153,14 +129,10 @@ In this case value of **deviceName** can be referenced as <code>${deviceName}</c
  
 <br/>
 
-Additionally this node can prepare email attachments if incoming message metadata contains **attachments** field with reference to files stored in DataBase. 
-
-**NOTE**: This is part of [File Storage](/docs/user-guide/file-storage/) feature supported by [ThingsBoard Professional Edition](/products/thingsboard-pe/).
+Также этот узел может подготовить вложения для электронного письма, если метаданные входящего сообщения содержат поле **вложений** со ссылкой на файлы, хранящиеся в базе данных.
 
 <br/>
 
-You can see the real life example, where this node is used, in the next tutorial:
+В следующем руководстве вы можете ознакомиться с примером использования данного узла
 
 - [Send Email](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
-
-

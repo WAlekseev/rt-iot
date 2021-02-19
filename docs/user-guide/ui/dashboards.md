@@ -1,16 +1,13 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Dashboards
-description: ThingsBoard IoT Dashboards
-
+title: Дашборды
+description: Дашборды
 ---
 
 * TOC
 {:toc}
 
-## Video tutorial
+## Видеоинструкция
 
 <div id="video">  
     <div id="video_wrapper">
@@ -18,46 +15,45 @@ description: ThingsBoard IoT Dashboards
     </div>
 </div>
 
-## Default IoT dashboard for customer user
+## IoT-дашборд по умолчанию для пользователя клиента
 
-Since ThingsBoard 1.2 you are now able to define default IoT dashboard for your customer users in 2 simple steps:
+Вы можете определить IoT-дашборд по умолчанию для ваших пользователей в 3 простых шага:
 
-#### Step 1. Assign IoT dashboard to customer
+#### Шаг 1. Назначьте IoT-дашборд пользователю
 
-See embedded video tutorial above on tips how to do this.
+Воспользуйтесь советами о том, как это сделать, из встроенного видео-руководства выше.
 
-#### Step 2. Open customer user details
+#### Шаг 2. Откройте сведения о пользователе
 
-Navigate to "**Customers** -> Your customer -> **Customer Users**" and toggle edit mode using 'pencil' button in the top-right corner of the screen.
+Перейдите в раздел «Клиенты» -> ваш клиент- > «Пользователи-клиенты» и переключитесь в режим редактирования с помощью кнопки «карандаш» в правом верхнем углу экрана.
 
-#### Step 3. Select IoT dashboard 
+#### Шаг 3. Выберите IoT-дашборд
 
-select the IoT dashboard from the list and apply changes. Please note that you can also check the "Always Fullscreen" mode to prevent a user from navigating to different dashboards/screens. 
+Выберите IoT-дашборд из списка и примените изменения. Обратите внимание, что вы также можете проверить параметр “всегда полноэкранный режим”, чтобы предотвратить переход пользователя к различным дашбордам/экранам. 
 
 ![image](/images/user-guide/ui/default-dashboard.png)
 
-## IoT Dashboard import/export
+## Импорт/экспорт IoT-дашборда
 
-#### Dashboard export
+#### Экспорт IoT-дашборда
 
-You are able to export your dashboard to JSON format and import it to the same or another ThingsBoard instance.
+Вы можете экспортировать свой дашборд в формат JSON и импортировать его.
 
-In order to export dashboard, you should navigate to the **Dashboards** page and click on the export button located on the particular dashboard row.
+Для экспорта IoT-дашборда необходимо перейти на страницу «Дашборды» и нажать на кнопку «Экспорт», расположенную в определенной строке дашборда
  
 ![image](/images/user-guide/ui/export-dashboard.png)
 
-#### Dashboard import
+#### Импорт дашбордов
 
-Similar, to import the dashboard you should navigate to the **Dashboards** page and click on the "+" button located in the top-right corner of the **Dashboards** table and then choose "Import dashboard" option. 
+Аналогично, чтобы импортировать дашборд, вы должны перейти на страницу «Дашборды» и нажать на кнопку “+”, расположенную в правом верхнем углу таблицы «Дашбордов», а затем выбрать опцию "Импортировать дашборд".
 
 ![image](/images/user-guide/ui/import-dashboard.png)
 
-The dashboard import window should popup and you will be prompted to upload the json file.
+Появится окно импорта дашбордов, и вам будет предложено загрузить файл json.
 
 ![image](/images/user-guide/ui/import-dashboard-window.png)
 
-Once you click on the "import" button you will need to specify the device aliases. 
-This basically allows you to set what device(s) correspond to dashboard alias.
+Как только вы нажмете на кнопку “Импорт”, вам нужно будет указать псевдонимы устройств. 
+Прежде всего это позволяет вам установить, какие устройства соответствуют псевдониму дашборда.
 
 ![image](/images/user-guide/ui/import-dashboard-aliases.png)
-

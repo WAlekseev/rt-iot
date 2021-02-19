@@ -1,159 +1,141 @@
 ---
 layout: docwithnav
-assignees:
-- yefimov-andrey
-title: Aliases
-description: ThingsBoard Aliases
-
+title: Псевдонимы
+description: Псевдонимы
 ---
 
 * TOC
 {:toc}
 
-In order to create a dashboard, aliases have to be created first in order to define data from which entities will be 
-used. Aliases can be as easy as referring to a single device or as complicated as creating a complex search query for 
-specific assets from a list.
-
-In this guide aliases will be used on a system with a following scheme:
+Перед созданием дашборда сначала необходимо задать псевдонимы, чтобы определить данные, из которых будут браться сущности. Псевдонимы могут быть такими же простыми, как ссылка на одно устройство, или такими же сложными, как сложный поисковый запрос для конкретных активов из списка.
+В этом руководстве псевдонимы будут использоваться в системе со следующей схемой:
 
 ![image](/images/user-guide/ui/alias-scheme.png)
 
-and all devices have "water_level" generated values coming to them.
+и все устройства имеют генерируемые значения “water_level”, посылаемые им.
 
-## Alias types
+## Типы псевдонимов
 
-### Single entity
+### Одиночная сущность
 
-This alias allows to choose a single entity, which can be device, asset, entity view, tenant, customer, dashboard, 
-data converter, scheduler event, blob entity or current customer.
+Этот псевдоним позволяет выбрать одиночную сущность, которой может быть устройство, актив, представление сущности, арендатор, клиент, дашборд, конвертер данных, событие планировщика, blob-сущность или текущий клиент.
 
 <img data-gifffer="/images/user-guide/ui/single-entity-alias.gif" />
 
-This alias filters one device, which in this case is Device A.
+Этот псевдоним фильтрует одно устройство, которым в данном случае является устройство А.
 
-### Group entities
+### Групповые сущности
 
-This alias allows to choose a single group of entities, which can be a customer group, an asset group or a device group.
+Этот псевдоним позволяет выбрать одну группу сущностей: клиентов, активов или устройств.
 
 <img data-gifffer="/images/user-guide/ui/group-entity-alias.gif" />
 
-This alias filters group of devices, which in this case is Irrigation systems.
+Этот псевдоним фильтрует группу устройств, которой в данном случае являются ирригационные системы.
 
-### Entity list
+### Список сущностей
 
-This alias allows to choose several entities manually without entering query, which can be device(s), asset(s), entity 
-view(s), tenant(s), customer(s), dashboard(s), data converter(s), scheduler event(s), blob entity(-ies) or customer(s).
+Этот псевдоним позволяет выбрать несколько сущностей вручную, не вводя запрос. Ими могут быть устройство(а), актив(ы), представление сущности(ей), клиент(ы), дашборд(ы), конвертер(ы) данных, событие(я) планировщика, blob-объект(ы) или клиент(ы).
 
 <img data-gifffer="/images/user-guide/ui/entity-list-alias.gif" />
 
-This alias filters a list of several devices, which in this case are Device A and Device B.
+Этот псевдоним фильтрует список из нескольких устройств, которыми в данном случае являются устройство А и устройство В.
 
 ### Entity name
 
-This alias allows to choose one or more entities names of which start with entered query, which can be device(s), 
-asset(s), entity view(s), tenant(s), customer(s), dashboard(s), data converter(s), scheduler event(s), blob entity(-ies)
- or customer(s).
+Этот псевдоним позволяет выбрать одну или несколько сущностей, имена которых начинаются с введенного запроса. Ими могут быть устройство(а), актив(ы), представление сущности(ей), клиент(ы), дашборд(ы), конвертер(ы) данных, событие(я) планировщика, blob-объект(ы) или клиент(ы).
  
 <img data-gifffer="/images/user-guide/ui/entity-name-alias.gif" />
 
- This alias filters devices whose names start with ‘Device’.
+Этот псевдоним фильтрует устройства, имена которых начинаются со слова "устройство".
  
-### Entity group list
+### Список групп сущностей
 
-This alias allows to choose several entity groups manually without entering query, which can be device group(s), 
-asset group(s), entity view group(s), customer group(s), dashboard group(s) or user group(s). 
+Этот псевдоним позволяет выбрать несколько групп сущностей вручную без ввода запроса. Ими могут быть группа(ы) устройств, активов, представления устройств, клиентов, дашбордов или пользователей. 
 
 <img data-gifffer="/images/user-guide/ui/entity-group-list-alias.gif" />
  
- This alias filters a list of device groups, which in this case are ‘Irrigation systems’ and ‘Moisture sensors’.
+Этот псевдоним фильтрует список групп устройств, которым в данном случае являются "ирригационные системы" и "датчики влажности".
  
-### Entity group name
+### Имя группы сущностей
 
-This alias allows to choose several entity groups names of which start with entered query, which can be device group(s),
-asset group(s), entity view group(s), customer group(s), dashboard group(s) or user group(s). 
+Этот псевдоним позволяет выбрать несколько групп сущностей, имена которых начинаются с введенного запроса. Ими могут быть группа(ы) устройств, активов, представления устройств, клиентов, дашбордов или пользователей.
 
-For this example an empty device group named 'Irrigation machines' was created.
+Для этого примера была создана пустая группа устройств под названием "ирригационные машины".
+
 
 <img data-gifffer="/images/user-guide/ui/entity-group-name-alias.gif" />
  
- This alias filters device groups whose names start with ‘Irrigation’.
+Этот псевдоним фильтрует группы устройств, имена которых начинаются с "ирригационные".
  
-### Entity from dashboard state
-This alias allows to choose entity(-ies) from dashboard state which can be device, asset, entity view, tenant, customer,
- dashboard, data converter, scheduler event, blob entity or current customer. 
-  
-It is used for filtering data for other dashboard states, for example, if Timeseries widget is created on a 
-root dashboard state with several entities displayed on it and you want to create a dashboard state which will display
-a widget with the entity you clicked on, you need to use this alias. 
- 
- In the following example the alias is used after group entities alias was created.
+### Сущность из дашборда
+
+Этот псевдоним позволяет выбрать сущность(и) из дашборда, которой может быть устройство, актив, представление сущности, арендатор, клиент, дашборд, конвертер данных, событие планировщика, blob-объект или текущий клиент.
+
+Он используется для фильтрации данных других состояний дашбордов. Вам нужно использовать этот псевдоним, например, если виджет «Timeseries» создан в корневом состоянии дашборда с несколькими сущностями, отображаемыми на нем, и вы хотите создать состояние дашборда, которое будет отображать виджет с сущностью, на который вы нажали.
+
+В следующем примере псевдоним используется после создания псевдонима групповых сущностей.
+
  
  <img data-gifffer="/images/user-guide/ui/entity-dashboard-state-alias.gif" />
 
-### Asset type
+### Тип актива
 
-This alias allows to choose assets of entered type (and, if needed) names of which start with entered query.
+Этот псевдоним позволяет выбрать активы введенного типа и (если нужно) имена которых начинаются с введенного запроса.
 
  <img data-gifffer="/images/user-guide/ui/asset-type-alias.gif" />
  
- This alias filters assets of type ‘field’ and with name starting with ‘House’.
+Этот псевдоним фильтрует активы типа "поле" и с именем, начинающимся со слова "Дом".
  
-### Device type
+### Тип устройства
 
-This alias allows to choose devices of entered type (and, if needed) names of which start with entered query.
+Этот псевдоним позволяет выбрать устройства введенного типа и (если нужно) имена которых начинаются с введенного запроса.
 
  <img data-gifffer="/images/user-guide/ui/device-type-alias.gif" />
  
- This alias filters devices of type ‘Device’.
+Этот псевдоним фильтрует устройства типа "Устройство".
  
-### Entity view type
+### Тип представления сущности
 
-This alias allows to choose entity views of entered type (and, if needed) names of which start with entered query.
+Этот псевдоним позволяет выбрать представление сущностей введенного типа и (если нужно), имена которых начинаются с введенного запроса.
 
-An entity view called 'Device-D-entity-view' was created with a type 'example-type' which provides access to
- 'water_level' timeseries from Device D.
+Представление сущности под названием "Device-D-entity-view’ было создано с типом" example-type’, который предоставляет доступ к временным рядам 'water_level’ от устройства D.
+
 
  <img data-gifffer="/images/user-guide/ui/entity-view-type-alias.gif" />
  
-This alias filters entity Views of type ‘example-type’ and with name starting with ‘Device’.
+Этот псевдоним фильтрует представления сущностей типа "example-type" и с именем, начинающимся со слова "Устройство".
 
-### Relations query
+### Запрос отношений
 
-This alias allows to choose entities which are related to specified originator up to specified level and in specified 
-direction.
+Этот псевдоним позволяет выбирать сущности, которые связаны с указанным инициатором вплоть до заданного уровня и направления.
 
  <img data-gifffer="/images/user-guide/ui/relations-query-alias.gif" />
 
-This alias filters entities that have any relation from Asset ‘Street A’ up to relation level 2.
+Этот псевдоним фильтрует сущности, имеющие любые отношения с активом "улица А" вплоть до второго уровня.
 
-### Asset search query
+### Запрос на поиск активов
 
-This alias allows to choose assets of specified type which are related to specified originator up to specified level and
-in specified direction.
+Этот псевдоним позволяет выбрать активы указанного типа, которые связаны с указанным инициатором вплоть до заданного уровня и направления.
 
  <img data-gifffer="/images/user-guide/ui/Asset-search-query-alias.gif" />
 
-This alias filters assets with types ‘field’ that have any relation to Device ‘Device D’ with relation level 1.
+Этот псевдоним фильтрует активы с типом "поле", которые имеют какое-либо отношение с устройством "устройство D" вплоть до первого уровня.
 
-### Device search query
+### Запрос поиска устройства
 
-This alias allows to choose devices of specified type which are related to specified originator up to specified level
-and in specified direction. 
+Этот псевдоним позволяет выбирать устройства заданного типа, которые связаны с указанным инициатором вплоть до заданного уровня и направления. 
 
  <img data-gifffer="/images/user-guide/ui/Device-search-query-alias.gif" />
 
-This alias filters devices with types ‘Device’ that have any relation from Asset ‘House C’ up to relation level 1.
+Этот псевдоним фильтрует устройства с типом "устройство", которые имеют любое отношение с активом "дом С" вплоть до первого уровня.
 
-### Entity view search query
+### Запрос поиска представления сущности
 
-This alias allows to choose entity views of specified type which are related to specified originator up to specified
-level and in specified direction.
+Этот псевдоним позволяет выбирать представления сущностей указанного типа, которые связаны с указанным инициатором вплоть до заданного уровня и направления.
 
-An entity view called 'Device-D-entity-view' which has 'contains' relation to it from Device D was created with a type
- 'example-type' which provides access to 'water_level' timeseries from Device D.
+Представление сущности под названием "Device-D-entity-view’, которое имеет с ним связь "contains" от устройства D, было создано с типом ‘example-type’, который обеспечивает доступ к временным рядам 'water_level’ с устройства D.
+
 
  <img data-gifffer="/images/user-guide/ui/entity-view-type-search-query-alias.gif" />
  
-This alias filters entity views with types ‘example-type’ that have any relation from device ‘Device D’ up to
-relation level 1.
-
+Этот псевдоним фильтрует представления сущностей с типом 'example-type’, которые имеют любую связь с устройством «Устройством D» вплоть до первого уровня.

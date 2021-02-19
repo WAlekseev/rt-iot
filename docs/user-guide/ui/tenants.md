@@ -1,33 +1,29 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Tenants
-description: ThingsBoard Tenants management
-
+title: Тенанты
 ---
 
 * TOC
 {:toc}
 
-ThingsBoard support [Multitenancy](https://en.wikipedia.org/wiki/Multitenancy) out-of-the-box.
-You can treat ThingsBoard tenant as a separate business-entity: individual or organization who owns or produce devices.
+IoT платформа Ростелеком поддерживается [мультитенантность](https://en.wikipedia.org/wiki/Multitenancy) "из коробки".
+Вы можете рассматривать тенанта платформы как отдельную бизнес-сущность: физическое лицо или организацию, которая владеет устройствами.
 
-**System administrator** is able to create tenant entities.
+**Администратор платформы** может создавать сущностей с типом тенант.
 
 ![image](/images/user-guide/ui/tenants.png)
 
-System administrator is also able to create multiple [users](/docs/user-guide/ui/users) with **Tenant Administrator** role for each tenant by pressing "Manage Tenant Admins" button in Tenant details.
+Администратор платформы также может создавать множество [пользователей](/docs/user-guide/ui/users) с ролью **Тенант-администратор** для каждого тенанта. Для этого нужно нажать кнопку "Управление тенант-админами" в деталях тенанта.
  
 ![image](/images/user-guide/ui/manage-tenant-admins.png) 
  
-Tenant Administrator is able to do following actions:
+Тенант-администратор может выполнять следующие действия:
  
- - Provision and Manage [Devices](/docs/user-guide/ui/devices).
- - Provision and Manage [Assets](/docs/user-guide/ui/assets).
- - Create and Manage [Customers](/docs/user-guide/ui/customers).
- - Create and Manage [Dashboards](/docs/user-guide/ui/dashboards).
- - Configure [Rule Engine](/docs/user-guide/rule-engine-2-0/re-getting-started/)
- - Add or modify default widgets using [Widget Library](/docs/user-guide/ui/widget-library).
+ - Обеспечение [девайсов](/docs/user-guide/ui/devices) и управление ими.
+ - Обеспечение [активов](/docs/user-guide/ui/assets) и управление ими.
+ - Создание [клиентов](/docs/user-guide/ui/customers) и управление ими.
+ - Создание [дашбордов](/docs/user-guide/ui/dashboards) и управление ими.
+ - Настройка [движка правил](/docs/user-guide/rule-engine-2-0/re-getting-started/)
+ - Добавление и изменение дефолтных виджетов с помощью [библиотеки виджетов](/docs/user-guide/ui/widget-library).
  
- All actions listed above are available using [REST API](/docs/reference/rest-api/)
+ Все вышеперечисленные действия доступны через [REST API](/docs/reference/rest-api/)

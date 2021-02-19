@@ -1,146 +1,139 @@
 ---
 layout: docwithnav
-title: Trip animation widget
-description: Trip animation widget guide 
-
+title: Виджет анимации перемещения
+description: Виджет анимации перемещения
 ---
 
-{% assign feature = "Platform Integrations" %}
 
 * TOC
 {:toc}
+Общие сведения
 
-## Overview
+В этом примере мы изучим функциональность виджета анимации перемещения (Trip-анимации.)
 
-In this example, we'll study trip animation widget functionality. 
+Этот виджет имеет несколько вариантов использования, но в основном он используется для real-time трэккинга, отслеживания движения объектов и его визуализации.
 
-This widget might be useful for different use cases, but mainly it might be used for a Tracking in a realtime, researching movement of the entities and visualizing it.
+## Настройка виджета trip-анимации
 
-This guide was written on a [cloud](https://cloud.thingsboard.io) version-2.4.2 of ThingsBoard Professional Edition, so some steps will be a little different from Community Edition. 
+Во-первых, вам нужно создать устройство, с которого будет собираться телеметрия.
 
-It's capable of all further versions.
+Кроме того, вы можете использовать любое имеющееся у вас устройство с координатной телеметрией (долгота и широта).
 
-## Setting up Trip Animation Widget
+Это может быть любое устройство, которое получает свои координаты в реальном времени.
 
-Firstly you need to create a device from which will collect telemetry.
+Наше устройство получает свою долготу, широту, скорость, статус и координаты полигона.
 
-Also, you may use any device you have with a coordinates telemetry (longitude and latitude). 
+Долгота и широта являются ключевыми данными для визуализации карты, так что вы увидите их в виджете на дашборде, которой выбрали.
 
-This can be any device which receives its coordinates in a realtime. 
+В нашем примере мы используем эмулятор, написанный на javascript для получения телеметрии и визуализации ее на дашборде.
 
-Our device receives its longitude, latitude, speed, status, and coordinates of polygon. 
 
-Longitude and latitude are the key data for map visualization so that you'll see it on a widget at the dashboard which you chose.
+### Создание дашборда
 
-In our example, we use an [emulator](/docs/user-guide/resources/timeseries-map-bus.js)
- written in javascript to receive telemetry and visualize it on the dashboard. 
+Нам нужно создать дашборд где будет визуализироваться телеметрия. Это необходимо, если ваша цель состоит в том, чтобы отслеживать, как ваша сущность перемещалась в определенный период времени.
 
-### Creating a dashboard
+Мы можем использовать существующий дашборд или создать новый для нашего нового варианта использования.
 
-We need to create a dashboard where our telemetry will be visualized. It might be useful if your goal is to track how your entity moved in a specific period. 
+В обучающих целях мы создаем новый дашборд под названием "Дашборд1".
 
-We can use an existing one or create a new dashboard for our new use case. 
+### Добавление виджета
 
-In our example, we create a new dashboard called “Dashboard1” for our guide reasons. 
-
-### Adding widget
-
-Now we will open our empty dashboard and edit it. 
+Теперь мы откроем нашу пустой дашборд и отредактируем его. 
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/1.png)
 
-Now we have an empty dashboard. Let's fill it with some content.
+Теперь у нас есть пустой дашборд. Давайте наполним его каким-нибудь содержанием
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/2.png)
 
-Firstly we need to create an **alias** to specify entity from which we’ll receive telemetry data. 
+Во-первых, нам нужно создать псевдоним, чтобы указать сущность, от которой мы будем получать телеметрические данные.
 
-Our entity in this guide will be **“Tracker1”** device which we created previously. We’ll give **“GeoData1”** name to our alias. 
+Нашей сущностью в этом руководстве будет устройство "Tracker1", которое мы создали ранее. Мы зададим псевдоним “GeoData1".
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/3.png)
 
-Now we go for adding a widget!
+Теперь мы переходим к добавлению виджета.
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/4.png)
 
-Trip animation widget is located in Maps bundle 
+Виджет trip-анимации находится в пакете «Карты»
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/5.png)
 
-In our widget we add **coordinates**, **latitude**, **longitude**, speed and status from our alias **“GeoData1”** as our parameters. 
+В нашем виджете мы добавляем координаты, широту, долготу, скорость и статус из псевдонима “GeoData1” в качестве наших параметров.
 
-They have the same labels as their keys are. Secondly, we create a widget on which we will visualize our telemetry. 
+Они имеют те же метки, что и их ключи. Во-вторых, мы создаем виджет, на котором будем визуализировать нашу телеметрию.
 
-We use **Trip Animation Widget** in our guide. It’s located in **Maps Bundle, Time series tab**. 
+Мы используем виджет trip-анимации в нашем руководстве. Он находится в пакете «Карты», вкладка «Временные ряды».
 
-Also, we’ll go for “Use dashboard timewindow” so that we’ll make it easier to synchronise our data. 
+Кроме того, мы перейдем к “Use dashboard timewindow”, чтобы упростить синхронизацию наших данных.
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/6.png)
 
-In addition to this, we’ll use last minute received data to visualize and change aggregation function to None, because we don’t need to guess possible data value for the next time period, we receive data in realtime without any errors.
+Кроме того, мы будем использовать полученные в последнюю минуту данные, чтобы их визуализировать и изменять функцию агрегации на «None», потому что нам не нужно угадывать возможное значение данных для следующего периода времени – мы получаем данные в реальном времени без каких-либо ошибок.
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/8.png)
 
-Finally, we turn on our emulator (link on it you may find below, in "Device emulator" section).
+Наконец, мы включаем наш эмулятор (ссылку на него вы можете найти ниже, в разделе “Эмулятор устройства”).
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/9.png)
 
-### Widget is ready
+### Виджет готов
 
-Now we can take a look at how our device is being moving for the last minute in a realtime. 
+Теперь мы можем посмотреть, как наше устройство движется в течение последней минуты в режиме реального времени.
 
-We also can speed up our timeline cursor up to 1,5,10,25 times so that we can make a check on its routing much faster. 
+Мы также можем ускорить наш курсор временной шкалы в 1,5,10,25 раз, чтобы сделать проверку его маршрутизации намного быстрее.
 
-Don’t forget to press the “Start” button. 
+Не забудьте нажать кнопку “Пуск”.
+
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/3.gif)
 
-## Customization
+## Настройки
 
-### Settings tab
+### Вкладка настройки
 
-Now, when we got the basics of what our widget can provide, let us go for editing its settings to make it more functional and eye-catching. Firstly we go to settings, there we can specify:
+Теперь, когда мы имеем представление о том, что обеспечивает наш виджет, давайте перейдем к редактированию его настроек, чтобы сделать его более функциональным и привлекательным. Во-первых, мы идем в настройки, там мы можем указать:
 
-* Title of widget, its style
+* Название виджета и его стиль
 
-* Title icon, icon colour, icon size in a px 
+* Значок заголовка, цвет значка, размер значка в пикселях
 
-* Title tooltip Show/Hide 
+* Всплывающая подсказка заголовка: Показать/Скрыть
 
-* Enable/disable drop shadow 
+* Включение/выключение падения тени
 
-* Enable/disable fullscreen mode for widget
+* Включение/выключение полноэкранного режима для виджета
 
-* Change widget style 
+* Изменить стиль виджета
 
-* Enable/disable data export 
+* Включить/отключить экспорт данных
 
-* Background color, text color, padding, margin
+* Цвет фона, цвет текста, отступы, поля
 
-* Specify mobile settings
+* Указать настройки мобильного телефона
 
-
-Let's see how it works.
+Давайте посмотрим, как это работает.
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/4.gif)
 
-### Advanced tab
+### Вкладка «Дополнительно»
 
-In a settings tab, we can specify unique parametres for Trip animation widget for functionality that only it can provide. We have:
+Чтобы добиться большей функциональности, вкладке «Настройки» мы можем указать уникальные параметры для виджета trip-анимации. У нас есть:
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/15.png)
 
-* Map provider 
+* •	Поставщик карт 
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/16.png)
 
-* Normalization data step (ms) 
+* Нормализация данных (ms) 
 
-* Latitude & Longitude key names - you can specify name based on which widget will be updated. It uses data based on the label of the data. So that you may specify label “data-1” for the longitude key value and get longitude from the alias after we edit longitude key name as “data-1”. 
+* Ключевые имена широты и долготы – вы можете указать имя, на основе которого виджет будет обновляться. Он использует данные, основанные на метке данных. Вы можете указать метку “data-1” в значении ключа долготы и, после того, как параметр отредактирован, получить долготу из псевдонима. 
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/7.gif)
 
-* Widget label, or specify label function (you may change data contained in a widget label based on data, dsData, dsIndex)
+* Метка виджета или функция спецификации метки (Вы можете изменить данные, содержащиеся в метке виджета, на основе данных, dsData, dsIndex)
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/5.gif)
  
@@ -157,7 +150,7 @@ return res;
 
 ```
 
-* Show/Hide Tooltip, its color, its font color,the opacity of tooltip and tooltip text or use tooltip function (you may change data contained in a tooltip based on data, dsData, dsIndex)
+* Показать/Скрыть всплывающую подсказку, ее цвет, цвет шрифта, непрозрачность её и текста или использовать функцию всплывающей подсказки (вы можете изменить данные, содержащиеся во всплывающей подсказке, на основе данных, dsData, dsIndex)
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/6.gif)
 
@@ -174,7 +167,7 @@ return res;
 
 ```
 
-* Path color or specify path color function (you may change data contained in a tooltip based on data, dsData, dsIndex) - the color of the marker moves 
+* Цвет пути или функция спецификации цвета пути (вы можете изменить данные, содержащиеся во всплывающей подсказке, на основе данных, dsData, dsIndex) - цвет маркера изменяется
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/26.png)
 
@@ -190,67 +183,71 @@ if (speed > 50) {
 return res;
 ```
 
-* Path decorator, its size in px, end/beginning offset, decorator repeater, stroke weight and stroke opacity
+* Декоратор пути, его размер в пикселях, смещение конца/начала, ретранслятор декоратора, толщина и непрозрачность штриха
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/27.png)
 
-#### Polygon options
+#### Параметры полигона
 
-What’s a polygon? It’s a plane figure that’s described by a finite number of dots. We use polygon which is based on coordinates that are specified within the device we use, but you can use any other entity. 
+Что такое полигон? Это плоская фигура, которая описывается конечным числом точек. Мы используем полигон, который основан на координатах, указанных в устройстве, которое мы используем, но вы можете использовать любую другую сущность.
 
-You may mark your assets and any other entities with a polygon option. For the polygon, we can specify the next settings. Polygon coordinates are being received in a format:
+Вы можете пометить свои активы и любые другие объекты параметром полигона. Для полигона мы можем задать следующие настройки. Координаты полигона принимаются в формате:
+
 
 ```
 [[1CoordinateLatitude,1CoordinateLatitude],[2CoordinateLatitude,2CoordinateLatitude]...[nCoordinateLatitude,nCoordinateLatitude]]
 ``` 
 
-where **n** - number of coordinates which polygon is described by.
+где n – число координат, которыми описывается многоугольник.
 
-* Show/Hide polygon
+* Показать/cкрыть полигон
 
-* Polygon tooltip text or polygon tooltip function (you may change data contained in a polygon tooltip based on data, dsData, dsIndex) 
+* Текст или функция подсказки полигона (вы можете изменить данные, содержащиеся в подсказке полигона, на основе данных, dsData, dsIndex)
 
-* Polygon color, opacity
+* Цвет и непрозрачность полигона
 
-* Polygon border color, opacity, weight 
+* Цвет границы полигона, непрозрачность, толщина
 
-* Polygon color function  (you may change polygon color based on data, dsData, dsIndex)
+* Функция цвета полигона (вы можете изменить цвет полигона на основе данных, dsData, dsIndex)
+
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/28.png)
 
-#### Points options
+#### Настройки точек
 
-The next option is a show points option. Points are a telemetry data updates so that you can check each. For the points next options are available.
+Следующая опция – это опция «показать точки». Точки – это обновления телеметрических данных, так что вы можете проверить каждую из них. Для точек доступны следующие опции.
 
-* Show/Hide points
+* Показать/Скрыть точки
 
-* Point color
+* Цвет точки
 
-* Point size px
+* Размер точки в пикселях
 
-* Use point as an anchor, point as an anchor function (you may change data contained in a polygon tooltip based on data, dsData, dsIndex)
+* Использовать точку в качестве якоря или якорной функции (вы можете изменить данные, содержащиеся во всплывающей подсказке полигона, на основе данных, dsData, dsIndex)
 
-* Independent point tooltip
+* Независимая подсказка
 
-* Auto-close point popup 
+* Самозакрывающийся поп-ап
+
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/2.gif)
 
-#### Marker options
+#### Параметры маркера
 
-In addition to all of this, there are some settings for the marker and you can specify next settings for it:
+IКроме того, есть некоторые параметры маркера, которые вы можете задать:
 
-* Color for default marker
+* Цвет маркера по умолчанию
 
-* Custom marker image 
+* Пользовательское изображение маркера
 
-* Custom marker image size px 
+* Пользовательский размер изображения маркера в пикселях
 
-* Set additional rotation angle for marker
+* Установить дополнительный угол поворота маркера
 
-* Marker image function (you may change marker image, marker image color based on data, dsData, dsIndex)
+* Функция изображения маркера (вы можете изменить изображение маркера и его цвет на основе данных, dsData, dsIndex)
 
-* Specify other possible marker images, which can be used in a marker image function
+* Указать другие возможные изображения маркеров, которые можно использовать в соответствующей функции
+
 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/1.gif)
 
@@ -266,9 +263,9 @@ if (speed > 55) {
 return res;
 ```
 
-## Video tutorial 
+## Видеоинструкция
  
-We also recommend you to review this video tutorial.
+Также мы рекомендуем вам ознакомиться с этой видеоинструкцией
 
   
 <div id="video">  
@@ -278,17 +275,18 @@ We also recommend you to review this video tutorial.
 </div>
 
 
-## Device emulator
+## Эмулятор устройства
  
-[Emulator](/docs/user-guide/resources/timeseries-map-bus.js)
+[Эмулятор](/docs/user-guide/resources/timeseries-map-bus.js)
 
-In order to execute script go for a command line:
+Для того, чтобы выполнить скрипт, перейдите в командную строку:
 ```bash
 node timeseries-map-bus.js $ACCESSTOKEN
 ```
-Where **$ACCESSTOKEN** is your **Device** **access token**.
+Где **$ACCESSTOKEN** это **access token** вашего **устройства**
 
-**$ACCESSTOKEN** is located in a **Device details**. 
+**$ACCESSTOKEN** находится в **Device details**. 
 ![image](/images/user-guide/ui/widgets/trip-animation-widget/34.png)
 
-Emulator is capable with Node.js v8.10.0
+Эмулятор может работать с Node.js v8.10.0
+ 

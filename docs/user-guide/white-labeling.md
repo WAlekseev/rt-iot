@@ -1,35 +1,30 @@
 ---
 layout: docwithnav
 title: White-labeling
-description:  
+description:  White-labeling
 
 ---
 
 {% assign feature = "White-labeling" %}{% include templates/pe-feature-banner.md %}
 
-ThingsBoard web interface allows you to configure your company or product logo and color scheme in 2 minutes with zero coding efforts and no service restart required.
-The following configuration options are available:
-   
-  - Configure color scheme, icon and favicon on System Administrator level;
-  - Tenant and Customer Administrator UI inherits configuration changes by default;
-  - Tenant and Customer Administrators are able to setup their own white-labeling configuration;
-  - System and Tenant Administrator are able to setup custom email server settings and customer email templates to interact with the users;
-  - Allow System administrator to enable/disable white-labeling for each tenant;
-  - Allow Tenant administrator to enable/disable white-labeling for each customer;
-  - Allow Tenant administrator to configure custom translation of system components and end-user dashboard elements. 
+Веб-интерфейс платформы позволяет вам настроить логотип вашей компании или продукта и цветовую схему за 2 минуты с нулевыми усилиями кодирования и без необходимости перезапуска службы. Доступны следующие параметры конфигурации:
 
-[Contact us](/docs/contact-us/) to suggest missing feature for your use case.
+ - Настройка цветовой схемы и фирменного стиля на уровне системного администратора;
+ - Пользовательский интерфейс клиента- и тенант-администратора наследует изменения конфигурации по умолчанию;
+ - Клиенты- и тенант-администраторы могут настроить свою собственную конфигурацию white-labeling;
+ - Системный и тенант-администратор может установить пользовательские настройки почтового сервера и шаблоны электронной почты клиентов для взаимодействия с пользователями;
+ - Разрешить системному администратору включать/отключать white-labeling для каждого клиента;
+ - Разрешить администратору тенанта включать/отключать «white-labeling для каждого клиента;
+ - Разрешить клиенту-администратору настраивать пользовательский перевод системных компонентов дашборда конечного пользователя.
 
-See video tutorial below for step-by-step instruction how to use this feature.
+
+[Свяжитесь с нами,](/docs/contact-us/) если возникнут проблемы с настройкой.
+
+Смотрите пошаговую видео-инструкцию ниже, чтобы узнать, как использовать эту функцию.
 
 <br/>
 <div id="video">  
     <div id="video_wrapper">
         <iframe src="https://www.youtube.com/embed/VSNZWl1NjWU" frameborder="0" allowfullscreen></iframe>
     </div>
-</div> 
-
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
-
+</div>

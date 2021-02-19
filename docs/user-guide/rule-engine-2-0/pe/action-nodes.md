@@ -1,186 +1,140 @@
 ---
 layout: docwithnav
-title: Action Nodes
-description: Rule Engine 2.0 PE Action Nodes
-
+title: Дополнительные узлы действий
+description: Дополнительные узлы действий
 ---
 
-{% assign feature = "PE Action Nodes" %}{% include templates/pe-feature-banner.md %}
-
-Action Nodes that are specific to ThingsBoard PE. Execute various actions based on incoming Message.
+Данные узлы выполняют различные действия на основе входящего сообщения.
 
 * TOC
 {:toc}
 
 # Add To Group Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0.2</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-add-to-group.png)
 
-Adds Message Originator Entity to [Entity Group](/docs/user-guide/groups/). 
+Данный узел добавляет сущность с типом Отправитель сообщения в [группу сущностей](/docs/user-guide/groups/). 
 
-Following Message Originator types are allowed: **Customer**, **Asset**, **Device**.
+Допускаются следующие типы отправителей сообщений: **Customer**, **Asset**, **Device**.
 
-Finds target Entity Group by group name pattern and then adds Originator Entity to this group.
-Will create new Entity Group if it doesn't exist and **Create new group if not exists** is set to true.
+Находит целевую группу сущностей по шаблону имени группы, а затем добавляет в эту группу сущность с типом Отправитель. Создает новую группу сущностей, если она не существует, и если выставлен флаг «Создать новую группу, если групп не существует».
 
-Configuration:
+Настройка:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-add-to-group-config.png)
 
-- **Group name pattern** - can be set direct group name or pattern can be used, that will be resolved to the real group name using Message metadata.
-- **Create new group if not exists** - if checked will create new entity group if it doesn't exist.
-- **Groups cache expiration time** - specifies maximum time interval is seconds allowed to store found entity group records. 0 value means that records will never expire.
+- **Group name pattern** - можно задать прямое имя группы или использовать шаблон, который преобразуется в имя группы, на основе метаданных сообщения.
+- **Create new group if not exists** - создать новую группу, если групп не существует - если флажок установлен, будет создана новая группа сущностей.
+- **Groups cache expiration time** - время истечения срока действия кэша групп - указывает максимальный интервал времени в секундах, разрешенный для хранения найденных записей группы сущностей. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет перенаправлено по цепочке **Failure** в следующих случаях:
 
-- When Originator entity type is not supported.
-- Target entity group doesn't exist and **Create new group if not exists** is unchecked.
+- Если тип сущности Отправитель не поддерживается.
+- Целевая группа сущностей не существует, а флажок «Создать новую группу, если групп не существует» не установлен.
 
-In other cases Message will be routed via **Success** chain. 
+В других случаях сообщение будет направлено по цепочке **Success**. 
 
 <br/>
 
 # Remove From Group Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0.2</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-remove-from-group.png)
 
-Removes Message Originator Entity from [Entity Group](/docs/user-guide/groups/).
+Данный узел удаляет сущность с типом Отправитель сообщения из [группы сущностей](/docs/user-guide/groups/).
 
-Following Message Originator types are allowed: **Customer**, **Asset**, **Device**.
+Допускаются следующие типы отправителей сообщений: **Customer**, **Asset**, **Device**.
 
-Finds target Entity Group by group name pattern and then removes Originator Entity from this group.
+Находит целевую группу сущностей по шаблону имени группы, а затем удаляет исходную сущность из этой группы.
 
-Configuration:
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-remove-from-group-config.png)
 
-- **Group name pattern** - can be set direct group name or pattern can be used, that will be resolved to the real group name using Message metadata.
-- **Groups cache expiration time** - specifies maximum time interval is seconds allowed to store found entity group records. 0 value means that records will never expire.
+- **Group name pattern** - шаблон имени группы - можно задать прямое имя группы или использовать шаблон, который преобразуется в имя группы, на основе метаданных сообщения.
+- **Groups cache expiration time** - время истечения срока действия кэша групп - указывает максимальный интервал времени в секундах, разрешенный для хранения найденных записей группы сущностей. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет направлено по цепочке **Failure** в следующих случаях:
 
-- When Originator entity type is not supported.
-- Target entity group doesn't exist.
+- Если тип сущности Отправитель не поддерживается.
+- Целевая группа сущностей не существует.
 
-In other cases Message will be routed via **Success** chain. 
+В других случаях сообщение будет перенаправлено по цепочке **Success**. 
 
 <br/>
 
 # Generate Report Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-generate-report.png)
 
-Generates report files by capturing target dashboard with specific configuration.
+Данный узел создает файлы отчетов, на базе данных в дашбордах.
 
-This node can be configured to use specific report configuration or take it from incoming message body.
+Узел можно настроить для использования определенной конфигурации отчета или взять ее из тела входящего сообщения.
 
-Mode when report configuration is taken from message body usually is used when message is generated by [**Generate Report** Scheduler Event](/docs/user-guide/scheduler/#generate-report).
+Режим, когда настройки отчета берутся из тела сообщения, обычно используется, когда сообщение генерируется событием [Планировщик генерирования событий](/docs/user-guide/scheduler/#generate-report).
 
-Generate Report node invokes [Reports Server](/docs/user-guide/reporting/#reports-server) to generate report file using specified dashboard. 
+Узел генерирования отчета вызывает [Reports Server](/docs/user-guide/reporting/#reports-server) для создания файла отчета с помощью указанного дашборда. 
 
-Resulting report file is stored in DataBase using [File Storage](/docs/user-guide/file-storage/) feature and reference to this file is stored in **attachments** field of output message metadata.
+Файл с отчетом сохраняется в базе данных с помощью функции [Файлового хранилища](/docs/user-guide/file-storage/) ссылка на этот файл хранится в поле вложений метаданных исходящего сообщения.
 
-**attachments** metadata field can be used by other Rule Nodes to get actual file from DataBase. 
-For instance [**To Email Node**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#to-email-node) detects presence of this field and prepares email attachments 
-used by [**Send Email Node**](/docs/user-guide/rule-engine-2-0/external-nodes/#send-email-node) to send email with attachments.
+Поле **attachments** в метаданных может использоваться другими узлами правил для получения файла из базы данных. Например, узел преобразования сообщения в электронное письмо [**To Email Node**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#to-email-node) ищет это поле и подготавливает вложения для электронной почты, которые используются узлом преобразования сообщения в электронное письмо для отправки почты с вложениями.
 
-Configuration:
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-generate-report-config.png)
 
-- **Use system reports server** - if set, [Reports Server](/docs/user-guide/reporting/#reports-server) endpoint URL will be taken from system configuration (**thingsboard.yml**).
-- **Reports server endpoint URL** - endpoint URL of [Reports Server](/docs/user-guide/reporting/#reports-server).
-- **Use report config from message** - if set, report generation configuration will be taken from incoming message body.
-- **Base URL** - base URL of ThingsBoard UI that should be accessible by Report Server.
-- **Dashboard** - dashboard that will be used for report generation.
-- **Dashboard state parameter value** - used to specify target dashboard state for report generation. Can be set automatically by clicking on right most button of the field and invoking **Select dashboard state** dialog.       
-- **Timezone** - timezone in which target dashboard will be presented in report.
-- **Use dashboard timewindow** - if set, timewindow configured in the target dashboard will be used during report generation.
-- **Timewindow** - specific dashboard timewindow that will be used during report generation.
-- **Report name pattern** - file name pattern of generated report, can contain date-time pattern in form of `%d{date-time pattern}`. See [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) documentation for date-time pattern details.
-- **Report type** - report file type, can be *PDF \| PNG \| JPEG*.
-- **Use current user credentials** - if set, credentials of user created this report configuration will be used to open dashboard UI during report generation.
-- **Customer user credentials** - target customer user whose credentials will be used to open dashboard UI during report generation.
+- **Use system reports server** - Использовать сервер системных отчетов - если этот параметр установлен, URL-адрес конечной точки сервера отчетов будет взят из конфигурации системы .
+- **Reports server endpoint URL** - конечная точка URL-адреса [сервера отчетов](/docs/user-guide/reporting/#reports-server).
+- **Use report config from message** - если флажок установлен, настройки генерирования отчета будут взяты из тела сообщения.
+- **Base URL** - базовый URL пользовательского интерфейса платформы, который должен быть доступен серверу отчетов.
+- **Dashboard** - дашборд, который будет использоваться для формирования отчетов.
+- **Dashboard state parameter value** - значение параметра состояния дашборда - используется для указания целевого состояния дашборда для создания отчета. Можно установить автоматически, нажав кнопку, находящуюся справа от поля редактирования. Откроется диалоговое окно «Выберете состояние дашборда».       
+- **Timezone** - часовой пояс, в котором целевой дашборд будет представлен в отчете.
+- **Use dashboard timewindow** - использовать временной интервал дашборда - если данный флажок выставлен, то при генерировании отчета будет использоваться временной интервал, настроенный в целевом дашборде.
+- **Timewindow** - Временной интервал, который будет использоваться при генерировании отчета.
+- **Report name pattern** - шаблон названия отчета - шаблон названия файла с сгенерированным отчетом. В данном поле можно задать  шаблон названия, в котором будут содержаться дата и время в таком виде `%d{date-time pattern}`. Ссотрите [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) для подробностей.
+- **Report type** - файл отчета может быть в формате  *PDF \| PNG \| JPEG*.
+- **Use current user credentials** - использовать текущие учетные данные пользователя - если флажок установлен, учетные данные пользователя, создавшего эту конфигурацию отчета, будут использоваться для открытия пользовательского интерфейса дашборда во время генерирования отчета.
+- **Customer user credentials** - учетные данные клиента - целевой клиент, учетные данные которого будут использоваться для открытия пользовательского интерфейса дашборда во время генерирования отчета.
 
-**Generate Test Report** button is used for testing purposes. It invokes report generation process with provided configuration. Resulting report file will be automatically downloaded if the report generation will be successful. 
+**Generate Test Report** кнопка «Сгенерировать тестовый отчет» используется для тестирования. Нажав её, можно вызывать процесс генерирования отчета с заданными настройками. Полученный файл отчета будет автоматически загружен, если генерирование успешно выполнится. 
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет направлено по цепочке **Failure** в следующих случаях: 
 
-- When **Use report config from message** is set and incoming message does not contain valid report configuration JSON object.
-- When [Reports Server](/docs/user-guide/reporting/#reports-server) is unavailable at the specified endpoint URL.
-- When [Reports Server](/docs/user-guide/reporting/#reports-server) will fail generate report and return corresponding error message. 
+- Когда **Use report config from message** установлен и во входящих сообщениях не передается JSON-объект, содержащий валидные настройки отчета.
+- Когда [Reports Server](/docs/user-guide/reporting/#reports-server) недоступен по указанному URL-адресу конечной точки.
+- Когда [Reports Server](/docs/user-guide/reporting/#reports-server) завершает генерирование отчета ошибкой и возвращает соответствующее сообщеие о сбое. 
 
-In other cases Message will be routed via **Success** chain.
+В остальных случаях сообщение будет направлено по цепочке **Success**.
 
 <br/>
 
 # Integration Downlink Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0.2</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-integration-downlink.png)
 
-Forwards Message to selected [Integration](/docs/user-guide/integrations/) as downlink message.
+Данный узел направляет сообщение в выбранную [интеграцию](/docs/user-guide/integrations/) в виде нисходящего сообщения.
  
-Message will be pushed to the selected integration downlink queue.
+Сообщение будет передано в выбранную очередь нисходящей линии интеграции.
 
-Configuration:
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-integration-downlink-config.png)
 
-- **Integration** - target Integration for downlink message processing.
+- **Integration** - целевая интеграция для обработки нисходящих сообщений.
 
-**Failure** chain is used if Message push to Integration will fail, otherwise **Success** chain.
+**Failure**  - если сообщение push to Integration завершается неудачно, в противном случае цепочка **Success**.
 
 <br/>
 
 # REST Call Reply Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-rest-call-reply.png)
 
-Sends reply to REST API call that was originally sent to rule engine.
+Данный узел отправляет ответ на вызов REST API, который был первоначально отправлен в движок правил.
+Принимает сообщения любого типа. Пересылает входящее сообщение в качестве ответа на вызов REST API, отправленный в движок правил.
 
-Expects messages with any message type. Forwards incoming message as a reply to REST API call sent to rule engine.
-
-Configuration:
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-rest-call-reply-config.png)
 
@@ -188,32 +142,24 @@ Configuration:
 
 # Change Owner Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-change-owner-node.png)
 
-Changes Owner of the Originator entity to the selected Owner by type:
+Данный узел изменяет владельца сущности типа Создатель на выбранного владельца по типу:
 
-- Tenant
+- Тенант
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-change-owner-node-tenent-config.png)
 
-- Customer
+- Клиент
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/action-change-owner-node-customer-config.png)
 
-Rule node finds target Owner by owner name pattern and then change the owner of the originator entity.
+Узел правил находит целевого владельца по шаблону имени владельца, а затем изменяет владельца сущности типа Создатель.
 
-- **Owner name pattern** - can be set direct customer name or pattern can be used, that will be resolved to the real customer name using Message metadata.
-- **Create new owner if not exists** - if checked will create new owner(customer) if it doesn't exist.
-- **Owner cache expiration time** - specifies maximum time interval is seconds allowed to store found owners(customers) records. 0 value means that records will never expire.
+- **Owner name pattern** - Шаблон имени владельца - может быть задано прямое имя клиента или может быть использован шаблон, по которому будет создано имя, на основе метаданных сообщения.
+- **Create new owner if not exists** - Создать нового владельца, если владельцев нет – если данный флажок установлен, будет создан новый владелец (клиент).
+- **Owner cache expiration time** - Время истечения срока действия кэша владельца - задает максимальный интервал времени в секундах, разрешенный для хранения найденных записей владельцев (клиентов). Значение 0 означает, что срок действия записей никогда не истечет.
 
-If an entity already belongs to this owner or entity owner is successfully changed - Message sent via **Success** chain, otherwise, **Failure** chain will be used.
+Если сущность уже принадлежит этому владельцу или владелец сущности успешно изменен - сообщение отправляется по цепочке **Success**, в противном случае будет использоваться цепочка **Failure**.
 
 <br/>

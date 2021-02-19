@@ -1,48 +1,46 @@
 ---
 layout: docwithnav
-title: Getting Started with Rule Engine
-description: Getting Started with Rule Engine
-
+title: Начало работы с движком правил
+description: Документация к IoT платформе Ростелеком
 ---
 
 * TOC
 {:toc}
 
-## What is ThingsBoard Rule Engine?
-Rule Engine is an easy to use framework for building event-based workflows. There are 3 main components:
+## Что такое Rule Engine?
+Движок правил - это простая в использовании платформа для построения рабочих процессов на основе событий. Существует 3 основных компонента:
 
-- **Message** - any incoming event. It can be an incoming data from devices, device life-cycle event, REST API event, RPC request, etc.
-- **Rule Node** - a function that is executed on an incoming message. There are many different Node types that can filter, transform or execute some action on incoming Message. 
-- **Rule Chain** - nodes are connected with each other with relations, so the outbound message from rule node is sent to next connected rule nodes.
+- **Сообщение** - любое входящее событие. Это могут быть входящие данные от устройств, событие жизненного цикла устройства, событие REST API, RPC-запрос и т. д.
+- **Узел правил** - функция, которая выполняется при входящем сообщении. Существует множество различных типов узлов, которые могут фильтровать, преобразовывать сообщения или отвечать на них некоторым действием. 
+- **Цепочка правил** - узлы связаны друг с другом отношениями, поэтому исходящее сообщение от узла правил отправляется следующим подключенным узлам.
 
 
-## Typical Use Cases 
-ThingsBoard Rule Engine is a highly customizable framework for complex event processing. Here are some common use cases that one can configure via ThingsBoard Rule Chains:
+## Варианты использования
+Это тонко настраиваемый фреймворк для комплексной обработки событий. Вот некоторые распространенные случаи использования, которые можно настроить с помощью цепочек правил:
 
-- Data validation and modification for incoming telemetry or attributes before saving to the database.
-- Copy telemetry or attributes from devices to related assets so you can aggregate telemetry. For example data from multiple devices can be aggregated
-in related Asset.
-- Create/Update/Clear alarms based on defined conditions.
-- Trigger actions based on device life-cycle events. For example, create alerts if Device is Online/Offline.
-- Load additional data required for processing. For example, load temperature threshold value for a device that is defined in Device's Customer or Tenant attribute.
-- Trigger REST API calls to external systems.
-- Send emails when complex event occurs and use attributes of other entities inside Email Template.
-- Take into account User preferences during event processing.
-- Make RPC calls based on defined condition.
-- Integrate with external pipelines like Kafka, Spark, AWS services, etc.
+- Проверка и модификация данных для входящей телеметрии или атрибутов перед их сохранением в базе данных.
+- Копируйте телеметрию или атрибуты с устройств и переносите их на связанные ресурсы, чтобы объединить телеметрию. Например, данные с нескольких устройств могут быть объединены в связанный актив.
+- Создавайте/обновляйте/удаляйте сигналы тревоги, исходя из определенных условий.
+- Вызывайте действия, основанные на событиях жизненного цикла устройства. Например, создавайте оповещения, если устройство переключается в режим онлайн/оффлайн.
+- Загружайте дополнительные данные, необходимые для обработки. Например, устанавливайте пороговое значение температуры для устройства, определенное в атрибутах тенанта или в устройствах клиентов.
+- Инициируйте REST API-вызовы для внешних систем.
+- Отправляйте электронные письма, когда происходит комплексное событие, и используйте атрибуты других сущностей в шаблоне электронного письма.
+- Учитывайте предпочтения пользователя при обработке событий.
+- Выполняйте RPC-вызовы на основе определенного условия.
+- Интегрируйте платформу с внешними конвейерами, такими как Kafka, Spark, AWS services и т. д.
 
-## Hello-World Example
-Let’s assume your device is using DHT22 sensor to collect and push temperature to the ThingsBoard. 
-DHT22 sensor can measure temperature from -40°C to +80°C.
+## Пример с "Hello-World"
+Предположим, что ваше устройство использует датчик DHT22 для считывания и передачи температуры на IoT-платформу Ростелеком.  
+Датчик DHT22 может измерять температуру от -40°C до +80°C.
 
-In this tutorial we will configure ThingsBoard Rule Engine to store all temperature within -40 to 80°C range and log all other readings to the system log.
+В этом руководстве мы настроим узел правил для хранения всех температур в диапазоне от -40 до 80°C и занесем все остальные показания в системный журнал.
 
-#### Adding temperature validation node
-In Thingsboard UI go to **Rule Chains** section and open **Root Rule Chain**.
+#### Добавление узла считывания температуры
+В пользовательском интерфейсе платформы перейдите в раздел **Цепочка правил** и откройте раздел **Корневая цепочка правил**.
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/initial-root-chain.png)
 
-Drag and Drop **Script Filter** rule node to the chain. Node configuration window will be opened. We will use this script for data validation:
+Перетащите узел правила **Script Filter** в цепочку. Откроется окно конфигурации узла. Мы будем использовать этот скрипт для проверки данных:
 
 {% highlight javascript %}
 return typeof msg.temperature === 'undefined' 
@@ -51,52 +49,51 @@ return typeof msg.temperature === 'undefined'
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/script-config.png)
 
-If temperature property not defined or temperature is valid - script will return **True**, otherwise it will return **False**.
-If script returns **True** incoming message will be routed to the next nodes that are connected with **True** relation.
+Если свойство температуры не определено или температура допустима, скрипт вернет значение **True**, в противном случае он вернет значение **False**. 
+Если скрипт возвращает **True**, то входящее сообщение будет перенаправлено на следующие узлы, связанные с True-отношениями.
  
-Now we want that all **telemetry requests** pass through this validation script. We need to remove the existing **Post Telemetry** 
-relation between **Message Type Switch** node and **Save Telemetry** node:
+Теперь мы сделаем так, чтобы все **запросы телеметрии** проходили через этот сценарий проверки. Нам нужно удалить существующую связь **Post Telemetry** 
+между узлами **Message Type Switch** и **Save Telemetry**:
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/remove-relation.png)
   
-And connect **Message Type Switch** node with **Script Filter** node using **Post Telemetry** relation:
+И соединить узлы **Message Type Switch** и **Script Filter** с помощью отношения **Post Telemetry**:
    
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/realtion-window.png)
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/connect-script.png)
 
-Next, we need to connect **Script Filter** node with **Save Telemetry** node using **True** relation. So all valid telemetry will be saved:
+Далее нам нужно соединить узлы **Script Filter** и **Save Telemetry**, используя отношение  **True**. Таким образом, вся действительная телеметрия будет сохранена:
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/script-to-save.png)
 
-Also, we will connect **Script Filter** node with **Log Other** node using **False** relation. So that all not valid telemetry will be logged in the system log:
+Кроме того, мы свяжем узлы **Script Filter** и **Log Other**, используя отношение **False**. Так что вся недействительная телеметрия будет записана в системный журнал:
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/false-log.png)
 
-Press Save button to apply changes.
+Нажмите кнопку «Сохранить», чтобы применить изменения.
 
-#### Validate results
-For validating results we will need to create Device and submit telemetry to the Thingsboard. So go to **Devices** section and create new Device:
+#### Проверка результатов
+Для проверки результатов нам нужно будет создать Устройство и отправить телеметрию на платформу. Перейдите в раздел **Устройства** и создайте новое:
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/create-device.png)
 
-For posting device telemetry we will use [Rest API](/docs/reference/http-api/#telemetry-upload-api). To do this this we will need to
-copy device access token from the device **Thermostat Home**. 
+Для публикации телеметрии устройства мы будем использовать [Rest API](/docs/reference/http-api/#telemetry-upload-api). Для этого нам нужно будет скопировать токен доступа устройства из **Thermostat Home**. 
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/copy-access-token.png)
 
-Lets post temperature = 99. We will see that telemetry **was not** added in Device **Latest Telemetry** section:
+Давайте выставим температуру = 99.  Мы увидим, что телеметрия **не была** добавлена в разделе **Latest Telemetry** устройства:
 
 {% highlight bash %}
 curl -v -X POST -d '{"temperature":99}' http://localhost:8080/api/v1/$ACCESS_TOKEN/telemetry --header "Content-Type:application/json"
 {% endhighlight %}
 
-***you need to replace $ACCESS_TOKEN with actual device token**
+***вам нужно заменить $ACCESS_TOKEN на фактический токен устройства**
 
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/empty-telemetry.png)
 
 
-Lets post temperature = 24. We will see that telemetry was saved successfully.
+Выставим температуру = 24. Мы увидим, что телеметрия была успешно сохранена.
 
 {% highlight bash %}
 curl -v -X POST -d '{"temperature":24}' http://localhost:8080/api/v1/$ACCESS_TOKEN/telemetry --header "Content-Type:application/json"
@@ -105,27 +102,23 @@ curl -v -X POST -d '{"temperature":24}' http://localhost:8080/api/v1/$ACCESS_TOK
 ![image](/images/user-guide/rule-engine-2-0/tutorials/getting-started/saved-ok.png)
 
 
-## See Also:
+## Смотрите также:
 
-You can use the next links for learning more about Thingsboard Rule Engine:
+Вы можете пройти по следующим ссылкам для получения дополнительной информации об движке правил:
 
-- [Rule Engine Overview](/docs/user-guide/rule-engine-2-0/overview/)
-- [Rule Engine Architecture](/docs/user-guide/rule-engine-2-0/architecture/)
-- [Debug Node Execution](/docs/user-guide/rule-engine-2-0/overview/#debugging)
-- [Validate incoming telemetry](/docs/user-guide/rule-engine-2-0/tutorials/validate-incoming-telemetry/)
-- [Transform incoming telemetry](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/)
-- [Transform telemetry using previous record](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/)
-- [Create & clear alarms](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
-- [Send email on alarm](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
-- [Create alarm when the device is offline](/docs/user-guide/rule-engine-2-0/tutorials/create-inactivity-alarm/)
-- [Check Relation between Entities](/docs/user-guide/rule-engine-2-0/tutorials/check-relation-tutorial/)
-- [RPC Request to Related Device](/docs/user-guide/rule-engine-2-0/tutorials/rpc-request-tutorial/)
-- [Add & remove devices to group dynamically](/docs/user-guide/rule-engine-2-0/tutorials/add-devices-to-group/)
-- [Aggregate incoming data stream](/docs/user-guide/rule-engine-2-0/tutorials/aggregate-incoming-data-stream/)
+- [Обзор движка правил](/docs/user-guide/rule-engine-2-0/overview/)
+- [Архитектура движка правил](/docs/user-guide/rule-engine-2-0/architecture/)
+- [Отладка выполнения узла](/docs/user-guide/rule-engine-2-0/overview/#debugging)
+- [Проверка входящей телеметрии](/docs/user-guide/rule-engine-2-0/tutorials/validate-incoming-telemetry/)
+- [Преобразование входящей телеметрии](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/)
+- [Преобразование телеметрии по последним записям](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/)
+- [Создание и удаление сигналов тревоги](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
+- [Отправка письма на сигнал тревоги](/docs/user-guide/rule-engine-2-0/tutorials/send-email/)
+- [Создание сигнала тревоги, когда устройство отключено](/docs/user-guide/rule-engine-2-0/tutorials/create-inactivity-alarm/)
+- [Проверка отношений между сущностями](/docs/user-guide/rule-engine-2-0/tutorials/check-relation-tutorial/)
+- [RPC-запрос на связанные устройства](/docs/user-guide/rule-engine-2-0/tutorials/rpc-request-tutorial/)
+- [Динамическая группировка устройства и удаление их из групп](/docs/user-guide/rule-engine-2-0/tutorials/add-devices-to-group/)
+- [Объединение входящих потоков данных](/docs/user-guide/rule-engine-2-0/tutorials/aggregate-incoming-data-stream/)
 
 <br/>
 <br/>
-
-## Next steps
-
-{% assign currentGuide = "GettingStartedGuides" %}{% include templates/guides-banner.md %}

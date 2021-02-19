@@ -1,65 +1,51 @@
 ---
 layout: docwithnav
-title: Action Nodes
-description: Rule Engine 2.0 Action Nodes
-
+title: Узлы действий
+description: Документация к IoT платформе Ростелеком
 ---
-
-Action Nodes execute various actions based on incoming Message.
+Узлы действий выполняют различные действия на основе входящего сообщения.
 
 * TOC
 {:toc}
 
-# Create Alarm Node
+# Узел Create Alarm
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-alarm.png)
 
-This Node tries to load latest Alarm with configured **Alarm Type** for Message Originator.
-If **Uncleared** Alarm exist, then this Alarm will be updated, otherwise a new Alarm will be created.
+Этот узел пытается загрузить последний сигнал тревоги с настроенным **типом сигнала** для отправителя сообщения. Если существует **неочищенный** сигнал тревоги, то он будет обновлен, в противном случае будет создан новый.
 
-Node Configuration:
+Конфигурации узла:
 
-- **Alarm Details Builder** script
-- **Alarm Type** - any string that represents Alarm Type
-- **Alarm Severity** - {CRITICAL \| MAJOR \| MINOR \| WARNING \| INDETERMINATE}
-- is **Propagate** - whether Alarm should be propagated to all parent related entities.
+- скрипт **Alarm Details Builder**
+- **Тип сигнала тревоги** - любая строка, представляющая тип сигнала тревоги
+- **Серьезность тревоги** - {CRITICAL \| MAJOR \| MINOR \| WARNING \| INDETERMINATE}
+- is **Propagate** - должен ли сигнал тревоги распространяться на все родительские связанные объекты.
 
-Note: Since TB Version 2.3.0 the rule node has the ability to:
+Примечание: узел может:
 
--  read alarm config from message:
+-  Читать конфигурацию сигнала тревоги из сообщения;
 
--  get alarm type using pattern with fields from message metadata:
+-  Получать тип сигнала тревоги с помощью паттерна с полями из метаданных сообщения:
 
     ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-alarm-config-from-msg.png)
-  
-Note: Since TB Version 2.4.3 the rule node has the ability to:
 
-- filter propagation to parent entities by relation types:
+- Распространять фильтр на родительские объекты по типам отношений:
 
     ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-alarm-propagate-list.png)
 
-**Alarm Details Builder** script used for generating Alarm Details JsonNode. It is useful for storing additional parameters
-inside Alarm. For example you can save attribute name/value pair from Original Message payload or Metadata. 
+Скрипт **Alarm Details Builder** используется, чтобы сгенерировать Alarm Details JsonNode. Это нужно для хранения дополнительных параметров внутри сигнализации. Например, вы можете сохранить пару «имя/значение» атрибута из оригинальной полезной нагрузки или метаданных сообщения.
 
-**Alarm Details Builder** script should return **details** object.
+Скрипт **Alarm Details Builder** должен возвращать объект **details**.
  
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-alarm-config.png)
 
-- Message _payload_ can be accessed via <code>msg</code> property. For example <code>msg.temperature</code><br/> 
-- Message _metadata_ can be accessed via <code>metadata</code> property. For example <code>metadata.customerName</code><br/> 
-- Message _type_ can be accessed via <code>msgType</code> property. For example <code>msgType</code><br/>
+-  Полезная нагрузка сообщения должна быть доступна через свойство <code>msg</code>. Например, <code>msg.temperature</code><br/> 
+- Доступ к метаданным сообщения можно получить через свойство <code>metadata</code>. Например, <code>metadata.customerName</code><br/> 
+- Тип сообщения можно получить через свойство <code>msgType</code>. Например, <code>msgType</code><br/>
 
-**Optional:** previous Alarm Details can be accessed via <code>metadata.prevAlarmDetails</code>. 
-If previous Alarm does not exist, this field will not be present in Metadata. **Note** that  <code>metadata.prevAlarmDetails</code> 
-is a raw String field and it needs to be converted into object using this construction:
+**Опционально:**  предыдущие сведения о сигналах тревоги можно получить с помощью <code>metadata.prevAlarmDetails</code>. 
+Если предыдущий сигнал тревоги не существует, то это поле не будет присутствовать в метаданных. **Примечание**  <code>metadata.prevAlarmDetails</code> - необработанное строковое поле, и его необходимо преобразовать в объект с помощью следующей конструкции:
 {% highlight javascript %}
 var details = {};
 if (metadata.prevAlarmDetails) {
@@ -67,12 +53,11 @@ if (metadata.prevAlarmDetails) {
 }
 {% endhighlight %}
 
-**Alarm Details Builder** script function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функция скрипта **Alarm Details Builder** может быть проверена с помощью [тестовой функции JavaScript](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
  
-**Example of Details Builder Function**
+**Пример функции Details Builder**
 
-This function takes <code>count</code> property from previous Alarm and increment it. Also put <code>temperature</code>
-attribute from inbound Message payload into Alarm details.
+Эта функция берет свойство <code>count</code> из предыдущего сигнала тревоги и увеличивает его, а также помещает атрибут <code>temperature</code> из полезной нагрузки входящего сообщения в детали сигнала тревоги.
 
 {% highlight javascript %}
 var details = {temperature: msg.temperature, count: 1};
@@ -88,30 +73,28 @@ return details;
 {% endhighlight %}
 
 
-**Alarm created/updated with those properties:**
+**Сигнал тревоги создан/обновлен с помощью этих свойств:**
 
-- Alarm details - object returned from **Alarm Details Builder** script
-- Alarm status - if **new alarm** -> *ACTIVE_UNACK*. If **existing Alarm** -> does not changed
-- Severity - value from Node Configuration
-- Propagation - value from Node Configuration
-- Alarm type - value from Node Configuration
-- Alarm start time - if **new alarm** -> *current system time*. If **existing Alarm** -> does not changed
-- Alarm end time - *current system time*
+- Детали тревоги - объект, возвращенный скрипта **Alarm Details Builder**
+- Состояние тревоги – если **новый сигнал тревоги** -> *ACTIVE_UNACK*. Если **существующий сигнал тревоги** -> не изменяется
+- Серьезность – значение из конфигурации узла
+- Распространение – значение из конфигурации узла
+- Тип сигнала тревоги – значение из конфигурации узла
+- Время начала сигнала тревоги - если **новый сигнал тревоги** -> текущее системное время. Если **существующий сигнал тревоги** -> не изменяется
+- Время окончания тревоги – *текущее системное время*
 
-**Outbound message will have the following structure:**
+**Исходящее сообщение будет иметь следующую структуру:**
 
-- **Message Type** - *ALARM*
-- **Originator** - the same originator from inbound Message
-- **Payload** - JSON representation of new Alarm that was created/updated
-- **Metadata** - all fields from original Message Metadata  
+- **Тип сообщения** - *ALARM*
+- **Отправитель** - из входящего сообщения
+- **Полезная нагрузка** - JSON-представление нового сигнала тревоги, который был создан/обновлен
+- **Метаданные** - все поля из исходных метаданных сообщения  
 
-After new Alarm **_created_**, Outbound message will contain additional property inside Metadata - **isNewAlarm** with **true** value.
-Message will be passed via **Created** chain.
+После создания нового сигнала тревоги исходящее сообщение будет содержать дополнительное свойство внутри метаданных - **isNewAlarm** со значением **true**. Сообщение будет передано по цепочке **Created**.
 
-After existing Alarm **_updated_**, Outbound message will contain additional property inside Metadata - **isExistingAlarm** with **true** value.
-Message will be passed via **Updated** chain.
+После обновления существующего сигнала тревоги исходящее сообщение будет содержать дополнительное свойство внутри метаданных – **isExistingAlarm** со значением **true**. Сообщение будет передано по цепочке **Updated**.
 
-Here is an example of Outbound Message **payload**
+Вот пример **полезной нагрузки** исходящего сообщения:
 {% highlight json %}
 {
   "tenantId": {
@@ -140,51 +123,42 @@ Here is an example of Outbound Message **payload**
 }
 {% endhighlight %}
 
-More details about Alarms in the Thingsboard can be found in [this tutorial](/docs/user-guide/alarms/)
+Более подробную информацию о сигналах тревоги IoT платформы Ростелеком можно найти в [этом руководстве](/docs/user-guide/alarms/)
 
-You can see the real life example, where this node is used, in the next tutorial:
+Вы можете увидеть пример использования данного узла в следующем уроке:
 
-- [Create and Clear Alarms](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
+- [Создание и удаление сигналов тревоги](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
 
 <br/>
 
-# Clear Alarm Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Clear Alarm
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-clear-alarm.png)
 
-This Node loads the latest Alarm with configured **Alarm Type** for Message Originator and Clear the Alarm if it exist.
+Этот узел загружает последний сигнал тревоги с настроенным **типом сигнала тревоги** для отправителя сообщения и очищает сигнал тревоги, если он есть.
 
-Node Configuration:
+Конфигурация Узла:
 
-- **Alarm Details Builder** script
-- **Alarm Type** - any string that represents Alarm Type
+- Скрипт **Alarm Details Builder**
+- **Тип сигнала тревоги** - любая строка, представляющая тип сигнала тревоги
 
-Note: Since TB Version 2.3.0 the rule node has the ability to get alarm type using pattern with fields from message metadata:
+Примечание: узел правил имеет возможность получать тип сигнала тревоги с помощью паттерна с полями из метаданных сообщения:
 
    ![image](/images/user-guide/rule-engine-2-0/nodes/action-clear-alarm-fetch-alarm-type-from-metadata.png)
 
-**Alarm Details Builder** script used for updating Alarm Details JsonNode. It is useful for storing additional parameters
-inside Alarm. For example you can save attribute name/value pair from Original Message payload or Metadata.
+Скрипт **Alarm Details Builder**, используется для обновления сведений о тревоге JsonNode. Он полезен для хранения дополнительных параметров внутри сигнализации. Например, вы можете сохранить пару имя/значение атрибута из исходной полезной нагрузки или метаданных сообщения.
 
-**Alarm Details Builder** script should return **details** object. 
+Скрипт **Alarm Details Builder** должен возвращать объект **details**.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-clear-alarm-config.png)
  
-- Message _payload_ can be accessed via <code>msg</code> property. For example <code>msg.temperature</code><br/> 
-- Message _metadata_ can be accessed via <code>metadata</code> property. For example <code>metadata.customerName</code><br/> 
-- Message _type_ can be accessed via <code>msgType</code> property. For example <code>msgType</code><br/>
-- Current Alarm Details can be accessed via <code>metadata.prevAlarmDetails</code>. 
+- Полезная нагрузка сообщения может быть доступна через свойство <code>msg</code> property. Например, <code>msg.temperature</code><br/> 
+- Метаданные сообщения могут быть доступны через свойство <code>metadata</code>. Например, <code>metadata.customerName</code><br/> 
+- Тип сообщения может быть доступен через свойство <code>msgType</code>. Например, <code>msgType</code><br/>
+- Текущие детали сигнала тревоги могут быть доступны через <code>metadata.prevAlarmDetails</code>. 
 
-**Note** that  <code>metadata.prevAlarmDetails</code> 
-is a raw String field and it needs to be converted into object using this construction:
+**Примечание**  <code>metadata.prevAlarmDetails</code> 
+– это необработанное строковое поле и оно должно быть преобразовано в объект с помощью этой конструкции:
 {% highlight javascript %}
 var details = {};
 if (metadata.prevAlarmDetails) {
@@ -192,12 +166,11 @@ if (metadata.prevAlarmDetails) {
 }
 {% endhighlight %}
 
-**Alarm Details Builder** script function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функция скрипта **Alarm Details Builder** может быть проверена с помощью [Тестовой JavaScript функции](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
-**Example of Details Builder Function**
+**Пример функции Details Builder**
 
-This function takes <code>count</code> property from previous Alarm and increment it. Also put <code>temperature</code>
-attribute from inbound Message payload into Alarm details.
+Эта функция принимает свойство <code>count</code> от предыдущего сигнала тревоги и увеличивает его, а также помещает атрибут <code>temperature</code> из полезной нагрузки входящего сообщения в детали сигнала тревоги.
 {% highlight javascript %}
 var details = {temperature: msg.temperature, count: 1};
 
@@ -212,25 +185,25 @@ return details;
 {% endhighlight %}
 
  
-This Node updates Current Alarm:
+Этот узел обновляет текущий сигнал тревоги:
 
-- change alarm **status** to **CLEARED_ACK** if it was already acknowledged, otherwise to **CLEARED_UNACK**
-- set **clear time** to current system time
-- update Alarm details with new object returned from **Alarm Details Builder** script
+- изменение **состояния** сигнала тревоги на **CLEARED_ACK**, если оно уже было подтверждено. Если не было подтверждено – на **CLEARED_UNACK**
+- установка **clear time** на текущее системное время
+- обновление сведения о тревоге с помощью нового объекта, возвращенного из скрипта **Alarm Details Builder**
 
 
-In case when Alarm does not exist or it is already **Cleared** Alarm, original Message will be passed to the next nodes via **False** chain.
+В случае, если сигнал тревоги не существует или он уже **удален**, исходное сообщение будет передано следующим узлам по цепочке **False**.
 
-Otherwise new Message will be passed via **Cleared** chain.
+В противном случае новое сообщение будет передано по цепочке **Cleared**.
 
-**Outbound message will have the following structure:**
+**Исходящее сообщение будет иметь следующую структуру:**
 
-- **Message Type** - *ALARM*
-- **Originator** - the same originator from inbound Message
-- **Payload** - JSON representation of Alarm that was cleared
-- **Metadata** - all fields from original Message Metadata. Also additional property inside Metadata will be added -> **isClearedAlarm** with **true** value.
+- **Тип сообщения** - *ALARM*
+- **Отправитель** - из входящего сообщения
+- **Полезная нагрузка** - JSON-представление тревоги, которая была очищена
+- **Метаданные** - все поля из исходных метаданных сообщения. Также будет добавлено дополнительное свойство внутри метаданных -> **isClearedAlarm** со значением **true**.
 
-Here is an example of Outbound Message **payload**
+Вот пример **полезной нагрузки** исходящего сообщения:
 {% highlight json %}
 {
   "tenantId": {
@@ -260,68 +233,52 @@ Here is an example of Outbound Message **payload**
 {% endhighlight %}
 
 
-More details about Alarms in the Thingsboard can be found in [this tutorial](/docs/user-guide/alarms/)
+Более подробную информацию о сигналах тревоги можно найти в  [следующем руководстве](/docs/user-guide/alarms/)
 
-You can see the real life example, where this node is used, in the next tutorial:
+Вы можете увидеть пример, где используется данный узел в руководстве:
 
-- [Create and Clear Alarms](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
+- [Создание и удаление сигналов тревоги](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
 
 <br/>
 
-# Delay Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Delay
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-delay.png)
 
-Delays incoming messages for configurable period.
+Задерживает входящие сообщения на настраиваемый период.
 
-Configuration:
+Конфигурация:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-delay-config.png)
 
-- **Period in seconds** - specifies the value of the period during which incoming message should be suspended
-- **Maximum pending messages** - specifies the amount of maximum allowed pending messages (queue of suspended messages) 
+- **Период в секундах** - указывает значение периода, в течение которого входящее сообщение должно быть отложено
+- **Максимальное количество отложенных сообщений** - задает количество максимально допустимых отложенных сообщений (очередь приостановленных сообщений)
 
-When delay period for particular incoming message will be reached it will be removed from pending queue and routed to the next nodes via **Success** chain.
-  
-Each next message will be routed via **Failure** chain if the maximum pending messages limit will be reached.  
+Когда истечет период задержки для конкретного входящего сообщения, оно будет удалено из очереди ожидания и перенаправлено на следующие узлы по цепочке **Success**.
+
+Каждое следующее сообщение будет перенаправляться по цепочке **Failure**, если будет достигнут предел ожидающих сообщений.
 
 <br/>
 
-# Generator Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Generator
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-generator.png)
 
-Generates Messages with configurable period. JavaScript function is used for message generation.
+Генерирует сообщения с настраиваемым периодом. Для генерации сообщений используется функция JavaScript.
 
-Node Configuration:
+Конфигурация узла:
 
-- Message generation frequency in seconds
-- Message originator 
-- JavaScript function that will generate the actual message.
+- Частота генерации сообщений в секундах
+- Отправитель сообщения 
+- Функция JavaScript, которая будет генерировать фактическое сообщение.
 
-JavaScript function receive 3 input parameters: 
+Функция JavaScript получает 3 входных параметра:
 
-- <code>prevMsg</code> - is a previously generated Message payload.
-- <code>prevMetadata</code> - is a previously generated Message metadata.
-- <code>prevMsgType</code> - is a previously generated Message type.
+- <code>prevMsg</code> - ранее сгенерированная полезная нагрузка сообщения.
+- <code>prevMetadata</code> - ранее сгенерированные метаданные сообщения.
+- <code>prevMsgType</code> - ранее сгенерированный тип сообщения.
 
-Script should return the following structure:
+Скрипт должен возвращать следующую структуру:
 {% highlight java %}
 {   
     msg: new payload,
@@ -332,75 +289,57 @@ Script should return the following structure:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-generator-config.png)
 
-All fields in resulting object are optional and will be taken from previously generated Message if not specified.
+Все поля в итоговом объекте являются необязательными и будут взяты из ранее сгенерированного сообщения, если они не указаны.
 
-Outbound Message from this Node will be new Message that was constructed using configured JavaScript function.
+Сообщение, исходящее от этого узла, будет новым, построенным с использованием настроенной функции JavaScript.
 
-JavaScript generator function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функция генератора JavaScript может быть проверена с помощью [Тестовой функции JavaScript](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
-This node can be used for Rule Chain debugging purposes.
+Этот узел можно использовать для отладки цепочка правил.
 
 <br/>
 
-# Log Node 
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Log 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-log.png)
 
-Transform incoming Message with configured JavaScript function to String and log final value into the Thingsboard log file. 
+Преобразуйте входящее сообщение с помощью настроенной функции JavaScript в строку и записывайте конечное значение в файл журнала.
 
-**INFO** log level is used for logging.
+Уровень логирования **INFO** используется для логирования.
 
-JavaScript function receive 3 input parameters 
+Функция JavaScript получает 3 входных параметра
 
-- <code>metadata</code> - is a Message metadata.
-- <code>msg</code> - is a Message payload.
-- <code>msgType</code> - is a Message type.
+- <code>metadata</code> - метаданные сообщения.
+- <code>msg</code> - полезная нагрузка сообщения.
+- <code>msgType</code> - тип сообщения.
 
-Script should return String value.
+Скрипт должен возвращать строковое значение.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-log-config.png)
 
-JavaScript transform function can be verified using [Test JavaScript function](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
+Функция преобразования JavaScript может быть проверена с помощью [Тестовой функции JavaScript](/docs/user-guide/rule-engine-2-0/overview/#test-javascript-functions).
 
-You can see the real life example, where this node is used, in the next tutorial:
+Пример использования данного узла вы можете увидеть в следующем руководстве:
 
-- [Reply to RPC Calls](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md#log-unknown-request)
+- [Ответы на вызовы RPC](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md#log-unknown-request)
 
-# RPC Call Reply Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел RPC Call Reply
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-rpc-call-reply.png)
 
-Sends response to the RPC Call originator. All incoming RPC requests are passed through Rule Chain as Messages.
-Also all RPC requests have request ID field. It is used for mapping requests and responses.
-Message Originator must be a **Device** entity because RPC response is initiated to the Message Originator.
+Отправляет ответ инициатору RPC- вызова. Все входящие RPC-запросы передаются через цепочку правил в виде сообщений. Кроме того, все RPC- запросы имеют поле request ID. Оно используется для сопоставления запросов и ответов. Составитель сообщения должен быть сущностью **устройство**, поскольку RPC-ответ инициируется отправителем сообщения.
 
-Node configuration has special request ID field mapping. If the mapping is not specified, **requestId** metadata field is used by default. 
+Конфигурация узла имеет специальное сопоставление полей request ID. Если сопоставление не указано, по умолчанию используется поле метаданных **requestId**.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-rpc-call-reply-config.png)
 
-RPC request can be received via different transports:
+RPC- запрос может быть получен с помощью различных транспортных протоколов:
 
 - MQTT
 - HTTP
 - CoAP  
 
-Message payload example:
+Пример полезной нагрузки сообщения:
 {% highlight json %}
 {
   "method": "setGpio",
@@ -411,38 +350,29 @@ Message payload example:
 }
 {% endhighlight %}
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет перенаправлено по цепочке **Failure** в следующих случаях:
 
-- Inbound Message originator is not a **Device** entity
-- Request id is not present in the Message metadata
-- Inbound Message payload is empty
+- Отправитель входящего сообщения не является cущностью **устройство**
+- Идентификатор запроса отсутствует в метаданных сообщения
+- В полезной нагрузке входящего сообщения отсутствуют данные
 
-For more details how RPC works in the Thingsboard, please read [RPC capabilities](/docs/user-guide/rpc/) Article.
+Для получения более подробной информации о том, как RPC работает в IoT платформе Ростелеком, прочитайте статью о [Возможностях RPC](/docs/user-guide/rpc/).
 
-You can see the real life example, where this node is used, in the next tutorial:
+Пример использования данного узла можно увидеть в следующем руководстве:
 
-- [Reply to RPC Calls](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md)
+- [Ответы на RPC-вызовы](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial.md)
 
-# RPC Call Request Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел RPC Call Request
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-rpc-call-request.png)
 
-Sends RPC requests to the Device and routing response to the next Rule nodes.
-Message Originator must be a **Device** entity as RPC request can be initiated only to device.
+Отправляет RPC-запросы на устройство и маршрутизирует ответ на следующие узлы правил. Составитель сообщения должен быть сущностью **устройство**, а RPC-запрос может быть инициирован только для устройства.
 
-Node configuration has **Timeout** field used to specify timeout waiting for response from device.
+Конфигурация узла имеет поле **Timeout**, которое используется для указания тайм-аута ожидания ответа от устройства.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-rpc-call-request-config.png)
 
-Message payload must have correct format for RPC request. It must contains **method** and **params** fields.
+Полезная нагрузка сообщения должна иметь соответствующий RPC-запросу формат и содержать поля **method** и **params**. Пример:
 Example:
 
 {% highlight json %}
@@ -455,55 +385,52 @@ Example:
 }
 {% endhighlight %}
 
-If Message Payload contains **requestId** field, its value used to identify RPC request to the Device. 
-Otherwise random requestId will be generated.
+Если полезная нагрузка сообщения содержит поле **requestId**, то его значение используется для идентификации RPC-запроса к устройству. В противном случае будет сгенерирован случайный requestId.
 
-Outbound Message will have same originator and metadata as in inbound Message. Response from the Device will be added into Message payload.
+Исходящее сообщение будет иметь тот же инициатор и метаданные, что и входящее. Ответ от устройства будет добавлен в payload сообщения.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет перенаправлено по цепочке **Failure** в следующих случаях:
 
-- Inbound Message originator is not a **Device** entity
-- Inbound Message has missed **method** or **params** fields
-- If Node will not receive a response during configured timeout
+- Отправитель сообщения не является сущностью типа **Устройство**
+- Во входящем сообщении отсутствуют поле **method** или **params**
+- Если узел не получает ответа до настроенного таймаута
  
-Otherwise Message will be routed via **Success** chain.
+В противном случае сообщение будет перенаправлено по цепочке **Success**.
 
-For more details how RPC works in the Thingsboard, please read [RPC capabilities](/docs/user-guide/rpc/) article.
+Для получения более подробной информации о работе RPC можно перейти на [следующую страницу](/docs/user-guide/rpc/).
 
 <br/>
 
-# Save Attributes Node
+# Узел Save Attributes
 
 <table  style="width:12%">
    <thead>
      <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
+     <td style="text-align: center"><strong><em>С версии IoT платформы Ростелеком 2.0</em></strong></td>
      </tr>
    </thead>
 </table> 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-attributes.png)
 
-Stores attributes from incoming Message payload to the database and associate them to the Entity, that is identified by the Message Originator. 
-Configured **scope** is used to identify attributes scope.
+Хранит атрибуты из полезную нагрузку входящего сообщения в базе данных и связывает их с сущностью, которая идентифицируется отправителем сообщения. Настроенная **область действия** используется для идентификации области атрибутов.
 
-Supported scope types:
+Поддерживаемые типы области применения:
 
-- Client attributes
-- Shared attributes
-- Server attributes
+- Клиентские атрибуты
+- Общие атрибуты
+- Серверные атрибуты
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-attributes-config.png)
 
-Expects messages with **POST_ATTRIBUTES_REQUEST** message type.
-If message Type is not **POST_ATTRIBUTES_REQUEST**, Message will be routed via **Failure** chain. 
+Ожидает сообщения с типом **POST_ATTRIBUTES_REQUEST**.
+Если тип сообщения не **POST_ATTRIBUTES_REQUEST**, сообщение будет направлено по цепочке **Failure**. 
 
-When attributes are uploaded over existing API (HTTP / MQTT / CoAP / etc.) Message with correct payload and type will be passed into **Input** node of the **Root Rule Chain**.
+Когда атрибуты загружаются через существующий API (HTTP / MQTT / CoAP / etc.) cообщение с корректной полезной нагрузкой и типом будет передано в узел **Input**, находящемся в **Root Rule Chain**.
 
-In cases when it is required to trigger attributes saving inside Rule Chain, the Rule Chain should be configured to transform Message payload 
-to the expected format and set message type to **POST_ATTRIBUTES_REQUEST**. It could be done using [**Script Transformation Node**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#script-transformation-node).
+В тех случаях, когда требуется инициировать сохранение атрибутов внутри цепочки правил, она должна быть настроена для преобразования payload сообщения в ожидаемый формат и тип сообщения **POST_ATTRIBUTES_REQUEST**. Это можно было бы сделать с помощью [**Узла Script Transformation**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#script-transformation-node).
 
-**Expected Message Payload example:**
+**Пример ожидаемой полезной нагрузки:**
 {% highlight json %}
 {
   "firmware_version": "1.0.1",
@@ -511,42 +438,31 @@ to the expected format and set message type to **POST_ATTRIBUTES_REQUEST**. It c
 }
 {% endhighlight %}
 
-After successful attributes saving, original Message will be passed to the next nodes via **Success** chain, 
-otherwise **Failure** chain is used.
+После успешного сохранения атрибутов исходное сообщение будет передано следующим узлам через цепочку **Success**, в противном случае используется цепочка **Failure**.
 
 <br/>
 
-# Save Timeseries Node 
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.0</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Save Timeseries 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-timeseries.png)
 
-Stores Timeseries data from incoming Message payload to the database and associate them to the Entity, that is identified by the Message Originator. 
-Configured **TTL** seconds is used for timeseries data expiration. **0** value means that data will never expire.
+Хранит данные временных рядов из payload входящего сообщения в базе данных и связывает их с сущностью, идентифицируемой отправителем сообщения. Сконфигурированный **TTL** секунд используется для истечения срока действия данных timeseries. Значение **0** означает, что срок действия данных никогда не истечет.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-timeseries-config.png)
 
-Expects messages with **POST_TELEMETRY_REQUEST** message type. 
-If message Type is not **POST_TELEMETRY_REQUEST**, Message will be routed via **Failure** chain.
+Ожидает сообщения типа **POST_TELEMETRY_REQUEST**. 
+Если тип сообщения не является **POST_TELEMETRY_REQUEST**, то сообщение направляется по цепочке **Failure**.
  
-When timeseries data is published over existing API (HTTP / MQTT / CoAP / etc.) Message with correct payload and type will be passed into **Input** node of the **Root Rule Chain**.
+Когда данные временных рядов публикуются через существующий API (HTTP / MQTT / CoAP / etc.), сообщение с правильной полезной нагрузкой и типом будет передано в узел **Input**, который находится в **Root Rule Chain**.
 
-In cases when it is required to trigger timeseries data saving inside Rule Chain, the Rule Chain should be configured to transform Message payload  
-to the expected format and set message type to **POST_TELEMETRY_REQUEST**. It could be done using [**Script Transformation Node**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#script-transformation-node).
+В тех случаях, когда требуется инициировать сохранение данных временных рядов внутри цепочки правил, цепочка правил должна быть сконфигурирована для преобразования payload сообщения
+к ожидаемому формату и установите тип сообщения в **POST_TELEMETRY_REQUEST**. Это можно было бы сделать с помощью Узла [**Узла Script Transformation**](/docs/user-guide/rule-engine-2-0/transformation-nodes/#script-transformation-node).
 
-Message Metadata must contain **ts** field. This field identifies timestamp in milliseconds of published telemetry.
+Метаданные сообщения должны содержать поле **ts**. Это поле определяет метку времени в миллисекундах опубликованной телеметрии.
 
-Also, if Message Metadata contains **TTL** field, its value is used for timeseries data expiration, otherwise **TTL** 
-from Node Configuration is used.
+Кроме того, если метаданные сообщения содержат поле **TTL**, его значение используется для истечения срока действия данных временных рядов, в противном случае **TTL** из конфигурации узла используется.
 
-**Expected Message Payload example:**
+**Пример ожидаемой полезной нагрузки сообщения**
 {% highlight json %}
 {  
   "values": {
@@ -556,275 +472,224 @@ from Node Configuration is used.
 }
 {% endhighlight %}
 
-After successful timeseries data saving, original Message will be passed to the next nodes via **Success** chain, 
-otherwise **Failure** chain is used.
+После успешного сохранения данных временных рядов исходное сообщение будет передано следующим узлам по цепочке **Success**, иначе используется цепочка **Failure**.
 
 <br/>
 
 # Save to Custom Table
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-to-custom-cassandra-table.png)
 
-Node stores data from incoming Message payload to the Cassandra database into the predefined custom table that should have **cs_tb_** prefix, to avoid the data insertion to the common TB tables.
+Узел хранит данные из payload входящего сообщения в базе данных Cassandra в заведомо определенной пользовательской таблице, которая должна иметь префикс **cs_tb_**, чтобы избежать вставки данных в общие таблицы IoT Ростелеком.
 
-Please note, that rule node can be used only for **Cassandra DB**.
+Обратите внимание, что узел правил может использоваться только для базы данных **Cassandra DB**.
 
-Configuration:
+Конфигурация:
 
-Administrator should set the custom table name without prefix: **cs_tb_**.
+Администратор должен установить пользовательское имя таблицы без префикса: **cs_tb_**.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-to-custom-cassandra-table-name-config.png)
 
-Administrator can configure the mapping between the Message field names and Table columns name. If the mapping key is **$entity_id**, that is identified by the Message Originator, then to the appropriate column name(mapping value) will be write the message originator id.
+Администратор может настроить сопоставление наименований полей в сообщениях и столбцов таблицы. Если ключом сопоставления является **$entity_id**, который идентифицируется составителем сообщения, то в соответствующий столбец name (mapping value) будет записан идентификатор составителя сообщения.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-save-to-custom-cassandra-table-config.png)
 
-If specified message field does not exist or is not a JSON Primitive, the outbound message will be routed via **Failure** chain, otherwise, the message will be routed via **Success** chain.
+Если указанное поле сообщения не существует или не является примитивом JSON, исходящее сообщение будет маршрутизировано через цепочку **Failure**, в противном случае сообщение будет маршрутизировано через цепочку **Success**.
 
 <br/>
 
-# Assign To Customer Node 
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.2</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Assign To Customer 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-assign-to-customer-node.png)
 
-Assign Message Originator Entity to [Customer](/docs/user-guide/ui/customers/). 
+ Назначает сущность отправителя сообщения [клиенту](/docs/user-guide/ui/customers/).
+ 
+ Допускаются следующие типы отправителей сообщений: **Актив**, **Устройство**, **Представление сущности**, **Дашборд**.
 
-Following Message Originator types are allowed: **Asset**, **Device**, **Entity View**, **Dashboard**.
+Находит целевого клиента по паттерну имени клиента, а затем назначает этому клиенту сущность-инициатор.
 
-Finds target Customer by customer name pattern and then assign Originator Entity to this customer.
+Создаст нового клиента, если его нет и **Create customer if not exists** имеет значение **true**.
 
-Will create new Customer if it doesn't exists and **Create new Customer if not exists** is set to **true**.
-
-Configuration:
+Конфигурация:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-assign-to-customer-node-configuration.png)
 
-- **Customer name pattern** - can be set direct customer name or pattern can be used, that will be resolved to the real customer name using Message metadata.
-- **Create new customer if not exists** - if checked will create new customer if it doesn't exist.
-- **Customers cache expiration time** - specifies maximum time interval is seconds allowed to store found customers records. 0 value means that records will never expire.
+- **Шаблон имени клиента** - можно установить прямое имя клиента или использовать паттерн, который будет применен к реальному имени клиента с помощью метаданных сообщения.
+- **Создать нового клиента, если его нет** - если флажок установлен, то будет создан новый клиент.
+- **Время истечения срока действия кэша клиентов** - указывает максимальный интервал времени в секундах, отведенный для хранения найденных записей клиентов. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет перенаправлено по цепочке **Failure** в следующих случаях
 
-- When Originator entity type is not supported.
-- Target customer doesn't exist and **Create customer if not exists** is unchecked.
+- Если тип сущности-отправителя не поддерживается.
+- Целевой клиент не существует и **Create customer if not exists**
 
-In other cases Message will be routed via **Success** chain. 
+В других случаях сообщение будет перенаправлено по цепочке **Success**. 
 
 <br/>
 
-# Unassign From Customer Node
-
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.2</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Unassign From Customer
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-unassign-from-customer-node.png)
 
-Unassign Message Originator Entity from [Customer](/docs/user-guide/ui/customers/). 
+Отменяет назначение сущности-отправителя сообщения [Клиенту](/docs/user-guide/ui/customers/). Допускаются следующие типы отправителей сообщений: **Актив**, **Устройство**, **Представление сущности**, **Дашборд**.
 
-Following Message Originator types are allowed: **Asset**, **Device**, **Entity View**, **Dashboard**.
+Находит целевого клиента по паттерну имени клиента, а затем отменяет назначение сущности-отправителя этому клиенту.
 
-Finds target Customer by customer name pattern and then unassign Originator Entity from this customer.
-
-Configuration:
+Конфигурация:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-unassign-from-customer-node-configuration.png)
 
-- **Customer name pattern** - can be set direct customer name or pattern can be used, that will be resolved to the real customer name using Message metadata.
-- **Customers cache expiration time** - specifies maximum time interval is seconds allowed to store found customers records. 0 value means that records will never expire.
+- **Шаблон имени клиента** - можно установить прямое имя клиента или использовать паттерн, который будет применен к реальному имени клиента с помощью метаданных сообщения.
+- **Время истечения срока действия кэша клиентов** - указывает максимальный интервал времени в секундах, отведенный для хранения найденных записей клиентов. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет направлено по цепочке **Failure** в следующих случаях:
 
-- When Originator entity type is not supported.
-- Target customer doesn't exist.
+- Если тип сущности-отправителя не поддерживается.
+- Целевой клиент не существует.
 
-In other cases Message will be routed via **Success** chain. 
+В других случаях сообщение будет направлено по цепочке **Success**. 
 
 <br/>
 
-# Create Relation Node 
-
-<table  style="min-width:12%; max-width: 20%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Create Relation 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-relation.png)
 
-Create the relation from the selected entity to originator of the message by type and direction. 
+Создает отношение между выбранным объектом и отправителем сообщения по типу и направлению.
 
-Following Message Originator types are allowed: **Asset**, **Device**, **Entity View**, **Customer**, **Tenant**, **Dashboard**.
+Допускаются следующие типы отправителей сообщений: **Актив**, **Устройство**, **Представление сущности**, **Клиент**, **Тенант**, **Дашборд**.
 
-Finds target Entity by metadata key patterns and then create a relation between Originator Entity and the target entity.
+Находит целевую сущность по паттернам ключей метаданных, а затем создает связь между сущностью-отправителем и целевой сущностью.
 
-If selected entity type **Asset**, **Device** or **Customer**  rule node will create new Entity if it doesn’t exist and selected checkbox: **Create new Entity if not exists**.
+Если выбран тип сущности **Актив**, **Устройство** или **Клиент**,  узел правил устройства или клиента создаст новую сущность, если её нет, и установлен флажок **Create new Entity if not exists**.
 
-**Note:** if selected entity type **Asset** or **Device** you need to set two patterns: 
+**Примечание:** если выбран тип сущности **Актив** или **Устройство**, вам необходимо установить два шаблона:
 
- - entity name pattern; 
+ - шаблон имени сущности; 
  
- - entity type pattern. 
+ - шаблон типа сущности. 
 
-Otherwise, only name pattern should be set.
+В противном случае должен быть установлен только шаблон имени.
 
-Configuration:
+Конфигурация:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-relation-node-configuration.png)
 
-- **Direction** - following types are allowed: **From**, **To**.
-- **Relation type** - type of directed connections to message originator entity. Default types **Contains** and **Manages** can be selected from the drop-down list.
-- **Name pattern** and **Type pattern** - can be set direct entity name/type or pattern can be used, that will be resolved to the real entity name/type using Message metadata.
-- **Entities cache expiration time** - specifies maximum time interval is seconds allowed to store found target entity records. 0 value means that records will never expire.
+- **Направление** - разрешены следующие типы: **From**, **To**.
+- **Тип отношений** - тип направленных соединений с сущностью-инициатором сообщения. Типы по умолчанию **Contains** и **Manages** можно выбрать из раскрывающегося списка.
+- **Шаблон имени** и **Шаблон типа** - можно задать прямое имя сущности/тип или использовать паттерн, который будет применен к реальному имени сущности/типу с помощью метаданных сообщения.
+- **Время истечения срока действия кэша сущностей** - указывает максимальный интервал времени в секундах, отведенный для хранения найденных записей целевых сущностей. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет направлено по цепочке **Failure** в следующих:
 
-- When Originator entity type is not supported.
-- Target entity doesn't exist.
+- Если тип сущности-отправителя не поддерживается.
+- Целевой объект не существует.
 
-In other cases Message will be routed via **Success** chain. 
+В других случаях сообщение будет направлено по цепочке **Success**. 
 
-**Note:** Since TB Version 2.3 the rule node has the ability to:
+**Примечание:** начиная с версии IoT платформы Ростелеком 2.3, узел правил имеет возможность:
 
- - remove current relations from the originator of the incoming message based on direction and type: 
+ - удалить текущие отношения отправителя входящего сообщения на основе направления и типа:
 
     ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-relation-node-remove-relations.png)
 
- - change the originator of the incoming message to the selected entity and process outboud messages as messages from another entity: 
+ - изменить отправителя входящего сообщения на выбранную сущность и обработать исходящие сообщения как сообщения от другой сущности: 
  
     ![image](/images/user-guide/rule-engine-2-0/nodes/action-create-relation-node-change-originator.png)
 
 <br/>
 
-# Delete Relation Node
-
-<table  style="min-width:12%; max-width: 20%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел Delete Relation
 
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-delete-relation.png)
 
-Delete the relation from the selected entity to originator of the message by type and direction.
+Удаляет связь между выбранным объектом и отправителем сообщения по типу и направлению.
 
-Following Message Originator types are allowed: **Asset**, **Device**, **Entity View**, **Customer**, **Tenant**, **Dashboard**.
+Допускаются следующие типы отправителей сообщений: **Актив**, **Устройство**, **Представление сущности**, **Клиент**, **Тенант**, **Дашборд**.
 
-Finds target Entity by entity name pattern and then delete a relation between Originator Entity and this entity.
+Находит целевую сущность по паттерну имени сущности, а затем удаляет связь между сущностью-инициатором и этой сущностью.
 
-Configuration:
+Конфигурация:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-delete-relation-node-configuration.png)
 
-- **Direction** - following types are allowed: **From**, **To**.
-- **Relation type** - type of directed connections to message originator entity. Default types **Contains** and **Manages** can be selected from the drop-down list.
-- **Name pattern** - can be set direct entity name or pattern can be used, that will be resolved to the real entity name using Message metadata.
-- **Entities cache expiration time** - specifies maximum time interval is seconds allowed to store found target entity records. 0 value means that records will never expire.
+- **Направление** - разрешены следующие типы: **From**, **To**.
+- **Тип отношений** - тип направленных соединений с сущностью-инициатором сообщения. Типы по умолчанию **Contains** и **Manages** можно выбрать из раскрывающегося списка.
+- **Шаблон имени** - может быть задано прямое имя сущности или использован паттерн, который будет применен к реальному имени сущности с помощью метаданных сообщения.
+- **Время истечения срока действия кэша сущностей** - указывает максимальный интервал времени в секундах, разрешенный для хранения найденных записей целевых сущностей. Значение 0 означает, что срок действия записей никогда не истечет.
 
-Message will be routed via **Failure** chain in the following cases:
+Сообщение будет направлено по цепочке **Failure** в следующих случаях:
 
-- When Originator entity type is not supported.
-- Target entity doesn't exist.
+- Если тип сущности-отправителя не поддерживается.
+- Целевая сущность не существует.
 
-In other cases Message will be routed via **Success** chain. 
+В остальных случаях сообщение будет направлено по цепочке **Success**. 
 
 
-**Note:** Since TB Version 2.3 the rule node has the ability to deletes relation from the originator of the incoming message to the specified entity or to the list of entities based on direction and type by disabling the following checkbox in the rule node configuration:
+**Примечание:** начиная с версии в IoT Ростелеком 2.3, есть возможность удалить связь между отправителем входящего сообщения и указанным объектом или их группой на основе направления и типа, отключив следующий флажок в настройках узла правил:
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-delete-relation-node-new-functionality.png)
 
 <br/>
 
-# GPS Geofencing Events Node
-
-<table  style="width:15%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.3.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
+# Узел GPS Geofencing Events
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-gps-geofencing-event-node.png)
 
-Produces incoming messages by GPS based parameters. Extracts latitude and longitude from incoming message data or metadata and returns different events based on configuration parameters (geo fence).
+Производит входящие сообщения GPS based-параметрам. Извлекает широту и долготу из данных входящих сообщений или метаданных и возвращает различные события на основе параметров конфигурации (geo fence).
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-default-config.png)
 
-The rule node fetches perimeter information from message metadata by default. If **Fetch perimeter information from message metadata** is unchecked, additional information should be configured.
+Узел правил по умолчанию извлекает информацию о периметре из метаданных сообщений. Если флажок **Извлекать информацию о периметре из метаданных сообщений** снят, необходимо настроить дополнительные сведения.
 
 <br>
 
-###### Fetch perimeter information from message metadata
+###### Извлечение информации о периметре из метаданных сообщений
 
-There are two options of area definition based on the perimeter type:
+Существует два варианта определения площади в зависимости от типа периметра:
 
-- Polygon 
+- Полигон 
            
-    Metadata of the incoming message must include key with name **perimeter** and following data structure:
+    Метаданные входящего сообщения должны включать ключ с именем **perimeter** и следующую структуру данных:
      
 {% highlight java %}[[lat1,lon1],[lat2,lon2], ... ,[latN,lonN]]{% endhighlight %}
  
-- Circle
+- Круг
                  
 {% highlight java %}"centerLatitude": "value1", "centerLongitude": "value2", "range": "value3"
 
-All values for these keys are in double-precision floating-point data type.
+Все значения для этих ключей имеют тип данных двойной точности с floating-point.
 
 The "rangeUnit" key requires specific value from a list of METER, KILOMETER, FOOT, MILE, NAUTICAL_MILE (capital letters obligatory).
 {% endhighlight %}
 
-###### Fetch perimeter information from node configuration
+###### Извлечение информации о периметре из конфигурации узла
  
-There are two options of area definition based on the perimeter type:
- 
-- Polygon 
+Существует два варианта определения площади в зависимости от типа периметра:
+
+- Полигон 
              
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-polygon-config.png)           
 
-- Circle
+- Круг
                   
 ![image](/images/user-guide/rule-engine-2-0/nodes/filter-gps-geofencing-circle-config.png)       
 
-###### Event Types
-There are 4 types of events managed by geofencing rule node:
+###### Типы событий
+Существует 4 типа событий управляемых узлом правил геозоны:
 
-- **Entered** — is reporting whenever latitude and longitude from the incoming message to belong the required perimeter area for the first time;
-- **Left** — is reporting whenever latitude and longitude from the incoming message not belong the required perimeter area for the first time;
-- **Inside** and **Outside** events are used to report current status.
+- **Entered** — сообщается всякий раз, когда широта и долгота из входящего сообщения присваиваются требуемой площади периметра впервые;
+- **Left** — сообщается всякий раз, когда широта и долгота из входящего сообщения присваиваются требуемой площади периметра не в первый раз;
+- **Inside** и **Outside** события используются для отчета о текущем состоянии.
 
-Administrator can configure duration time threshold for reporting inside or outside event. For example, whenever minimal inside time is set to 1 minute the message originator is considered as being inside the perimeter 60 seconds after entering the area.
-Minimal outside time defines whenever message originator is considered as out of the perimeter as well.
+Администратор может настроить порог продолжительности для создания отчетов о внутренних или внешних событиях. Например, когда минимальное внутреннее время равно 1 минуте, отправитель сообщения считается находящимся внутри периметра через 60 секунд после входа в зону. 
+Минимальное внешнее время определяет, когда отправитель сообщения считается вышедшим за периметр.
 
 ![image](/images/user-guide/rule-engine-2-0/nodes/action-gps-geofencing-event-node-duration-config.png)  
  
-**Failure** chain will to be used when:
+Цепочка **Failure** будет использоваться, когда:
 
-   - incoming message has no configured latitude or longitude key in data or metadata. 
-   - missing perimeter definition;     
+   - входящее сообщение не имеет выставленных значений широты или долготы в данных или метаданных
+   - отсутствует значение периметра
     

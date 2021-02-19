@@ -1,9 +1,7 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Users
-description: ThingsBoard Users management
+title: Пользователи
+description: Пользователи
 
 ---
 

@@ -1,50 +1,38 @@
 ---
 layout: docwithnav
-title: Claiming devices
-description: IoT device management using ThingsBoard claiming devices feature
+title: Подтверждение устройств
+description: Подтверждение устройств
 
 ---
 
 * TOC
 {:toc}
 
-## Use Case description
+## Когда это необходимо
 
-As a Tenant, I would like to pre-provision my devices via script or UI. My customers purchase devices directly from me or through the distributors.
-I would like my customers to claim their devices based on the QR code or similar technique, once they get physical access to the device.
+Как тенант, вы хотели бы предварительно подготовить к подключению к платформе свои устройства с помощью скрипта или пользовательского интерфейса (UI). Ваши клиенты покупают устройства непосредственно у вас или через дистрибьюторов. Вы хотели бы, чтобы ваши клиенты подтверждали свои устройства по QR-коду или схожим способом, как только они получат физический доступ к устройству.
 
-Once device is claimed, the customer becomes its owner and customer users may access device data as well as control the device.   
+Как только устройство подтверждено, клиент становится его владельцем, а пользователи клиента могут получить доступ к данным устройства и управлять им.
 
-## Device Claiming scenarios
+## Сценарии подтверждения устройств
  
-ThingsBoard User can claim the device if they "know" the device Name and Secret Key. 
-The Secret Key is optional, always has an expiration time and may also change over time. 
+Пользователь платформы может подтвердить устройство, если он знает его имя и секретный ключ. Секретный ключ является опциональным, всегда имеет срок действия и может изменяться с течением времени.
+Секретный ключ может быть подготовлен двумя различными способами. Либо сообщается устройством (device-side ключ), либо используется атрибут устройства на стороне сервера (server-side ключ). Более подробную информацию смотрите ниже.
 
-The Secret Key may be provisioned in two different ways. 
-Either reported by device (device-side key) or using server-side device attribute (server-side key).
-See below for more details.
+### Подтверждение при помощи Device-side ключа
 
-### Claiming using Device-side key
-
-This procedure requires device to generate the Secret Key based on some trigger event. 
-For example, once device is booted or when some physical button is pressed. 
-Once the Secret Key is generated, it is valid for certain period of time. 
-The device sends Claiming Information to the server which contains both the Secret Key and the duration of the validity of the key.  
-ThingsBoard server stores Claiming Information for the duration of the validity of the key. See diagram below.
+Эта процедура требует, чтобы устройство сгенерировало секретный ключ на основе некоторого триггерного события. Например, после загрузки устройства или при нажатии какой-либо физической кнопки. Как только секретный ключ сгенерирован, он действителен в течение определенного периода времени. Устройство передает информацию о секретном ключе и сроке его действия на сервер платформы.
+Платформа хранит информацию о подтверждении в течение всего срока действия ключа. Смотрите диаграмму ниже.
 
 ![image](/images/user-guide/claiming-devices/device-side-key-diagram.png)
 
-Device may send Claiming Information to TB using all supported transport protocols. The message body has two parameters: **secretKey** and **durationMs**, which may be optionally specified. 
-The **secretKey** parameter adds security to the claiming process.
-The **durationMs** parameter determines the expiration of claiming time.
-In case the **secretKey** is not specified, the empty string as a default value is used.
-In case the **durationMs** is not specified, the system parameter **device.claim.duration** is used (in the file **/etc/thingsboard/conf/thingsboard.yml**).
+Устройство может передавать информацию о подтверждении платформе, используя все поддерживаемые транспортные протоколы. Тело сообщения имеет два параметра: **secretKey** и **durationMs**, которые могут быть заданы дополнительно. 
+Параметр **secretKey** обеспечивает безопасность процесса подтверждения. 
+Параметр **durationMs** определяет истечение времени подтверждения. 
+Если **secretKey** не указан, то в качестве значения по умолчанию используется пустая строка. 
+В случае, если **durationMs** не указан, используется системный параметр device.claim.duration
 
-In order to enable claiming devices feature a system parameter **security.claim.allowClaimingByDefault** (see [configuration guide](/docs/user-guide/install/config/)) 
-should be set to **true**, otherwise a server-side **claimingAllowed** attribute with the value **true** is obligatory for provisioned devices.
-
-Please see the Device API references to get the information about the message structure and topics/URLs to which to send the claiming messages.
-You can use the MQTT Gateway API that allows initiating claiming of multiple devices per time as well.
+Пожалуйста, ознакомьтесь с Device API, чтобы получить информацию о структуре сообщений в которых можно передавать сообщения о подтверждении. Вы можете использовать MQTT Gateway API, который также позволяет инициировать подтверждение нескольких устройств за один раз.
 
  - [MQTT Device API](/docs/reference/mqtt-api/#claiming-devices)
  - [CoAP Device API](/docs/reference/coap-api/#claiming-devices)
@@ -52,105 +40,87 @@ You can use the MQTT Gateway API that allows initiating claiming of multiple dev
  - [MQTT Gateway API](/docs/reference/gateway-mqtt-api/#claiming-devices-api)
  
 
-Once the Claiming Info is sent, device may display the Secret Key either in plain text or using the QR code. User should scan this key and use it to send the Claiming Request.
-Claiming Request consists of the device Name and Secret Key. You may use MAC address or other unique property as the device Name. 
-See instructions how to send the Claiming Request [here](/docs/user-guide/claiming-devices/#device-claiming-api-request).   
+После передачи информации о подтверждении, устройство может отображать секретный ключ либо в виде обычного текста, либо в виде QR-кода. Пользователь должен отсканировать этот ключ и использовать его для передачи запроса на подтверждение. Запрос состоит из имени устройства и секретного ключа. В качестве имени устройства можно использовать MAC-адрес или другое уникальное свойство. Смотрите инструкции по передаче заявки здесь [здесь](/docs/user-guide/claiming-devices/#device-claiming-api-request).   
 
-**Note:** The Secret Key may also be an empty string. This is useful if your device does not have any way to display the Secret Key. 
-For example, you may allow to claim device within 30 seconds after the claim button is pressed on the device. In this case user needs to know the device Name (MAC address, etc) only.
+**Примечание** секретный ключ также может быть пустой строкой. Это может быть необходимо, если ваше устройство никаким способом не может отобразить секретный ключ. Например, вы можете разрешить подтверждение устройства в течение 30 секунд после нажатия соответствующей кнопки. В этом случае пользователю необходимо знать только имя устройства (MAC-адрес и т. д.).
 
-Server validates the Claiming Request and replies with the Claiming Response. Claiming Response contains status of the Claiming operation and Device ID if the operation was successful.
+Сервер проверяет запрос и отвечает на него. Ответ содержит статус операции подтверждения и идентификатор устройства, если операция была успешной.
+После запроса пользователь-клиент может использовать виджет подтверждения устройства       
 
-Once Claiming Information is provisioned, Customer User may use [Claim Device](/docs/user-guide/claiming-devices/#device-claiming-widget) widget.        
+### Подтверждение с помощью Server-side ключа
 
-### Claiming using Server-side key
-
-Let's assume you have thousands of NB IoT/LoRaWAN/Sigfox devices connected using one of ThingsBoard [Integrations](/docs/user-guide/integrations/).
-The integration layer will automatically provision them in ThingsBoard. 
-Assuming Tenant Admin knows the list of DevEUIs (LoRaWAN) or any other device identifiers, 
-it is possible to generate a random Secret Key per device and upload this key to ThingsBoard as a server-side attribute using [REST API](https://thingsboard.io/docs/reference/rest-api/) or UI.
-Once this is done, tenant admin can email those keys to the Customer, or put them inside the device package box. 
+Предположим, что есть тысячи устройств NB IoT/LoRaWAN/Sigfox, подключенных с помощью одной из интеграций платформы. Интеграционный слой автоматически подключит их к платформе. Предполагая, что тенант-админ знает список DevEUIs для LoRaWAN или иные идентификаторы устройств, можно сгенерировать случайный секретный ключ для каждого устройства и загрузить этот ключ на платформу в качестве server-side атрибута с помощью REST API или пользовательского интерфейса. Как только это будет сделано, тенант админ может отправить эти ключи клиенту по электронной почте или поместить их в коробку с устройством. 
 
 ![image](/images/user-guide/claiming-devices/server-side-key-diagram.png)
 
-In order to provision device Secret Key, Tenant Administrator should set server-side attribute "claimingData" with the following value:
+Чтобы предоставить секретный ключ устройства, тенант админ должен установить server-side атрибут “claimingData” со следующим значением:
 
 ```json
 {"secretKey": "YOUR_SECRET_KEY", "expirationTime": "1640995200000"}
 ``` 
 
-, where 1577836800000 is an expiration time of the device Secret Key that is 01/01/2022 as a unix timestamp with milliseconds precision.
+где 1577836800000 – это время истечения срока действия секретного ключа устройства, которое равно 01/01/2022 в виде временной метки unix с точностью до миллисекунд.
+После подготовки server-side атрибута пользователь может использовать виджет подтверждения устройства.
 
-Once server-side attribute is provisioned, Customer User may use [Claim Device](/docs/user-guide/claiming-devices/#device-claiming-widget) widget.  
+## Разрешения на подтверждение устройства
 
-## Device Claiming Permissions in PE
-
-It is important to know that in case of the PE version the user that is trying to claim the specific device must have the necessary permissions to do so.
-In this case, the needed permission is the following:
+Важно, что пользователь, который пытается подтвердить устройство, должен иметь для этого необходимые полномочия. В данном случае необходимыми полномочиями являются:
 
 - **Resource: Device**
 - **Operation: Claim devices**
 
-Let's add the above permission for a custom claiming user group.
-
-First, we need to create a generic role:
+Чтобы добавить пользователю полномочия, необходимо сделать следующее:
+Во-первых, нам нужно создать универсальную роль:
 
 ![image](/images/user-guide/claiming-devices/claiming-generic-role.png)
 
-And then assign that role for a user group:
+А затем назначить эту роль группе:
 
 ![image](/images/user-guide/claiming-devices/assign-claiming-role.png)
 
-## Device Claiming Widget
+## Виджет подтверждения устройства
 
-Claim device widget is quite simple and allows to input device name and Secret Key. 
+Виджет подключения устройства довольно прост, в нем вводится имя устройства и секретный ключ.
 
 ![image](/images/user-guide/claiming-devices/claim-device-widget.png)
 
-It is possible to "hide" Secret Key input field and change the labels in "General settings".
+Можно скрыть поле ввода секретного ключа и изменить метки в разделе “Общие настройки”.
 
 ![image](/images/user-guide/claiming-devices/claim-device-widget-advanced-settings.png)
 
-It is also possible to configure all sorts of messages to the user in "Message settings".
+Также можно настроить все виды сообщений, отправляемых пользователю, в разделе “Настройки сообщений”.
 
 ![image](/images/user-guide/claiming-devices/claim-device-widget-message-settings.png)
 
-Finally, you can relate claimed device to the current state entity of the dashboard. 
-This is useful if you have multiple assets and would like to relate your device to one of them. 
+Наконец, вы можете связать подтвержденное устройство с текущим состоянием сущности дашборда. Это полезно, если у вас есть несколько объектов и вы хотите связать устройство с одним из них. 
 
 ![image](/images/user-guide/claiming-devices/claim-device-widget-relation-settings.png)
 
+## API-запрос подтверждения устройства
 
-## Device Claiming API Request
-
-The Claiming Request is sent as a POST request to the following URL:
+Запрос подтверждения отправляется в виде:
 
 ```shell
 http(s)://host:port/api/customer/device/$DEVICE_NAME/claim
 ```
-
-The supported data format is:
+Поддерживаемый формат данных:
 
 ```json
 {"secretKey":"value"}
 ```
 
-**Note:** the message does not contain **duarationMs** parameter and the **secretKey** parameter is optional.
+**Примечание:** сообщение не содержит параметра **duarationMs**, а параметр **secretKey** является опциональным.
 
 Whenever claiming is succeed the device is being assigned to the specific customer. The **claimingAllowed** attribute is automatically deleted in case the system parameter **allowClaimingByDefault** is **false**.
 
-In addition, there is a possibility to reclaim the device, which means the device will be unassigned from the customer. The **claimingAllowed** attribute will appear again in case the **allowClaimingByDefault** is **false**. 
+Всякий раз, когда подтверждение проходит успешно, устройство назначается конкретному клиенту. Атрибут **claimingAllowed** автоматически удаляется в случае, если системный параметр **allowClaimingByDefault** имеет значение **false**. 
 
-See the following for more details regarding the above steps. 
+См. ниже для получения более подробной информации о вышеуказанных шагах.
 
-## Device Reclaiming API Request
+## API отмены подтверждения устройства
 
-In order to reclaim the device, you can send DELETE request to the following URL:
+Чтобы отменить подтверждение устройства, вы можете отправить DELETE-запрос по следующему URL-адресу:
 
 ```shell
 http(s)://host:port/api/customer/device/$DEVICE_NAME/claim
 ```
-
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}

@@ -1,23 +1,16 @@
 ---
 layout: docwithnav
-title: CSV/XLS data export
-description: CSV/XLS data export guide
-
+title: Экспорт данных CSV/XLS
+description: Документация к IoT платформе Ростелеком
 ---
 
-{% assign feature = "CSV/XLS data export" %}{% include templates/pe-feature-banner.md %}
-
-* TOC
-{:toc}
-
-ThingsBoard allows you to export data from widgets to CSV or XLS. Nearly any widget supports this functionality if applicable to widget type.
-The list of columns in the exported data set corresponds to the list of parameters you configure in data set configuration.
+IoT-платформа Ростелеком позволяет экспортировать данные из виджетов в формате CSV или XLS. Почти любой виджет поддерживает эту функцию, если она с ним совместима. Список столбцов в пакете экспортированных данных соответствует списку параметров, выставленных в настройках пакета данных.
  
-See video tutorial below for step-by-step instruction how to use this feature.
+Посмотрите пошаговую видео-инструкцию, чтобы узнать, как использовать эту функцию.
 
 <br/> 
 <div id="video">  
     <div id="video_wrapper">
         <iframe src="https://www.youtube.com/embed/TzQ21MP8tNs" frameborder="0" allowfullscreen></iframe>
     </div>
-</div> 
+</div>

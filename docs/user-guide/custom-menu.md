@@ -1,16 +1,15 @@
 ---
 layout: docwithnav
-title: Custom Menu
-description:  
+title: Пользовательское меню
+description:  Пользовательское меню
 
 ---
 
-{% assign feature = "Custom Menu" %}{% include templates/pe-feature-banner.md %}
 
-ThingsBoard Custom Menu feature allows you to extend ThingsBoard UI with custom menu items 
-and show/hide existing menu items.
+Данная функция позволяет расширить пользовательский интерфейс платформы с помощью пользовательских пунктов меню и показать/скрыть существующие пункты.
 
-See video tutorial below for step-by-step instruction how to use this feature.
+Смотрите пошаговую видео-инструкцию ниже, чтобы узнать, как использовать эту функцию.
+
 
 <br/>
 <div id="video">  
@@ -18,8 +17,3 @@ See video tutorial below for step-by-step instruction how to use this feature.
         <iframe src="https://www.youtube.com/embed/VSNZWl1NjWU" frameborder="0" allowfullscreen></iframe>
     </div>
 </div> 
- 
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
-

@@ -1,31 +1,23 @@
 ---
 layout: docwithnav
-title: Scheduler
-description: Scheduler Guide 
+title: Планировщик
+description: Планировщик
 
 ---
-
-{% assign feature = "Scheduler" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
-### Overview
+### Oбзор
 
-ThingsBoard allows you to schedule various types of events with flexible schedule configuration.
-ThingsBoard Scheduler fires configured scheduler events according to their schedule.
-When scheduler event is fired the [Rule Engine Message](/docs/user-guide/rule-engine-2-0/overview/#rule-engine-message) is generated
-from the event configuration which has a similar structure with a Rule Engine Message.
-Generated message is then forwarded to [Rule Engine](/docs/user-guide/rule-engine-2-0/re-getting-started/) and processed starting from
-the [Root Rule Chain](/docs/user-guide/rule-engine-2-0/overview/#rule-chain).
+Платформа позволяет планировать различные типы событий с гибкой конфигурацией расписания. Планировщик платформы запускает настроенные события планировщика в соответствии с их расписанием. При запуске события планировщика сообщение движка правил генерируется на основе конфигурации события, которая имеет аналогичную структуру с сообщением движка правил. Сгенерированное сообщение затем пересылается в движок правил и обрабатывается, начиная с [корневой цепочки правил](/docs/user-guide/rule-engine-2-0/overview/#rule-chain).
 
-<br/>
 
 ![image](/images/user-guide/scheduler.svg)
 
-### Video tutorial
+### Видео-руководство
 
-See video tutorial below for step-by-step instruction how to use this feature.
+Смотрите пошаговую видео-инструкцию ниже, чтобы узнать, как использовать эту функцию.
 
 <br/>
 <div id="video">  
@@ -34,138 +26,132 @@ See video tutorial below for step-by-step instruction how to use this feature.
     </div>
 </div> 
 
-### Scheduler Administration
+### Администрирование планировщика
 
-Tenant administrator and customer users are able to configure **Scheduler events** in ThingsBoard.
+Тенант администратор и пользователи-клиенты могут настраивать события планировщика в платформе.
 
 ![image](/images/user-guide/ui/scheduler.png)
 
-**Scheduler events** page displays current configured scheduler events.
-It allows to add, update or delete scheduler events. The page can be presented in two modes **List view** or **Calendar view**.
-The views can be switched by pressing corresponding icons in the page header.
+Страница **событий планировщика** отображает текущие настроенные события планировщика. Она позволяет добавлять, обновлять или удалять события планировщика. Страница может быть отображена в двух режимах: как список и как календарь. Режимы можно переключать, нажимая на соответствующие значки в верху страницы.
 
 ![image](/images/user-guide/ui/scheduler-view-buttons.png)
 
-In the calendar view mode scheduler events are presented as labels according to their schedule. 
+В режиме календаря события планировщика представлены как метки, соответствующие расписанию. 
   
 ![image](/images/user-guide/ui/scheduler-calendar-view.png)
 
-By default calendar view is presented as **Month** view type.
-**Calendar view type** dropdown allows to switch to other view types. The following view types can be selected:
+По умолчанию календарь представлен в месячном режиме.
 
-- *Month / Week / Day / List Year / List Month / List Week / List Day / Agenda Week / Agenda Day*
+Выпадающий список «Вид календаря» позволяет переключить режим отображения. Можно выбрать следующие:
 
-New scheduler event can be created by clicking on `+` button in top right corner or by clicking on any cell of Calendar view.
+Месяц / Неделя / День / Годичный список / Месячный список / Недельный список / Дневной список / Повестка недели / Повестка дня
 
-#### Scheduler Event Dialog
+Новое событие планировщика можно создать, нажав на кнопку + в правом верхнем углу или на любую ячейку календаря.
 
-Scheduler event edit dialog consist of two forms **Configuration** and **Schedule**.
+#### Диалог событий планировщика
+
+Диалог редактирования событий планировщика состоит из двух форм: **конфигурации** и **расписание**.
 
 ![image](/images/user-guide/ui/scheduler-event-dialog.png)
 
-**Configuration** form allows to set event type and event configuration parameters according to selected event type.
-Configuration of scheduler event is described in [Scheduler Event Types](#scheduler-event-types) section.
+**Форма конфигурации** позволяет задать тип события и соответствующие ему параметры. Конфигурация события планировщика описана в разделе «Типы событий планировщика».
 
-**Schedule** form allows to setup event schedule configuration.
+**Форма расписания** позволяет настроить расписание событий.
 
 ![image](/images/user-guide/ui/scheduler-event-schedule.png)
 
 Schedule form has the following parameters:
 
-- **Timezone** - timezone in which this scheduler event should be processed.
-- **Start Date/Time** - date/time when this scheduler event should be fired.
-- **Repeat** - if this scheduler event is one time or it should be repeated. 
-- **Repeats** - repeat rule, can be either *Daily* or *Weekly*.
-- **Repeat on** - applicable for *Weekly* repeat rule. Specifies weekdays when this scheduler event should be fired.
-- **Ends on** - date until which this scheduler event should be repeated.
+-Форма расписания имеет следующие параметры:
+ - **Часовой пояс** - часовой пояс, в котором должно обрабатываться данное событие планировщика.
+ - **Дата/время начала** – дата/время, когда это событие планировщика должно быть запущено.
+ - **Повторение** - если это событие планировщика является однократным или должно быть повторено.
+ - **Повторения** - правило повтора, может быть как ежедневным, так и еженедельным.
+ - **Повторение в…** - применяется для еженедельного повтора. Указываются дни недели, когда это событие планировщика должно быть запущено.
+ - **Повторение до…** - дата, до которой событие планировщика должно повторяться.
  
 
-### Scheduler Event Types
+### Типы событий планировщика
 
-In Configuration **Event type** field can be selected existing event type or specified custom one.
+В поле «Тип события» в форме конфигурации можно выбрать существующий тип события или указать пользовательский.
 
-#### Custom Type
+#### Пользовательский тип
 
-Custom type uses default scheduler event configuration form according to message structure.
+Используется исходная форма конфигурации событий планировщика, соответствующую структуре сообщения.
 
 ![image](/images/user-guide/ui/scheduler-custom-event-type.png)
 
-- **Originator** - message originator, can be *Single entity* (ex. Device, Asset etc.) or [*Group of entities*](/docs/user-guide/groups/). If not specified, scheduler event entity itself will be considered as originator.
-- **Message type** - message type according to the Rule Engine message types. Can be [existing message type](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types) or custom. If not specified, scheduler event type will be considered as message type. 
-- **Message body** - message body in JSON representation.
-- **Metadata** - key/value table representing message metadata fields.
+ - **Инициатор** - может быть одиночным объектом (например, устройством, активом и т.д.) или их группой. Если это не указано, то сама event-сущность планировщика будет считаться инициатором.
+ - **Тип сообщения** - тип сообщения, соответствующий оным в движкe правил. Может использоваться существующий или пользовательский. Если он не указан, то тип события планировщика будет рассматриваться как тип сообщения.
+ - **Тело сообщения** - тело сообщения в представлении JSON.
+ - **Метаданные** - таблица ключ/значение, отображающая поля метаданных сообщения.
 
-#### Generate Report
 
-Allows to schedule reports generation supported by [Reporting](/docs/user-guide/reporting/#generate-report-rule-chain) feature.
+#### Генерирование отчетов
+
+Позволяет планировать генерацию отчетов, поддерживаемых функцией Reporting.
 
 ![image](/images/user-guide/ui/scheduler-generate-report-event-type-report-config.png)
 
 ![image](/images/user-guide/ui/scheduler-generate-report-event-type-email-config.png)
 
-- **Report configuration**:
-    - **Base URL** - base URL of ThingsBoard UI that should be accessible by Report Server.
-    - **Dashboard** - dashboard that will be used for report generation.
-    - **Dashboard state parameter value** - used to specify target dashboard state for report generation. Can be set automatically by clicking on right most button of the field and invoking **Select dashboard state** dialog.       
-    - **Timezone** - timezone in which target dashboard will be presented in report.
-    - **Use dashboard timewindow** - if set, timewindow configured in the target dashboard will be used during report generation.
-    - **Timewindow** - specific dashboard timewindow that will be used during report generation.
-    - **Report name pattern** - file name pattern of generated report, can contain date-time pattern in form of `%d{date-time pattern}`. See [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) documentation for date-time pattern details.
-    - **Report type** - report file type, can be *PDF \| PNG \| JPEG*.
-    - **Use current user credentials** - if set, credentials of user created this report configuration will be used to open dashboard UI during report generation.
-    - **Customer user credentials** - target customer user whose credentials will be used to open dashboard UI during report generation.
-    - **Generate Test Report** button is used for testing purposes. It invokes report generation process with provided configuration. Resulting report file will be automatically downloaded if the report generation will be successful.
+- **Настройка отчета**:
+    - **Базовый URL-адрес** – базовый URL пользовательского интерфейса платформы, который должен быть доступен Report Server’у.
+    - **Дашборд** - дашборд, который будет использоваться для генерации отчетов.
+    - **Значение параметра состояния дашборда** - используется для указания целевого состояния дашборда, чтобы сформировать отчет. Можно установить автоматически, нажав на крайнюю кнопку вызвав диалоговое окно «Select dashboard state»..       
+    - **Часовой пояс** - часовой пояс, в котором целевой дашборд будет представлен в отчете.
+    - **Использовать временное окно дашборда** - если оно задано, то при создании отчета будет использоваться временное окно, настроенное в целевом дашборде.
+    - **Timewindow** - конкретное временное окно, которое будет использоваться при создании отчета.
+    - **Паттерн имени отчета** - может содержать date-time-паттерн вида %d{date-time pattern}. Подробные сведения о date-time-паттерне см. в документации [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html).
+    - **Тип файла отчета** - тип файла отчета, может быть PDF | PNG | JPEG.
+    - **Использовать текущие учетные данные пользователя** - если они установлены, учетные данные пользователя, создавшего эту отчетную конфигурацию, будут использоваться для открытия UI панели мониторинга во время создания отчета.
+    - **Учетные данные пользователя-клиента** - целевой пользователь-клиент, учетные данные которого будут использоваться для открытия UI панели мониторинга во время создания отчета.
+    - **Кнопка «Создать тестовый отчет»** -  используется в целях тестирования. Она запускает процесс генерации отчета с предоставленной конфигурацией. Полученный файл отчета будет автоматически загружен, если его генерация пройдет успешно.
     
-- **Send email** - if set, email message with report file in attachment will be sent.
+- **Отправить email** - если задано, будет отправлен email с файлом отчета во вложении.
 
-- **Email configuration**:
-    - **From** - from address
-    - **To** - comma separated address list of recipients
-    - **Cc** - comma separated address list
-    - **Bcc** - comma separated address list
-    - **Subject** - mail subject, can contain date-time pattern in form of `%d{date-time pattern}` according to [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html).
-    - **Body** - mail body, can contain date-time pattern in form of `%d{date-time pattern}` according to [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html).
+- **Настрояка Email**:
+    - **From** - От
+    - **To** - Адреса получателей через запятую
+    - **Cc** - Список адресов через запятую
+    - **Bcc** - Список адресов через запятую
+    - **Subject** - может содержать date-time-паттерн вида %d{date-time pattern}, соответствующий [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html).
+    - **Body** - Тело письма, может содержать date-time-паттерн вида %d{date-time pattern}, соответствующий [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html).
 
-#### Update Attributes
+#### Обновление атрибутов
 
-Allows to schedule update of attributes for entity or group of entities.
+Позволяет запланировать обновление атрибутов для объекта или их группы.
 
 ![image](/images/user-guide/ui/scheduler-update-attributes-event-type.png)
 
-- **Target** - target entity which attributes should be updated, can be *Single entity* (ex. Device, Asset etc.) or [*Group of entities*](/docs/user-guide/groups/).
-- **Entity attributes scope** - [scope](/docs/user-guide/attributes/#attribute-types) of updated attributes. Can be selected if Device entity type is specified in **Target**. Can be either **Server attributes** or **Shared attributes**. For all other entity types **Server attributes** scope is used. 
-- **Server / Shared attributes** - key/value table representing attributes with values to update.
+- **Цель** - целевой объект, атрибуты которого должны быть обновлены, может быть как одним объектом (например, устройство, актив и т.д.), так и их группой.
+- **Область действий атрибутов объекта** - область действия обновленных атрибутов. Может быть выбрана, если тип объекта-устройства указан в Target. Это могут быть либо атрибуты сервера, либо общие атрибуты. Для всех остальных типов объектов используется область действия серверных атрибутов.
+- **Серверные / общие атрибуты** - key/value-таблица, отображающая значения атрибутов, которые нужно обновить.
 
-#### Send RPC Request to Device
+#### Отправка RPC - запросов на устройство
 
-Allows to schedule command ([RPC call](/docs/user-guide/rpc/#server-side-rpc-api)) to device or group of devices.
+Позволяет запланировать вызов ([RPC](/docs/user-guide/rpc/#server-side-rpc-api)) для устройства или группы устройств.
 
 ![image](/images/user-guide/ui/scheduler-send-rpc-request-event-type.png)
 
-- **Target** - target device to which command should be sent, can be *Single device* or [*Group of devices*](/docs/user-guide/groups/).
-- **Method** - RPC call method.
-- **Params** - RPC call params in JSON representation.
+- **Цель** - целевое устройство, на которое должна быть отправлена команда, может быть одиночным устройством или их [группой](/docs/user-guide/groups/).
+- **Метод** - метод вызова RPC.
+- **Параметры** - параметры RPC вызова в JSON-представлении.
 
-### Scheduler Widget
+### Виджет планировщика
 
-ThingsBoard provides ability to manage scheduler events via **Scheduler events** or **Reports schedule** Widgets which is part of **Scheduling** Widgets Bundle.
+Платформа предоставляет возможность управлять событиями планировщика с помощью виджетов Scheduler events или Reports schedule, которые являются частью пакета Scheduling Widgets
 
 ![image](/images/user-guide/ui/scheduler-scheduler-events-widget.png)
 
-**Scheduler events** widget has same capabilities as [**Scheduler events** page](#scheduler-administration).
-Additionally it can be customized with predefined forms for custom scheduler event types. 
-This can be achieved by configuring list of **Custom event types** in **Advanced** tab of widget configuration.
+Виджет событий планировщика имеет те же возможности, что и страница событий планировщика. Кроме того, он может быть настроен с помощью предустановленных форм для пользовательских типов событий планировщика. Это можно сделать путем настройки списка «пользовательских типов событий» во вкладке «Дополнительно» конфигурации виджета.
 
 ![image](/images/user-guide/ui/scheduler-scheduler-events-widget-custom-types.png)
 
-- **Display name** - display name of custom event type.
-- **Type name** - internal name of custom event.
-- **Display originator entity select** - whether to allow select originator in scheduler event configuration form.
-- **Display message type select** - whether to allow select message type in scheduler event configuration form.
-- **Display message metadata table** - whether to display metadata table in scheduler event configuration form.
-- **Configuration HTML template** - HTML code used to generate custom event configuration form used to edit event configuration object.
-      
-## Next steps
+- **Display name** - отображаемое имя пользовательского типа события.
+- **Type name** - внутреннее имя пользовательского события.
+- **Display originator entity select** - разрешить ли выбор отправителя в форме конфигурации событий планировщика.
+- **Display message type select** - разрешить ли выбор типа сообщения в форме конфигурации событий планировщика.
+- **Display message metadata table** - следует ли отображать таблицу метаданных в форме конфигурации событий планировщика.
+- **Configuration HTML template** - HTML-код, нужный для создания пользовательской формы конфигурации события, используемой для редактирования объекта конфигурации события.
 
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
- 

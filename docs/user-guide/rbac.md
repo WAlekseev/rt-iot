@@ -1,7 +1,6 @@
 ---
-layout: docwithnav
-title: Advanced Role-Based Access Control (RBAC) for IoT devices and applications
-description:  
+title: Расширенный контроль доступа (RBAC)
+description:  Расширенный контроль доступа (RBAC)
 ---
 
 {% assign feature = "Advanced RBAC for IoT devices and applications" %}{% include templates/pe-feature-banner.md %}
@@ -10,7 +9,7 @@ description:
 {:toc}
 
 
-See video tutorial below for step-by-step instruction how to use this feature.
+Смотрите пошаговую видео-инструкцию к этой функции ниже.
 
 <br/>
 <div id="video">  
@@ -19,197 +18,144 @@ See video tutorial below for step-by-step instruction how to use this feature.
     </div>
 </div> 
 
-## ThingsBoard CE vs PE security features comparison
-
-ThingsBoard Community Edition (TB CE) supports straight-forward security model with three main roles: System administrator, Tenant administrator and Customer user. 
-System administrator is able to manage tenants, while tenant administrator manages devices, dashboards, customers and other entities that belong to particular tenant.
-Customer user is able to view dashboards and control devices that are assigned to specific customer.
-TB CE functionality is sufficient for a lot of simple use cases, especially building real-time [end-user dashboards](/docs/user-guide/ui/dashboards/).
+##Глоссарий
  
-ThingsBoard Professional Edition (TB PE) brings much more flexibility in terms of user, customer and role management. 
-It is designed to cover use cases for businesses and enterprises with multiple user groups that have different permissions but may interact with the same devices and assets. 
+**Тенант**
 
-TB PE security model was significantly improved in v2.3 to enable new security features and to support advanced RBAC for IoT applications. For example:
+Можно рассматривать тенант как отдельную бизнес-сущность: физическое лицо или организацию, которая владеет или производит устройства и активы. У тенанта может быть несколько тенант-администраторов и множество клиентов.
 
-  - ability to create hierarchy of customers with multiple levels of sub-customers, independent users and devices; 
-  - ability to create roles with flexible set of permissions;
-  - ability to assign roles to specific user groups;
-  - ability to grant specific permissions to specific user groups over specific device groups;
-   
-This document covers features that are exclusive to TB PE. We will start with a glossary and will provide step-by-step examples how to configure most popular use cases.
+**Сущность**
 
-## Glossary
+Любая сущность, управляемая платформой. Например: устройство, актив, пользователь, дашборд, вид сущности и т. д. Дополнительные сведения см. в [руководстве по сущностям и их отношениям](/docs/user-guide/entities-and-relations/).
+
+**Группа сущностей (EG)** 
+
+Это группы сущностей одного типа, например, группа устройств или группа активов. Одна сущность может принадлежать одновременно нескольким группам сущностей. Например, термостат может принадлежать к группе “термостаты”, которая содержит все устройства, и к более конкретной группе, например, “термостаты с прошивкой v1.2.3”.
+
+**Клиентr**
+
+Клиент может быть отдельным бизнес-субъектом: физическим лицом или организацией, которые покупают или используют устройства тенанта или объекты. Клиент также может быть подразделением внутри организации-тенанта. Клиент может иметь несколько пользователей, внутренних клиентов и множество устройств и/или объектов.
+
+**Группа клиентов (CG)**
+
+Группа клиентов также является и группой сущностей. Она имеет те же функции, что и обычная группа сущностей, но у нас есть отдельный термин для CG, чтобы легко различать CG и все остальные группы сущностей.
+
+**Пользовательr**
+
+Пользователи могут входить в веб-интерфейс платформы, выполнять вызовы REST API, получать доступ к устройствам и ресурсам, если у них есть на это полномочия. Пользователь также является сущностью в платформе.
+
+**Группа пользователей (UG)**
+
+Группа пользователей также является группой сущностей. Она имеет те же особенности, что и обычная группа сущностей, но у нас есть отдельный термин для UG, чтобы легко различать UG и все остальные группы сущностей.
+
+**Владелец**
+
+Каждая EG принадлежит одному владельцу. Это может быть как тенант, так и клиент. Кроме того, у каждого клиента также есть только один владелец. Если владелец клиента является тенантом, это означает, что это клиент верхнего уровня. Если владельцем клиента является другой клиент, это означает, что это суб-клиент. На платформе может быть несколько уровней клиентов.
+
+**Ресурс**
+
+Все, что имеет защищенные API или представляет сущность платформы, является ресурсом. Примеры сущностей перечислены в её определении, приведенном выше. Группы сущностей также являются ресурсами, например: группа устройств, группа активов, группа дашбордов. Дополнительные ресурсы – это white-labeling, журналы аудита и настройки администратора.
+
+**Операции**
+
+Операции представляют собой действия, которые можно выполнять с ресурсами. Существуют общие действия, такие как “создать”, “прочитать”, “написать”, “удалить”, “добавить в группу”, “удалить из группы". Существуют также особые действия, такие как “чтение/запись учетных данных”.
+
+**Роли**
+
+Роль содержит список ресурсов и разрешенных операций для каждого из этих ресурсов. Существует два типа ролей: общие и групповые. Существует специальный ресурс “All”, который является ярлыком для всех доступных типов ресурсов. Существует также специальная операция “All”, которая является кратчайшим путем ко всем возможным операциям.
+Мы объясним различия между ними чуть ниже в этой статье.
+  
  
-**Tenant**
+**Групповые разрешения объекта (GPE)**
 
-You can treat tenant as a separate business-entity: individual or organization who owns or produce devices and assets. Tenant may have multiple tenant administrator users and millions of customers.
+GPE – это по сути соотношение UG, роли и (опционально) EG. Дополнительные сведения см. в разделах “Общие роли” и “Групповые роли”.
 
-**Entity**
+## Иерархия клиентов
 
-Any entity managed by ThingsBoard. For example: device, asset, user, dashboard, entity view, etc. See [entities and relations](/docs/user-guide/entities-and-relations/) guide for more details.
+Платформа поддерживает “рекурсивную” иерархию клиентов с неограниченным количеством суб-клиентов. Владельцем корневого уровня является тенант. Каждый владелец может иметь несколько групп сущностей (EGs), групп пользователей (UGs) и групп клиентов (CGs).
+**Примечание:** каждая сущность имеет ровно одного владельца. Однако сущности могут относиться к нескольким EGs, принадлежащим одному и тому же владельцу.
+Поскольку CGs может содержать несколько клиентов, каждый клиент может также владеть своими EGs, UGs и CGs (т. е. подгруппами клиентов). См. диаграмму ниже для визуального представления отношений между этими сущностями.
 
-**Entity Group (EG)** 
-
-Entity Groups are groups of entities of the same type, for example: Device Group or Asset Group. Single entity may belong to multiple entity groups simultaneously. 
-For example, thermostat device may belong to group "Thermostats" that contains all devices and more specific group like "Thermostats with FW v1.2.3". 
-
-**Customer**
-
-Customer may be a separate business-entity: individual or organization who purchase or uses tenant devices and/or assets. 
-Customer may also be a division within Tenant organization. 
-Customer may have multiple users, inner customers and millions of devices and/or assets.
-
-**Customer Group (CG)**
-
-Customer group is also an EG. It has the same features as regular EG, but we have a separate term for CG to be able to easily distinct CGs and all other EGs.
-
-**User**
-
-Users are able to login to ThingsBoard web interface, execute REST API calls, access devices and assets if allowed. User is also an Entity in ThingsBoard.
-
-**User Group (UG)**
-
-User group is also an EG. It has the same features as regular EG, but we have a separate term for UG to be able to easily distinct UGs and all other EGs.
-
-**Owner**
-
-Each EG belongs to one owner. This may be either Tenant or Customer. 
-Also, each Customer has also only one owner. If the Customer Owner is Tenant, it means that this is a top-level Customer.
-If the Customer owner is another Customer, it means that this is a sub-customer. There might be multiple levels of Customers in ThingsBoard.
-
-**Resource**
-
-Anything that has secure APIs or represents a ThingsBoard Entity is a resource. 
-Examples of Entities are listed in the Entity definition above. Groups of entities are also resources, for example: Device Group, Asset Group, Dashboard Group. 
-Additional resources are white-labeling, audit logs and admin settings.
-
-**Operation**
-
-Operations represent actions that you might perform over Resources. 
-There are generic actions like "create", "read", "write", "delete", "add to group", "remove from group". There are also specific actions like "read/write credentials".
-
-**Role**
- 
-Role contains a list of Resources and a list of allowed Operations for each of those resources. There are two Role types: Generic and Group.
-There is a special resource "All" that is a shortcut to all available resource types. 
-There is also a special operation "All" that is a shortcut to all possible operations.  
-We will explain the differences between them later in this article.   
- 
-**Group Permissions Entity (GPE)**
-
-GPE is basically a mapping between UG, Role and optional EG. See "Generic roles" and "Group roles" for more details.
-
-## Customer hierarchy
-
-ThingsBoard supports "recursive" customer hierarchy with unlimited number of sub-customers. 
-The root level Owner is Tenant. Each Owner may have multiple Entity Groups (EGs), User Groups (UGs) and Customer Groups (CGs).
-
-**Note:** Each Entity has exactly one owner. However, Entities may belong to multiple EGs that belong to the same owner.
-
-Since CGs may contain multiple Customers, each Customer may also own his EGs, UGs and CGs (i.e sub-customer groups). 
-See diagram below for visual representation of relations between those entities. 
  
 ![image](/images/user-guide/security/customer-hierarchy-diagram.svg)
 
-## Roles
+## Роли
 
-Role maps Resource type to a list of allowed Operations. There are two Role types: Generic and Group.
+Роль соотносит тип ресурса со списком разрешенных операций. Существует два типа ролей: общие и групповые.
 
-### Generic roles
+### Общие роли
 
-Each Role is related to one or more User Group. Each User Group has only one Owner. 
-With Generic Role you grant UG with the same permissions over all entities that belong to the same Owner and all it's sub-customers recursively.
-We use special "connection" object called Group Permission Entity to make a connection between User Group and Generic Role.  
+Каждая роль связана с одной или несколькими группами пользователей (UG). У каждой группы пользователей (UG) есть только один владелец. С помощью общей роли вы предоставляете UG одинаковые разрешения для всех сущностей, принадлежащих одному владельцу, и всех его суб-клиентов рекурсивно. Мы используем специальный объект “соединение”, называемый «сущностью разрешения группы (GPE)», чтобы установить соединение между группой пользователей и общей ролью.
 
-Let's review the diagram below. 
+Рассмотрим диаграмму ниже.
 
-User Bob will be able to perform any operations over any entity that belongs to either his Tenant A or Customer B as long as any other customers and sub-customers for the same Tenant.
-However, User Alice will be able to perform any operations over any entity that belongs to only her Customer B and all it's sub-customers.
-So, Alice and Bob are able to access Device B1, but only Bob is able to access Device A1.        
+Пользователь Иван сможет выполнять любые операции над любой сущностью, принадлежащей либо его тенанту A, либо клиенту B, так же долго, как и любые другие клиенты и суб-клиенты, для того же тенанта. Однако пользователь Алиса сможет выполнять любые операции над любой сущностью, которая принадлежит только ее клиенту B и всем его суб-клиентам. Таким образом, Алиса и Иван могут получить доступ к устройству B1, но только Иван может получить доступ к устройству A1.
 
 ![image](/images/user-guide/security/generic-role-diagram.svg)
 
-### Group roles
+### Групповые роли
 
-Group Role allows you to map set of Permissions for specific User Group to specific Entity Group.
-We use special "connection" object called Group Permission Entity to make a connection between User Group, Entity Group and Group Role.  
+Групповая роль позволяет соотнести набор разрешений для конкретной группы пользователей (UG) с конкретной группой сущностей (EG). Мы используем специальный объект “соединение”, называемый сущностью разрешения группы (GPE), чтобы установить соединение между группой пользователей (UG), группой сущностей (EG) и групповой ролью.
 
-Let’s review the diagram below.
-
-User Bob belongs to "Tenant Administrators" group and is able to do any operations with any tenant entities. 
-Basically Bob has full control over both Device Groups A and B. 
-User Alice belongs to "Group A Administrators" and has read/write access to all devices in device group A. 
-However, Alice will not be able to see or use devices from group B.
+Рассмотрим диаграмму ниже.
+Пользователь Иван принадлежит к группе “тенант-администраторы” и может выполнять любые операции с любыми объектами тенантов. В основном Иван имеет полный контроль над обеими группами устройств A и B. пользователь Алиса принадлежит к “администраторам группы A” и имеет доступ к чтению/записи всех устройств в группе A. Однако Алиса не сможет видеть или использовать устройства из группы B.
 
 ![image](/images/user-guide/security/group-role-diagram.svg)      
 
-**Note:** Since Entity Group has exactly one Owner, you can assign Group Role to any User Group that belongs to the same Owner or any parents of the Owner.
+**Примечание:** поскольку группа сущностей (EG) имеет ровно одного владельца, вы можете назначить групповую роль любой группе пользователей, принадлежащей тому же владельцу или любому из родителей владельца.
 
-## Examples and How-Tos
+## Примеры
 
-See list of configuration examples below for the most popular use cases.
+См. список примеров конфигурации ниже для наиболее популярных вариантов использования.
 
-### Smart Buildings: Separate User Groups per Facility
+### Умное здание: отдельные группы пользователей (UG) для каждого объекта
 
-Let's assume your solution manages commercial buildings. 
-Your main customer is a Building Manager that wants to monitor HVAC systems, electricity consumption and other smart devices in the building.  
-Building Manager may want to design and share some dashboards with the end users - office workers.
-Besides, your engineers responsible for the maintenance are interested in supervising the devices state, for example, receiving alerts when the battery level for goes below certain thresholds.
+Предположим, что ваше приложение управляет коммерческими зданиями. Ваш основной клиент - это менеджер здания, который хочет контролировать инженерные системы, потребление электроэнергии и другие умные устройства в здании.
+Менеджер здания может захотеть спроектировать и поделиться некоторыми дашбордами с конечными пользователями - офисными работниками. Кроме того, ваши инженеры, ответственные за техническое обслуживание, заинтересованы в том, чтобы контролировать состояние устройств, например, получать оповещения, когда уровень заряда батареи для них опускается ниже пороговых значений.
+Чтобы суммировать эти требования в терминах платформы, мы должны реализовать следующие роли:
 
-To summarize those requirements in ThingsBoard terms, we should implement the following roles:
- * Supervisors - read-only access to all devices telemetry in all the buildings and ability to create their custom dashboards, but no access to dashboards created by users from different user groups.
- * Facility Managers - allows to provision new devices for each facility, setup thresholds, manage users and configure dashboards.
- * End Users - allows to have read-only access to the state of the facility where this user belongs to.
 
-Let's configure ThingsBoard to support this use case. The instructions below assume that you have logged in as a Tenant Administrator.
+* Supervisors – read-only доступ ко всем устройствам телеметрии во всех зданиях и возможность создавать свои собственные дашборды, но нет доступа к дашбордам, созданным пользователями из разных групп (UG).
+* Facility Managers – позволяет создавать новые устройства для каждого объекта, устанавливать пороговые значения, управлять пользователями и настраивать дашборды.
+* End Users – позволяет иметь read-only доступ к состоянию объекта, к которому принадлежит этот пользователь.
 
-**Supervisors**
 
-We will create a separate User Group named "Supervisors" and a separate Dashboard Group "Supervisor Dashboards". 
-Our goal is to allow Supervisors to manage dashboards in "Supervisor Dashboards" group, but for all other entities in the system, they should have read-only access. 
+Давайте настроим платформу для поддержки этого варианта использования. В приведенных ниже инструкциях предполагается, что вы вошли в систему как клиент-администратор.
 
-Let's start from creating a "Supervisor Dashboards" group. See screencast below.
+**Супервайзеры**
+
+Мы создадим отдельную группу пользователей с именем “супервайзеры” и отдельную группу дашбордов “дашборды супервайзеров”. Наша цель состоит в том, чтобы позволить супервайзерам управлять дашбордами в группе “дашборды супервайзеров”, но для всех других сущностей в системе они должны иметь read-only доступ.
+Давайте начнем с создания группы “дашборды супервайзеров”. Смотрите скриншот ниже.
 
 <img data-gifffer="/images/user-guide/security/smart-buildings-dashboards-group.gif" />
 
-We should create two roles to implement this use case:
+Мы должны создать две роли для реализации этого варианта использования:
 
- * "All Entities Read-only" - **generic role** that will allow to access all entities data accept device credentials. See screencast below: 
+“Все read-only сущности” – общая роль, которая позволит получить доступ ко всем данным сущностей и принимать учетные данные устройства. Смотрите скриншот ниже:
 
 <img data-gifffer="/images/user-guide/security/smart-buildings-role1.gif" /> 
  
- * "Entity Group Administrator" - **group role** that allows all operations for the group. See screencast below:
+* Администратор группы сущностей” – групповая роль, которая разрешает все операции для группы. Смотрите скриншот ниже:
 
 <img data-gifffer="/images/user-guide/security/smart-buildings-role2.gif" />
   
-We will assign those roles to the "Supervisors" group. See screencast below:
+Мы назначим эти роли группе “супервайзеры”. Смотрите скриншотт ниже
 
 <img data-gifffer="/images/user-guide/security/smart-buildings-user-group.gif" />
  
 **Facility managers**
 
-We will create separate Customer entity for each building or group of buildings. We will add a Facility Manager user account to a default "Customer Administrators" group that is automatically created for each Customer.
-As a Facility Manager we can now login, design dashboards, provision devices and end users.  
+Мы создадим отдельную клиентскую сущность для каждого здания или группы зданий. Мы добавим учетную запись Facility Manager-пользователя в группу “Клиенты-администраторы”, которая автоматически создается для каждого клиента. Как менеджер объекта, мы теперь можем входить в систему, проектировать панели мониторинга, обеспечивать устройства и end users.
   
 <img data-gifffer="/images/user-guide/security/smart-buildings-building-a.gif" />  
 
-**End Users**
+**Конечные пользователи**
 
-Let's login as Alice (created in a previous screencast), Building A administrator, and create several dashboards. 
-To simplify this guide we will not demonstrate particular dashboard creation steps (there are planty of guides available).
+Давайте войдем в систему как Алиса (аккаунт создан в предыдущем скриншоте), Building A администратор, и создадим несколько панелей мониторинга. Чтобы упростить это руководство, мы не будем демонстрировать конкретные шаги создания панели мониторинга (есть множество доступных руководств).
       
 ![image](/images/user-guide/security/smart-buildings-building-a-dashboards.png)
 
-Now, let's create a read-only user. Let's assume we want to assign "End User Dashboard" to him and make sure that this dashboard will open full screen once the user is logged in. 
-So, our read-only user will not have access to the administration panel to the left, since they are still not allowed to perform any server side API calls, except read-only browsing the data.   
+Теперь давайте создадим read-only пользователя. Предположим, что мы хотим назначить ему “конечный пользователь дашборда” и убедиться, что эта панель откроется во весь экран, как только пользователь войдет в систему. Таким образом, наш read-only пользователь не будет иметь доступа к административной панели слева, так как ему все еще не разрешено выполнять какие-либо server-side API-вызовы, кроме read-only просмотра данных.   
 
 <img data-gifffer="/images/user-guide/security/smart-buildings-read-only-user.gif" />
-
-### DaaS: Device as a Service
-
-TODO: Stay tuned, this doc will be available upon v2.3 release.
-    
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
-
+ 

@@ -1,106 +1,104 @@
 ---
 layout: docwithnav
-title: Bulk Provisioning
-description: Bulk Provisioning entities guide
-
+title: Групповая настройка
+description: Документация к IoT платформе Ростелеком
 ---
-
 * TOC
 {:toc}
 
-## Bulk Provisioning Overview
+## Обзор групповой настройки
 
-ThingsBoard provides the option of bulk provisioning using the CSV file for the following types of entities:
- 
- - **Devices** 
- - **Assets**
+IoT-платформа Ростелеком предоставляет возможность групповой настройки с использованием CSV-файла следующих типов сущностей: 
+ - **Устройства** 
+ - **Активы**
 
 
-Different entities may have the following parameters:
+Различные сущности могут иметь следующие параметры:
 
- - **Attributes** - static and semi-static key-value pairs associated with entities. For example, serial number, model, firmware version;
- - **Telemetry data** - time-series data points available for storage, querying and visualization. For example, temperature, humidity, battery level;
- - **Credentials** - used for the device to connect to the ThingsBoard server by applications that are running on the device.
+ - **Атрибуты** - статические или полустатические пары «ключ-значение», связанные с сущностями IoT-платформы. Например, серийный номер, модель, версия прошивки;
+ - **Телеметрические данные** - временной ряд данных, доступный для хранения, визуализации и обработки. Например, температура, влажность, уровень заряда батареи и т.д.;
+ - **Учетные данные** - используются устройством для подключения к серверу платформы с помощью приложений, запущенных на устройстве.
    
-## Import Entities
+## Импортируйте сущности
 
-To create multiple entities at one time, you need to create a CSV file, where each line will be responsible for creating one entity with given parameters. <br/>
-If you don't need to add some settings for a particular entity, leave this cell empty.<br/> 
-There are three reserved parameters names: Name, Type and Label that have a predefined column type.
+Чтобы создать несколько сущностей одновременно, вам нужно создать CSV-файл, где каждая строка будет отвечать за создание одной сущности с заданными параметрами.<br/>
+Если вам не нужно добавлять настройки для конкретного объекта, оставьте эту ячейку пустой.<br/> 
+Существует три зарезервированных названия параметров: имя, тип и метка; каждое имеет предопределенный тип столбца.
 
-### Step 1: Select a file
+### Шаг 1: Выберите файл
 
-Upload a CSV file to the system. 
+Загрузите CSV-файл в систему.
 
 <img data-gifffer="/images/user-guide/bull-provisioning/bulk-provision-step-1.gif" />
 
-### Step 2: Import configuration
+### Шаг 2: Импортируйте настройки
 
-For the uploaded file you need to configure the following parameters::
+Для загруженного файла необходимо настроить следующие параметры:
 
- - **CSV delimiter** - the separation character between the values in the data line;
- - **First line contains column names** - if this option is activated, the first line of the file will be used as the default values for the parameter names in the next step;
- - **Update attributes/telemetry** -  if this parameter is activated, for all entities whose names match the existing entities in the ThingsBoard system, the parameter values will be updated. Otherwise, for all the entities whose names already exist in the ThingsBoard system, an error message will be displayed.
+ - **CSV delimiter** - разделительный символ между значениями в строке данных;
+ - **Первая строка содержит имена столбцов** - если эта опция активирована, то первая строка файла будет использоваться в качестве значения по умолчанию для имен параметров на следующем шаге;
+ - **Обновить атрибуты/телеметрию** -  если этот параметр активен, то для всех сущностей, имена которых совпадают с имеющимся в системе IoT Ростелеком сущностями, значения параметров будут обновлены. В противном случае для всех сущностей, имена которых уже записаны в системе платформы, будет высвечено сообщение об ошибке.
  
 <img data-gifffer="/images/user-guide/bull-provisioning/bulk-provision-step-2.gif" /> 
 
-### Step 3: Select columns type
+### Шаг 3: Выберите тип столбцов
 
-At this step, you need to define a match between the columns of the downloaded file and the type of data in the ThingsBoard platform. You can also set/change the default name for attribute/telemetry key. 
+На этом этапе вам необходимо установить соответствие между столбцами загруженного файла и типом данных в IoT-платформе Ростелеком. Вы также можете установить/изменить имя по умолчанию для attribute/telemetry-ключа.
 
 <img data-gifffer="/images/user-guide/bull-provisioning/bulk-provision-step-3.gif" />  
 
-### Step 4: Creating new entities
+### Шаг 4: Создание новых сущностей
 
-Processing input data.
+Обработка входных данных.
 
-### Step 5: Done
+### Шаг 5: Готово
   
-The result of the query execution: the number of created/updated entities and the number of errors that occurred during execution.
+Результат выполнения запроса: количество созданных/обновленных сущностей и количество ошибок, возникших во время выполнения.
 
 <img data-gifffer="/images/user-guide/bull-provisioning/bulk-provision-step-5.gif" />
 
 
-## Use case
+## Вариант использования
 
-Let's suppose we want to create at the same time 10 devices and give them an access token.<br/><br/>
-Sample file:
+Предположим, мы хотим создать одновременно 10 устройств и дать им токен доступа.<br/><br/>
+Пример файла:
 {% capture tabspec %}sample-file
 A,test-import-device.csv,text,resources/test-import-device.csv,/docs/user-guide/resources/test-import-device.csv{% endcapture %} 
 {% include tabs.html %}
-**Note:** file should contain at least two columns: entity name and type.<br/>
+**Примечание:** файл должен содержать не менее двух столбцов: имя сущности и её тип.<br/>
 
-<br/>File was created using the CSV file editor, it contains data for 10 devices. Also, the **Data2** parameter was omitted for **Device 5**, it will not be created for this device.
+<br/>Файл был создан с помощью редактора CSV-файлов, он содержит данные для 10 устройств. Кроме того, параметр **Data2** был опущен для устройства**Device 5**и для него создан не будет.
 
-####  Upload file
+#### Загрузите файл
 
-Go to **Devices** -> **Import device**
+Перейдите в раздел **Устройства** -> **Импорт устройства**
 
-Upload sample file: **test-import-device.csv**
+Загрузите тестовый файл: **test-import-device.csv**
 
 ![image](/images/user-guide/bull-provisioning/import-device-select-file.png)
 
-####  Import configuration 
+#### Импортируйте настройки
 
- - **CSV delimiter** - select your editor separation symbol. In the sample file delimiter is ",";
- - **First line contains column names** - the sample file contains column names, so we leave this option selected;
- - **Update attributes/telemetry** - uncheck this option, because we are going to add new devices and not update parameters for existing devices in ThingsBoard platform.
+ - **CSV delimiter** - выберите редакторский разделительный символ. В тестовом файле разделителем является “,”;
+ - **Первая строка содержит имена столбцов** - тестовый файл содержит имена столбцов, поэтому мы оставляем этот параметр выбранным;
+ - **Обновить атрибуты/телеметрию** - снимите этот флажок, так как мы собираемся добавлять новые устройства, а не обновлять параметры для существующих устройств в IoT-платформе Ростелеком.
  
 ![image](/images/user-guide/bull-provisioning/import-device-config.png)
 
-####  Select columns type
+#### Выберите типы столбцов
 
-The first column of the table displays the first file line that contains data.<br/>
-Since the **First line contains column names** checkbox has been set on the previous step, values for the third column have already been initiated based on the first line of the document.<br/>
-Let’s change some of the attributes. Change the column type in the third row to **Timeseries** and set the attribute/telemetry key value, for example, **Temperature**.<br/>
-The last row in the following table is responsible for the token so change **Server attribute** to **Access token**. <br/><br/>
+В первом столбце таблицы отображается первая строка файла, содержащая данные.<br/>
+Поскольку флажок **Первая строка содержит имена столбцов** был установлен на предыдущем шаге, значения для третьего столбца уже были инициированы на основе первой строки документа.<br/>
+Изменим некоторые атрибуты. Измените тип столбца в третьей строке на **Временные ряды** и задайте значение attributes/telemetry-ключа, например, **Температуру**.<br/>
+Последняя строка в следующей таблице отвечает за токен, поэтому измените **Серверный атрибут** на **Токен доступа**. <br/><br/>
 
 ![image](/images/user-guide/bull-provisioning/import-device-column-type.png)<br/>
-**Note:** such column types as Name, Type and Access token can be selected only for one row. 
+**Примечание:** такие типы столбцов, как «имя», «тип» и «токен доступа», могут быть выбраны только для одной строки. 
 
-####  Import finished
+#### Импорт завершен
 
-After the creation process was completed, some statistics information will be shown.<br/>
-On the following example, we can see that 8 devices were created successfully, and an error occurred while creating 2 devices. The reason is that Device 1, Device 2 and Device 3 have the same token in the given sample file. ThingsBoard system prohibits that.
+После завершения процесса создания будет показана статистическая информация.
+В следующем примере мы видим, что 8 устройств были созданы успешно, и при создании 2 устройств произошла ошибка. Причина заключается в том, что в данном тестовом файле устройства 1, 2 и 3 имеют один и тот же токен. Система IoT Ростелеком запрещает это.
 
 ![image](/images/user-guide/bull-provisioning/import-device-info-created.png)<br/>
+ 

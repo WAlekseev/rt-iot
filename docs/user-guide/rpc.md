@@ -1,102 +1,88 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Using RPC capabilities
-description: Remote control of IoT devices from the ThingsBoard IoT cloud using RPC feature
+
+title: Возможности RPC
+description: Возможности RPC
 
 ---
 
 * TOC
 {:toc}
 
-ThingsBoard allows you to send remote procedure calls (RPC) from server side applications to devices and vice versa.
-Basically, this feature allows you to send commands to devices and receive results of commands execution. 
-Similar, you can execute request from the device, apply some calculations or other server-side logic on the back-end and push the response back to the device.
-This guide covers ThingsBoard RPC capabilities. After reading this guide, you will get familiar with following topics:
+С помощью платформы вы можете отправлять RPC с серверного приложения на устройства и наоборот. Это функция позволяет отправлять команды на устройства и получать информацию о результате их выполнения. Также вы можете отправлять запрос с устройства, производить необходимые вычисления или выполнять ину обработку на стороне сервера, а затем отправлять ответ обратно на устройство. 
+В данном руководстве рассмотрены следующие темы:
 
-- RPC call types
-- Basic RPC use-cases
-- RPC client-side and server-side APIs
-- RPC widgets
+ - Типы RPC-вызовов
+ - Основные варианты использования RPC
+ - Клиентский и серверный RPC API
+ - RPC-виджеты
 
-## RPC call types
+## Типы RPC вызовов
 
-Thinsboard RPC feature can be divided into two types based on originator: device-originated and server-originated RPC calls.
-In order to use more familiar names, we will name device-originated RPC calls as a **client-side** RPC calls 
-and server-originated RPC calls as **server-side** RPC calls.
-  
-   {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/client-side-rpc.svg)
-   {: refdef}  
-
-Server-side RPC calls can be divided into one-way and two-way:
+RPC платформы делятся на два типа: RPC с устройств (далее – клиентский RPC) и RPC с сервера (далее – серверный RPC)
  
- - One-way RPC request is sent to the device without delivery confirmation and obviously, does not provide any response from the device. 
-   RPC call may fail only if there is no active connection with the target device within a configurable timeout period.
+Серверный RPC может работать в формате one-way и в формате two-way.
+
+ - One-way серверный RPC-запрос отправляется только в одном направлении: на устройство, без дальнейшего подтверждения о получении. И, соответственно, устройство не отправляет ответ на данный запрос. RPC-вызов может не выполниться только при отсутствии связи с устройством в течение некоторого времени (интервал времени может быть задан).
+
    
    {:refdef: style="text-align: center;"}
    ![image](/images/user-guide/one-way-rpc.svg)
    {: refdef}
    
- - Two-way RPC request is sent to the device and expects to receive a response from the device within the certain timeout. 
-   The Server-side request is blocked until the target device replies to the request.
+ - Two-way RPC-запрос отправляется на устройство, которое затем отправляет ответ в течение определенного времени. Серверный запрос блокируется до тех пор, пока не получит ответ от устройства.
 
    {:refdef: style="text-align: center;"}
    ![image](/images/user-guide/two-way-rpc.svg)
    {: refdef}
 
 
-## Device RPC API
+## API RPC устройств
 
-ThingsBoard provides convenient API to send and receive RPC commands from applications running on the device.
-This API is specific for each supported network protocol.
-You can review API and examples in corresponding reference page:
+Платформа имеет API для передачи и получения RPC-команд из приложений, выполняющихся на устройстве. Этот API специфичен для каждого сетевого протокола. Вы можете ознакомиться с API и примерами использования на следующих страницах:
 
- - [MQTT RPC API reference](/docs/reference/mqtt-api/#rpc-api)
- - [CoAP RPC API reference](/docs/reference/coap-api/#rpc-api)
- - [HTTP RPC API reference](/docs/reference/http-api/#rpc-api) 
+ - [справка о MQTT RPC API](/docs/reference/mqtt-api/#rpc-api)
+ - [справка о CoAP RPC API](/docs/reference/coap-api/#rpc-api)
+ - [справка о HTTP RPC API](/docs/reference/http-api/#rpc-api) 
 
 ## Server-side RPC API
 
-ThingsBoard provides **System RPC Service** that allows you to send RPC calls from server-side applications to the device.
-In order to send RPC request you need execute HTTP POST request to the following URL:
+Платформа имеет **System RPC Service**, с помощью которой можно отправлять RPC-запросы из серверных приложений на устройства. Для этого нужно выполнить HTTP POST-запрос вида:
 
 ```shell
 http(s)://host:port/api/plugins/rpc/{callType}/{deviceId}
 ```
 
-where 
+где 
 
- - **callType** is either **oneway** or **twoway**
- - **deviceId** is your target [device id](/docs/user-guide/ui/devices/#get-device-id)
+ - **callType** может быть **oneway** или **twoway**
+ - **deviceId** [id устройства](/docs/user-guide/ui/devices/#get-device-id)
 
-The request body should be a valid json object with two elements: 
+В теле запроса должен передаваться JSON-объект с двумя элементами: 
  
- - **method** - method name, json string
- - **params** - method parameters, json object
+ - **method** - название метода, json строка
+ - **params** - параметр метода, json объект
 
-For example:
+Например:
 
 {% capture tabspec %}mqtt-rpc-from-client
 A,set-gpio-request.sh,shell,resources/set-gpio-request.sh,/docs/user-guide/resources/set-gpio-request.sh
 B,set-gpio-request.json,json,resources/set-gpio-request.json,/docs/user-guide/resources/set-gpio-request.json{% endcapture %}  
 {% include tabs.html %}
 
-Please **note** that in order to execute this request, you will need to substitute **$JWT_TOKEN** with a valid JWT token.
-This token should belong to either 
+Обратим внимание на то, что для передачи данного запроса, вам нужно подменить **$JWT_TOKEN** на валидный JWT токен. Этот токен должен принадлежать:
 
- - user with **TENANT_ADMIN** role
- - user with **CUSTOMER_USER** role that owns the device identified by **$DEVICE_ID**
- 
-You can use following [guide](/docs/reference/rest-api/#rest-api-auth) to get the token.
+ - пользователю с ролью **TENANT_ADMIN**
+ - пользователю с ролью **CUSTOMER_USER** которому принадлежит устройство с **$DEVICE_ID**
 
-## RPC Rule Nodes
-It is possible to integrate RPC actions into processing workflow. There are 2 Rule Nodes for working with RPC requests. 
+## RPC узла правил
 
--  [RPC reply](/docs/user-guide/rule-engine-2-0/action-nodes/#rpc-call-reply-node) 
--  [RPC request](/docs/user-guide/rule-engine-2-0/action-nodes/#rpc-call-request-node) 
+Можно интегрировать RPC-события в процесс обработки данных. Существует два узла правил для работы с RPC-запросами.
+
+
+-  [RPC ответ](/docs/user-guide/rule-engine-2-0/action-nodes/#rpc-call-reply-node) 
+-  [RPC запрос](/docs/user-guide/rule-engine-2-0/action-nodes/#rpc-call-request-node) 
 
 ## RPC widgets
 
-See [widgets library](/docs/user-guide/ui/widget-library/#gpio-widgets) for more details.
+Обратитесь к [библиотеке виджетов](/docs/user-guide/ui/widget-library/#gpio-widgets) for more details.

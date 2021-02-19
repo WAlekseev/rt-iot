@@ -1,103 +1,86 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Mail Settings
-description: ThingsBoard IoT platform mail settings
-
+title: Настройки почты
+description: Настройки почты
 ---
 
-ThingsBoard System Administrator is able to configure a connection to a SMTP server that will be used to distribute activation and password reset emails to users.
-This configuration step is required in production environments. 
-If you are evaluating the platform, pre-provisioned [**demo accounts**](/docs/samples/demo-account/#demo-tenant) are sufficient in most of the use cases.
-  
-**NOTE** System Mail settings are used only during user creation and password reset process and are controlled by a system administrator. 
-Tenant administrator is able to [**setup email rule node**](/docs/user-guide/rule-engine-2-0/tutorials/send-email/) to distribute alarms produced by [**rule engine**](/docs/user-guide/rule-engine-2-0/re-getting-started/).  
+Тенант-администратор может настроить узел правил электронной почты для распространения сигналов тревоги, создаваемых механизмом правил.
+ 
 
 * TOC
 {:toc}
 
-Following steps are required to configure system mail settings.
+Для настройки параметров системной почты необходимо выполнить следующие действия.
 
-#### Step 1. Login as system administrator
+#### Шаг 1. Войдите в систему как системный администратор
 
-Login to your ThingsBoard instance WEB UI as a system administrator using default [**account**](/docs/samples/demo-account/#system-administrator).
+Войдите в свой веб-интерфейс экземпляра платформы как системный администратор, используя учетную запись по умолчанию.
 
-#### Step 2. Change administrator email address 
+#### Шаг 2. Измените адрес электронной почты администратора
 
-Right click on the burger in the top-right corner of the WEB UI and select 'Profile'.
-Change 'sysadmin@thingsboard.org' to your email address. Now re-login as administrator again. 
+Щелкните правой кнопкой мыши на бургер-меню в правом верхнем углу веб-интерфейса и выберите "профиль". Замените электронный адрес  на ваш собственный. Теперь снова войдите в систему как администратор.
 
-#### Step 3. Open 'Outgoing Mail' and populate SMTP server settings
+#### Шаг 3. Откройте раздел «исходящая почта» и заполните настройки SMTP-сервера
 
-Navigate to **System Settings -> Outgoing Mail** and populate the form. Click on 'Send Test Email' button. 
-A test email will be sent to the email address that you have specified in 'Step 2'.
-In case of error in configuration, you should receive a popup with the error log.
+Перейдите в раздел Системные настройки -> исходящая почта - > и заполните форму. Нажмите на кнопку «отправить тестовое электронное письмо». Оно будет отправлено на адрес электронной почты, указанный вами в предыдущем шаге. В случае ошибки в конфигурации вы увидите всплывающее окно с журналом ошибок.
 
-##### Step 3.1. Sendgrid configuration example
+##### Шаг 3.1. Пример конфигурации Sendgrid
 
-SendGrid configuration is fairly simple and straightforward. First, you need to create [SendGrid](https://sendgrid.com/) account. 
-You can try it for free and the free plan is most likely enough for platform evaluation.
+Конфигурация SendGrid довольно проста и понятна. Во-первых, вам нужно создать учетную запись SendGrid. Вы можете попробовать его бесплатно – бесплатного плана, скорее всего, будет вполне достаточно для оценки платформы.
 
-Once you create your account, you will be forwarded to the welcome page. Now you can provision your SMTP Relay credentials. See the screen-shot below. 
+Как только вы создадите свою учетную запись, вы будете перенаправлены на страницу приветствия. Теперь вы можете предоставить свои учетные данные SMTP-ретранслятора. Смотрите снимок экрана ниже.
+ 
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/sendgrid-welcome.png)
 {: refdef}
 
-Please choose SMTP relay on the next page.
+Пожалуйста, выберите SMTP-реле на следующей странице.
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/sendgrid-smtp-relay.png)
 {: refdef}
 
-Once you populate the API key name and generate it, you will be able to copy-paste settings from the screen to ThingsBoard mail settings form.
+Как только вы заполните имя API-ключа и сгенерируете его, вы сможете скопировать и вставить настройки с экрана в форму настроек почты IoT-платформы Ростелеком.
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/sendgrid-token.png)
 {: refdef}
 
-Copy-paste the settings, update 'Mail From' field and click on 'Send Test Mail' button. 
+Скопируйте и вставьте настройки, обновите поле "Сообщение от" и нажмите на кнопку "Отправить тестовое письмо".
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/sendgrid-settings.png)
 {: refdef}
 
-Once you receive the notification about a successfull test, save populated data. You can also complete verification on the SendGrid website.
+Как только вы получите уведомление об успешном тестировании, сохраните заполненные данные. Вы также можете завершить проверку на веб-сайте SendGrid.
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/sendgrid-it-works.png)
 {: refdef}
 
 
+##### Шаг 3.2. Пример конфигурации Gmail
 
-
-
-##### Step 3.2. Gmail configuration example
-
-In order to use G-mail, you will need to do two extra steps. 
-First, you need to allow [**less secure apps**](https://support.google.com/accounts/answer/6010255?hl=en).
-Second, you need to enable two-step verification and generate an [**app password**](https://support.google.com/accounts/answer/185833?hl=en).
-Although the second step is not mandatory, it is highly recommended.
+Для того, чтобы использовать G-mail, вам нужно будет сделать два дополнительных шага. Во-первых, вам нужно разрешить менее безопасные приложения. Во-вторых, вам нужно включить двухэтапную проверку и сгенерировать пароль приложения. Хотя второй шаг не является обязательным, но настоятельно рекомендуется.
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/app-password.png)
 {: refdef}
 
-Once this is ready, you should be able to setup Gmail account using the information below
+Как только эта операция будет выполнена, вы сможете настроить учетную запись Gmail, используя приведенную ниже информацию
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/gmail-settings.png)
 {: refdef}
 
-Similar settings are available for G-suite accounts, however, you may need to contact your system administrator to enable less secure apps, etc.
-Note that you can also enable/disable TLS using checkbox.
+Аналогичные настройки доступны для учетных записей G-suite, однако вам может потребоваться связаться с системным администратором, чтобы подключить менее безопасные приложения и т. д. Обратите внимание, что вы также можете включить/отключить TLS с помощью соответствующего флажка.
 
 {:refdef: style="text-align: center;"}
 ![image](/images/user-guide/ui/mail/gsuite-settings.png)
 {: refdef}
 
 
-#### Step 4. Save configuration
+#### Шаг 4. Сохранить конфигурацию
 
-Once you will receive test email you can save SMTP server configuration.
+Как только вы получите тестовое письмо, вы можете сохранить конфигурацию SMTP-сервера.

@@ -1,33 +1,24 @@
 ---
 layout: docwithnav
-title: HTTP Integration
-description: HTTP integration guide 
-
+title: HTTP интеграция
 ---
 
-{% assign feature = "Platform Integrations" %}{% include templates/pe-feature-banner.md %}
 
+HTTP интеграция позволяет конвертировать существующие протоколы и форматы полезной нагрузки в формат сообщений IoT платформы Ростелеком. Также она полезна в следующих сценариях деплоя:
 
-HTTP Integration allows to convert existing protocols and payload formats to ThingsBoard message format and is useful in several deployment scenarios: 
-
- - stream device and/or asset data from external system, IoT platform or connectivity provider back-end.
- - stream device and/or asset data from your custom application running in the cloud.
- - connect the existing device with custom HTTP based protocol to ThingsBoard.
+- потоковая передача данных устройств и активов из внешней системы, IoT-платформы или сервера поставщика услуг связи.
+ - потоковая передача данных устройств и активов из вашего пользовательского приложения, запущенного в облаке.
+ - подключить существующие устройства к IoT платформе Ростелеком по пользовательскому протоколу, по типу HTTP.
  
-Please review the integration diagram and video tutorial to learn more. 
+ Для получения подробной информации изучите диаграмму и видео-урок.
 
  ![image](/images/user-guide/integrations/http-integration.svg)
  
-See video tutorial below for step-by-step instruction how to setup HTTP Integration.
+ В данном видео-уроке вы увидите пошаговую инструкцию по запуске HTTP интеграции.
 
 <br/>
 <div id="video">  
  <div id="video_wrapper">
      <iframe src="https://www.youtube.com/embed/LTl9mS4uXyg" frameborder="0" allowfullscreen></iframe>
  </div>
-</div> 
-
-
-## Next steps
-
-{% assign currentGuide = "ConnectYourDevice" %}{% include templates/guides-banner.md %}
+</div>

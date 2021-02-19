@@ -1,56 +1,51 @@
 ---
 layout: docwithnav
-assignees:
-- ikulikov
-title: Assets
-description: Thingsboard IoT Asset management
-
+title: Объекты
+description: Объекты
 ---
 
-Thingsboard support following asset management features using Web UI and [REST API](/docs/reference/rest-api/).
+Платформа поддерживает следующие функции управления объектами с помощью Web UI и [REST API](/docs/reference/rest-api/).
 
 * TOC
 {:toc}
 
-## Add and delete assets
+## Добавление и удаление объектов
 
-Tenant administrator is able to register new assets or delete them from Thingsboard.
+Тенант-админ может регистрировать новые объекты или удалять их из платформы.
 
 ![image](/images/user-guide/ui/assets.png)
 
-## Get Asset Id
+## Получение id объекта
   
-Tenant administrator and customer users are able to copy asset id to clipboard using "Copy Asset Id" button.
+Тенант администратор и клиенты могут копировать id объекта в буфер обмена с помощью кнопки “Скопировать id объекта”.
 
  ![image](/images/user-guide/ui/asset-id.png)
 
-## Assign assets to customers
-
-Tenant administrator is able to assign assets to certain [customer](/docs/user-guide/ui/customers/).
-This will allow Customer users to fetch asset data using REST APIs or Web UI.
+## Назначение объектов клиентам
+Тенант администратор может назначать объекты некоторым [клиентам](/docs/user-guide/ui/customers/).
+Это позволит клиентам получать данные объектов с помощью REST API или Web UI.
  
  ![image](/images/user-guide/ui/assign-asset-to-customer.png)
 
-## Manage asset attributes
+## Управление атрибутами объектов
 
-Tenant administrator and customer users are able to manage asset server-side [attributes](/docs/user-guide/attributes).
+Тенант-администратор и клиент могут управлять серверными [атрибутами объектов](/docs/user-guide/attributes).
 
  ![image](/images/user-guide/ui/asset-attributes.png)
 
-## Browse asset alarms
+## Просмотр сообщений о сигналах тревоги
 
-Tenant administrator and customer users are able to browse asset [alarms](/docs/user-guide/alarms).
+Тенант-администратор и клиенты могут просматривать сообщения о сигналах тревоги, которые поступают от [объектов](/docs/user-guide/alarms).
 
  ![image](/images/user-guide/ui/asset-alarms.png)
  
-## Browse asset events
+## Просмотр событий объектов
   
-Tenant administrator and customer users are able to browse events related to particular asset using "Events" tab.
-Lifecycle events and statistics are coming soon.
+В разделе “События” тенант администраторы и клиенты могут просматривать события, которые относятся к определенным объектам. В скором времени в данном разделе можно будет отслеживать события жизненного цикла и статистику по ним.
 
-## Manage asset relations
+## Управление связями между объектами
  
-Tenant administrator and customer users are able to manage asset [relations](/docs/user-guide/entities-and-relations).
+Тенант-администраторы и клиенты могут управлять связями между [объектами](/docs/user-guide/entities-and-relations).
 
  ![image](/images/user-guide/ui/asset-relations.png)
- 
+

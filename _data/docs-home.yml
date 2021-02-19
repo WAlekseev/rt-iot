@@ -19,308 +19,294 @@ toc:
     path: /docs/user-guide/alarms/
   - title: Статус подключения устройств
     path: /docs/user-guide/device-connectivity-status/
-  - title: Claiming Devices
+  - title: Подтверждение устройств
     path: /docs/user-guide/claiming-devices/
-    new: true
-  - title: Entity Views
+  - title: Представления сущностей
     path: /docs/user-guide/entity-views/
-  - title: Using RPC capabilities
+  - title: Возможности RPC
     path: /docs/user-guide/rpc/
-  - title: Data visualization
+  - title: Визуализация данных
     path: /docs/user-guide/visualization/
-  - title: OAuth 2 Support
-    path: /docs/user-guide/oauth-2-support/
-    new: true
-  - title: Advanced RBAC for IoT
+#  - title: OAuth 2 Support
+#    path: /docs/user-guide/oauth-2-support/
+#    pe: true
+  - title: Расширенный контроль доступа (RBAC) 
     path: /docs/user-guide/rbac/
-    pe: true
   - title: White-labeling
     path: /docs/user-guide/white-labeling/
-    pe: true
-  - title: Self-registration
+  - title: Самостоятельная регистрация
     path: /docs/user-guide/self-registration/
-    pe: true
-  - title: Custom Translations
+  - title: Пользовательские переводы
     path: /docs/user-guide/custom-translation/
-    pe: true
-  - title: Custom Menu
+  - title: Пользовательское меню
     path: /docs/user-guide/custom-menu/
-    pe: true
-  - title: Platform Integrations
-    path: /docs/user-guide/integrations/#overview
-    pe: true
-  - title: Entity Groups
+#  - title: Platform Integrations
+#    path: /docs/user-guide/integrations/#overview
+#    pe: true
+  - title: Группы сущностей
     path: /docs/user-guide/groups/
-    pe: true
-  - title: Scheduler
+  - title: Планировщик
     path: /docs/user-guide/scheduler/
-    pe: true
-  - title: Reporting
+  - title: Отчеты
     path: /docs/user-guide/reporting/
-    pe: true
-  - title: CSV/XLS data export
+  - title: Экспорт данных CSV/XLS
     path: /docs/user-guide/csv-xls-data-export/
-    pe: true
-  - title: Bulk Provisioning
-    new: true
+  - title: Групповые настройки
     path: /docs/user-guide/bulk-provisioning/
-  - title: File Storage
+  - title: Файловое хранилище
     path: /docs/user-guide/file-storage/
-    pe: true
-  - title: Audit Log
-    path: /docs/user-guide/audit-log/
-  - title: API Limits
-    path: /docs/user-guide/api-limits/
-- title: Rule engine
+#  - title: Audit Log
+#    path: /docs/user-guide/audit-log/
+#  - title: API Limits
+#    path: /docs/user-guide/api-limits/
+- title: Движок правил
   section:
-  - title: Getting Started
+  - title: Начало работы
     path: /docs/user-guide/rule-engine-2-0/re-getting-started/
-  - title: Overview
+  - title: Обзор
     path: /docs/user-guide/rule-engine-2-0/overview/
-  - title: Architecture
+  - title: Архитектура
     path: /docs/user-guide/rule-engine-2-0/architecture/
-  - title: Nodes
+  - title: Узлы
     section:
-    - title: Filter Nodes
+    - title: Узлы фильтрации
       path: /docs/user-guide/rule-engine-2-0/filter-nodes/
-    - title: Enrichment Nodes
+    - title: Узлы обогащения
       path: /docs/user-guide/rule-engine-2-0/enrichment-nodes/
-    - title: Transformation Nodes
+    - title: Узлы преобразования
       path: /docs/user-guide/rule-engine-2-0/transformation-nodes/
-    - title: Action Nodes
+    - title: Узлы действий
       path: /docs/user-guide/rule-engine-2-0/action-nodes/
-    - title: External Nodes
+    - title: Внешние узлы
       path: /docs/user-guide/rule-engine-2-0/external-nodes/
-  - title: PE Nodes
-    pe: true
+  - title: PE узлы
     section:
-    - title: Transformation Nodes
+    - title: Узлы трансформации
       path: /docs/user-guide/rule-engine-2-0/pe/transformation-nodes/
-    - title: Action Nodes
+    - title: Дополнительные узлы действий
       path: /docs/user-guide/rule-engine-2-0/pe/action-nodes/
-    - title: Analytics Nodes
+    - title: Узлы аналитики
       path: /docs/user-guide/rule-engine-2-0/pe/analytics-nodes/
-  - title: Custom Rule Nodes
-    path: /docs/user-guide/contribution/rule-node-development/
-- title: Integrations
-  pe: true
+#  - title: Custom Rule Nodes
+#    path: /docs/user-guide/contribution/rule-node-development/
+- title: Интеграция
+#  pe: true
   section:
-  - title: Overview
+  - title: Интеграция платформы
     path: /docs/user-guide/integrations/
-  - title: Remote Integrations
+  - title: Удаленные интеграции
     path: /docs/user-guide/integrations/remote-integrations/
-    new: true
   - title: HTTP
     path: /docs/user-guide/integrations/http/
   - title: MQTT
     path: /docs/user-guide/integrations/mqtt/
   - title: OPC-UA
     path: /docs/user-guide/integrations/opc-ua/
-  - title: Actility ThingPark
-    path: /docs/user-guide/integrations/thingpark/
-  - title: TheThingsNetwork
-    path: /docs/user-guide/integrations/ttn/
-  - title: TheThingsIndustries
-    path: /docs/user-guide/integrations/tti/
-  - title: AWS IoT
-    path: /docs/user-guide/integrations/aws-iot/
-  - title: AWS Kinesis
-    path: /docs/user-guide/integrations/aws-kinesis/
-  - title: IBM Watson
-    path: /docs/user-guide/integrations/ibm-watson-iot/
-  - title: Azure Event Hub
-    path: /docs/user-guide/integrations/azure-event-hub/
-  - title: Azure IoT Hub
-    path: /docs/user-guide/integrations/azure-iot-hub/
+#  - title: Actility ThingPark
+#    path: /docs/user-guide/integrations/thingpark/
+#  - title: TheThingsNetwork
+#    path: /docs/user-guide/integrations/ttn/
+#  - title: TheThingsIndustries
+#    path: /docs/user-guide/integrations/tti/
+#  - title: AWS IoT
+#    path: /docs/user-guide/integrations/aws-iot/
+#  - title: AWS Kinesis
+#    path: /docs/user-guide/integrations/aws-kinesis/
+#  - title: IBM Watson
+#    path: /docs/user-guide/integrations/ibm-watson-iot/
+#  - title: Azure Event Hub
+#    path: /docs/user-guide/integrations/azure-event-hub/
+#  - title: Azure IoT Hub
+#    path: /docs/user-guide/integrations/azure-iot-hub/
   - title: TCP
     path: /docs/user-guide/integrations/tcp/
   - title: UDP
     path: /docs/user-guide/integrations/udp/
-  - title: SigFox
-    path: /docs/user-guide/integrations/sigfox/
-  - title: Ocean Connect
-    path: /docs/user-guide/integrations/ocean-connect/
-  - title: Custom Integration development guide
-    path: /docs/user-guide/integrations/custom/
-  - title: Notifications and Alarms on your smartphone using Telegram Bot
+#  - title: SigFox
+#    path: /docs/user-guide/integrations/sigfox/
+#  - title: Ocean Connect
+#    path: /docs/user-guide/integrations/ocean-connect/
+#  - title: Custom Integration development guide
+#    path: /docs/user-guide/integrations/custom/
+  - title: Отправка уведомлений и сигналов тревоги через Telegram-бот
     path: /docs/user-guide/rule-engine-2-0/tutorials/integration-with-telegram-bot/
-- title: Analytics
-  new: true
+#- title: Analytics
+#  new: true
+#  section:
+#  - title: Trendz Analytics
+#    new: true
+#    section:
+#      - title: Getting Started
+#        path: /docs/trendz/
+#      - title: Installation guide
+#        section:
+#          - title: Installation options
+#             path: /docs/trendz/install/installation-options
+#           - title: Installing Trendz on Ubuntu Server
+#             path: /docs/trendz/install/ubuntu/
+#           - title: Installing Trendz on CentOS/RHEL
+#             path: /docs/trendz/install/rhel/
+#           - title: Installing Trendz on Windows
+#             path: /docs/trendz/install/windows/
+#           - title: Installing Trendz using Docker (Windows)
+#             path: /docs/trendz/install/docker-windows/
+#           - title: Installing Trendz using Docker (Linux or Mac OS)
+#             path: /docs/trendz/install/docker/
+#           - title: Upgrade instructions
+#             path: /docs/trendz/install/trndz-upgrade-instructions/
+#       - title: Connect Trendz to Thingsboard
+#         path: /docs/trendz/connect-thingsboard/
+#       - title: Data Visualization
+#         section:
+#           - title: Overview
+#             path: /docs/trendz/visualizations-overview/
+#           - title: Tables
+#             path: /docs/trendz/visualizations-tables/
+#           - title: Line Chart
+#             path: /docs/trendz/visualizations-line/
+#           - title: Bar & Histogram
+#             path: /docs/trendz/visualizations-bar/
+#           - title: Pie Chart
+#             path: /docs/trendz/visualizations-pie/
+#           - title: Scatter Plot
+#             path: /docs/trendz/visualizations-scatter/
+#           - title: Heat Map
+#             path: /docs/trendz/visualizations-heatmap/
+#           - title: Cards
+#             path: /docs/trendz/visualizations-card/
+#           - title: View Settings
+#             path: /docs/trendz/view-settings/
+#       - title: Grouping and Aggregation
+#         path: /docs/trendz/data-grouping-aggregation/
+#       - title: Filtering
+#         path: /docs/trendz/data-filtering/
+#       - title: Calculated Fields
+#         path: /docs/trendz/calculated-fields/
+#       - title: States
+#         path: /docs/trendz/states/
+#       - title: Prediction
+#         path: /docs/trendz/prediction/
+#       - title: Share and embed Visualizations
+#         path: /docs/trendz/embed-visuals/
+#       - title: Trendz Release Notes
+#         path: /docs/trendz/releases/
+#   - title: Kafka Streams
+#     new: true
+#     path: /docs/samples/analytics/kafka-streams/
+# - title: Security
+#   section:
+#   - title: OAuth 2 Support
+#     path: /docs/user-guide/oauth-2-support/
+#   - title: MQTT over SSL
+#     path: /docs/user-guide/mqtt-over-ssl/
+#   - title: Device authentication options
+#     path: /docs/user-guide/device-credentials/
+#   - title: Access Token based authentication
+#     path: /docs/user-guide/access-token/
+#   - title: X.509 Certificate based authentication
+#     path: /docs/user-guide/certificates/
+- title: Административный интерфейс
   section:
-  - title: Trendz Analytics
-    new: true
-    section:
-      - title: Getting Started
-        path: /docs/trendz/
-      - title: Installation guide
-        section:
-          - title: Installation options
-            path: /docs/trendz/install/installation-options
-          - title: Installing Trendz on Ubuntu Server
-            path: /docs/trendz/install/ubuntu/
-          - title: Installing Trendz on CentOS/RHEL
-            path: /docs/trendz/install/rhel/
-          - title: Installing Trendz on Windows
-            path: /docs/trendz/install/windows/
-          - title: Installing Trendz using Docker (Windows)
-            path: /docs/trendz/install/docker-windows/
-          - title: Installing Trendz using Docker (Linux or Mac OS)
-            path: /docs/trendz/install/docker/
-          - title: Upgrade instructions
-            path: /docs/trendz/install/trndz-upgrade-instructions/
-      - title: Connect Trendz to Thingsboard
-        path: /docs/trendz/connect-thingsboard/
-      - title: Data Visualization
-        section:
-          - title: Overview
-            path: /docs/trendz/visualizations-overview/
-          - title: Tables
-            path: /docs/trendz/visualizations-tables/
-          - title: Line Chart
-            path: /docs/trendz/visualizations-line/
-          - title: Bar & Histogram
-            path: /docs/trendz/visualizations-bar/
-          - title: Pie Chart
-            path: /docs/trendz/visualizations-pie/
-          - title: Scatter Plot
-            path: /docs/trendz/visualizations-scatter/
-          - title: Heat Map
-            path: /docs/trendz/visualizations-heatmap/
-          - title: Cards
-            path: /docs/trendz/visualizations-card/
-          - title: View Settings
-            path: /docs/trendz/view-settings/
-      - title: Grouping and Aggregation
-        path: /docs/trendz/data-grouping-aggregation/
-      - title: Filtering
-        path: /docs/trendz/data-filtering/
-      - title: Calculated Fields
-        path: /docs/trendz/calculated-fields/
-      - title: States
-        path: /docs/trendz/states/
-      - title: Prediction
-        path: /docs/trendz/prediction/
-      - title: Share and embed Visualizations
-        path: /docs/trendz/embed-visuals/
-      - title: Trendz Release Notes
-        path: /docs/trendz/releases/
-  - title: Kafka Streams
-    new: true
-    path: /docs/samples/analytics/kafka-streams/
-- title: Security
-  section:
-  - title: OAuth 2 Support
-    path: /docs/user-guide/oauth-2-support/
-  - title: MQTT over SSL
-    path: /docs/user-guide/mqtt-over-ssl/
-  - title: Device authentication options
-    path: /docs/user-guide/device-credentials/
-  - title: Access Token based authentication
-    path: /docs/user-guide/access-token/
-  - title: X.509 Certificate based authentication
-    path: /docs/user-guide/certificates/
-- title: Administration UI
-  section:
-  - title: Tenants
+  - title: Тенанты
     path: /docs/user-guide/ui/tenants/
-  - title: Customers
+  - title: Клиенты
     path: /docs/user-guide/ui/customers/
-  - title: Users
+  - title: Пользователи
     path: /docs/user-guide/ui/users/
-  - title: Assets
+  - title: Объекты
     path: /docs/user-guide/ui/assets/
-  - title: Devices
+  - title: Устройства
     path: /docs/user-guide/ui/devices/
-  - title: Rule Chains
+  - title: Цепочки правил
     path: /docs/user-guide/ui/rule-chains/
-  - title: Widgets
+  - title: Виджеты
     section:
-    - title: Trip Animation Widget
+    - title: Виджет анимации перемещения
       path: /docs/user-guide/ui/trip-animation-widget/
-    - title: Widgets Library
+    - title: Библиотека Виджетов
       path: /docs/user-guide/ui/widget-library/
-  - title: Dashboards
+  - title: Дашборды
     path: /docs/user-guide/ui/dashboards/
-  - title: Mail Settings
+  - title: Настройки почты
     path: /docs/user-guide/ui/mail-settings/
-  - title: Aliases
+  - title: Псевдонимы
     path: /docs/user-guide/ui/aliases/
-- title: IoT Gateway
-  path: /docs/iot-gateway/
-  new: true
-  section:
-  - title: What is ThingsBoard IoT Gateway?
-    path: /docs/iot-gateway/what-is-iot-gateway/
-  - title: Getting Started
-    path: /docs/iot-gateway/getting-started/
-  - title: Installation guide
-    section:
-      - title: Installation options
-        path: /docs/iot-gateway/installation/
-      - title: IoT Gateway installation on Ubuntu (DEB)
-        path: /docs/iot-gateway/install/deb-installation/
-      - title: IoT Gateway installation on CentOS/RHEL (RPM)
-        path: /docs/iot-gateway/install/rpm-installation/
-      - title: IoT Gateway installation using Docker (Linux and Mac OS)
-        path: /docs/iot-gateway/install/docker-installation/
-      - title: IoT Gateway installation using Docker (Windows)
-        path: /docs/iot-gateway/install/docker-windows/
-      - title: Installation from pip
-        path: /docs/iot-gateway/install/pip-installation/
-      - title: Installation from sources (Latest version)
-        path: /docs/iot-gateway/install/source-installation/
-      - title: Upgrade instructions
-        path: /docs/iot-gateway/install/upgrade-instructions/
-  - title: Configuration guide
-    section:
-      - title: General configuration
-        path: /docs/iot-gateway/configuration/
-      - title: MQTT Connector
-        path: /docs/iot-gateway/config/mqtt/
-      - title: Modbus Connector
-        path: /docs/iot-gateway/config/modbus/
-      - title: OPC-UA Connector
-        path: /docs/iot-gateway/config/opc-ua/
-      - title: BLE Connector
-        path: /docs/iot-gateway/config/ble/
-      - title: Request Connector
-        path: /docs/iot-gateway/config/request/
-      - title: CAN Connector
-        path: /docs/iot-gateway/config/can/
-      - title: BACnet Connector
-        path: /docs/iot-gateway/config/bacnet/
-      - title: ODBC Connector
-        path: /docs/iot-gateway/config/odbc/
-      - title: REST Connector
-        path: /docs/iot-gateway/config/rest/
-      - title: SNMP Connector
-        path: /docs/iot-gateway/config/snmp/
-  - title: Customization guide
-    path: /docs/iot-gateway/custom/
-  - title: IoT Gateway features
-    path: /docs/iot-gateway/features/
-    section:
-      - title: Remote logging
-        path: /docs/iot-gateway/guides/how-to-enable-remote-logging/
-      - title: Service RPC methods
-        path: /docs/iot-gateway/guides/how-to-use-gateway-rpc-methods/
-      - title: Remote shell
-        path: /docs/iot-gateway/guides/how-to-enable-remote-shell/
-  - title: IoT Gateway Roadmap
-    path: /docs/iot-gateway/roadmap/
-- title: Troubleshooting
-  path: /docs/user-guide/troubleshooting/
-- title: Contribution Guide
-  section:
-    - title: How to contribute
-      path: /docs/user-guide/contribution/how-to-contribute/
-    - title: Rule Node development
-      path: /docs/user-guide/contribution/rule-node-development/
-    - title: Widgets development (ThingsBoard v3.x)
-      path: /docs/user-guide/contribution/widgets-development/
-    - title: Widgets development (ThingsBoard v2.x)
-      path: /docs/user-guide/contribution/widgets-development-before-3.0/
-- title: Release Notes
-  path: /docs/reference/releases/
-- title: Roadmap
-  path: /docs/reference/roadmap/
+# - title: IoT Gateway
+#   path: /docs/iot-gateway/
+#   new: true
+#   section:
+#   - title: What is ThingsBoard IoT Gateway?
+#     path: /docs/iot-gateway/what-is-iot-gateway/
+#   - title: Getting Started
+#     path: /docs/iot-gateway/getting-started/
+#   - title: Installation guide
+#     section:
+#       - title: Installation options
+#         path: /docs/iot-gateway/installation/
+#       - title: IoT Gateway installation on Ubuntu (DEB)
+#         path: /docs/iot-gateway/install/deb-installation/
+#       - title: IoT Gateway installation on CentOS/RHEL (RPM)
+#         path: /docs/iot-gateway/install/rpm-installation/
+#       - title: IoT Gateway installation using Docker (Linux and Mac OS)
+#         path: /docs/iot-gateway/install/docker-installation/
+#       - title: IoT Gateway installation using Docker (Windows)
+#         path: /docs/iot-gateway/install/docker-windows/
+#       - title: Installation from pip
+#         path: /docs/iot-gateway/install/pip-installation/
+#       - title: Installation from sources (Latest version)
+#         path: /docs/iot-gateway/install/source-installation/
+#       - title: Upgrade instructions
+#         path: /docs/iot-gateway/install/upgrade-instructions/
+#   - title: Configuration guide
+#     section:
+#       - title: General configuration
+#         path: /docs/iot-gateway/configuration/
+#       - title: MQTT Connector
+#         path: /docs/iot-gateway/config/mqtt/
+#       - title: Modbus Connector
+#         path: /docs/iot-gateway/config/modbus/
+#       - title: OPC-UA Connector
+#         path: /docs/iot-gateway/config/opc-ua/
+#       - title: BLE Connector
+#         path: /docs/iot-gateway/config/ble/
+#       - title: Request Connector
+#         path: /docs/iot-gateway/config/request/
+#       - title: CAN Connector
+#         path: /docs/iot-gateway/config/can/
+#       - title: BACnet Connector
+#         path: /docs/iot-gateway/config/bacnet/
+#       - title: ODBC Connector
+#         path: /docs/iot-gateway/config/odbc/
+#       - title: REST Connector
+#         path: /docs/iot-gateway/config/rest/
+#       - title: SNMP Connector
+#         path: /docs/iot-gateway/config/snmp/
+#   - title: Customization guide
+#     path: /docs/iot-gateway/custom/
+#   - title: IoT Gateway features
+#     path: /docs/iot-gateway/features/
+#     section:
+#       - title: Remote logging
+#         path: /docs/iot-gateway/guides/how-to-enable-remote-logging/
+#       - title: Service RPC methods
+#         path: /docs/iot-gateway/guides/how-to-use-gateway-rpc-methods/
+#       - title: Remote shell
+#         path: /docs/iot-gateway/guides/how-to-enable-remote-shell/
+#   - title: IoT Gateway Roadmap
+#     path: /docs/iot-gateway/roadmap/
+# - title: Troubleshooting
+#   path: /docs/user-guide/troubleshooting/
+# - title: Contribution Guide
+#   section:
+#     - title: How to contribute
+#       path: /docs/user-guide/contribution/how-to-contribute/
+#     - title: Rule Node development
+#       path: /docs/user-guide/contribution/rule-node-development/
+#     - title: Widgets development (ThingsBoard v3.x)
+#       path: /docs/user-guide/contribution/widgets-development/
+#     - title: Widgets development (ThingsBoard v2.x)
+#       path: /docs/user-guide/contribution/widgets-development-before-3.0/
+# - title: Release Notes
+#   path: /docs/reference/releases/
+# - title: Roadmap
+#   path: /docs/reference/roadmap/

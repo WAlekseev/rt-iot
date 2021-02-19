@@ -1,170 +1,125 @@
 ---
 layout: docwithnav
-title: Analytics Nodes
-description: Rule Engine 2.0 Analytics Nodes
-
+title: Узлы аналитики
+description: Узлы аналитики
 ---
 
-{% assign feature = "PE Analytics Nodes" %}{% include templates/pe-feature-banner.md %}
-
-Analytics Nodes that are specific to ThingsBoard PE. Used for analysis of streamed or persisted data.
+Узлы аналитики используется для анализа потоковых или сохраняемых данных.
 
 * TOC
 {:toc}
 
 # Aggregate Latest Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-latest.png)
 
-Periodically does aggregation of child entities attributes or latest timeseries for specified set of parent entities.
+Периодически выполняет агрегацию атрибутов дочерних сущностей или последних временных рядов для указанного набора родительских сущностей.
 
-Performs aggregation of attributes or latest timeseries fetched from child entities with configurable period.
+Выполняет агрегацию атрибутов или последних временных рядов, извлеченных из дочерних сущностей с настраиваемым периодом.
 
-Aggregation result then set to specified target timeseries attribute of parent entity.
- 
-Message of type **POST_TELEMETRY_REQUEST** is generated for each parent entity and aggregated attribute.
+Затем результат агрегации устанавливается в указанный целевой атрибут временных рядов родительской сущности.
 
-Configuration:
+Для каждой родительской сущности и агрегатного атрибута генерируется сообщение типа POST_TELEMETRY_REQUEST.
+
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-latest-config.png)
 
-- **Execution period value/time unit** - specifies period of aggregation task.
-- **Entities** - specifies set of parent entities for which aggregation should be performed. Can be: 
-    - **Single entity** - one specific entity. 
-    - **Group of entities** - specific entity group. 
-    - **Relations query** - set of entities found by **Relations query** starting from the **Root entity**.
-- **Child entities** - specifies **Relations query** used to find child entities starting from the parent entity.
-Should be specified only when **Single entity** or **Relations query** is selected for parent entities.
-In case of **Group of entities** child entities selected from the entity group itself.
-- **Aggregate latest mappings** - table of mapping configurations specifying rules of child attributes aggregation.
+- **Execution period value/time unit** - значение/единица времени периода выполнения - задает период выполнения задачи агрегирования.
+- **Entities** - сущности - задает набор родительских сущностей, для которых должна выполняться агрегация. Может быть: 
+    - **Single entity** - одна конкретная сущность. 
+    - **Group of entities** - определенная группа сущностей. 
+    - **Relations query** - набор сущностей, найденных запросом отношений, в который входят сущности, начиная с корневой.
+- **Child entities** - Дочерние сущности - задает запрос отношений, используемый для поиска дочерних сущностей, начиная с родительской сущности. Следует указывать только в том случае, если для родительских сущностей выбран запрос на одну сущность или запрос на отношения. Для группы сущностей дочерние сущности выбираются из самой группы сущностей.
+- **Aggregate latest mappings** - агрегация последнего отображения - таблица настроек отображения, определяющая правила агрегации дочерних атрибутов.
 
 Mapping Configuration:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-latest-mapping-config.png)
 
-- **Latest telemetry** - specifies whether value of child latest telemetry or attribute should be aggregated.
-- **Source telemetry/attribute** - child latest telemetry or attribute key name.  
-- **Attribute scope** - specifies scope of child attribute in case when attribute used as source (**Latest telemetry** is unchecked).
-- **Default value** - numeric value used by default in cases when source attribute is not defined or is absent for child entity.
-- **Aggregation function** - mathematical function used for child values aggregation. Can be:
-    - **Minimum** - detects minimum attribute value among all child entities. 
-    - **Maximum** - detects maximum attribute value among all child entities.
-    - **Sum** - calculates total sum of attribute values of child entities.
-    - **Average** - calculates average value for attribute values of child entities.
-    - **Count** - performs count of child entities. In this case **Source telemetry/attribute** is not used and can be empty. 
-    - **Count unique** - performs count of unique attribute values of child entities.
-- **Target telemetry** - name of the target telemetry key of parent entity used to store aggregation result. 
-- **Filter entities** - whether to perform filtering of child entities before their attribute values aggregation. 
-- **Entity filter** - filter used to filter child entities. It has two parts:
-    1. List of entity attribute/latest timeseries keys that should be fetched and used in JavaScript filter function.
-    1. JavaScript filter function that should return filtering result as boolean value.
-    It receives **attributes** map containing fetched attributes/latest timeseries values as input argument.
-    Fetched attribute values are added into **attributes** map using attribute/latest timeseries keys with scope prefix:
-        - shared attribute -> <code>shared_</code>
-        - client attribute -> <code>cs_</code>
-        - server attribute -> <code>ss_</code>
-        - telemetry -> no prefix used 
+- **Latest telemetry** - последняя телеметрия - указывает, следует ли агрегировать значение последней дочерней телеметрии или атрибута.
+- **Source telemetry/attribute** - исходная телеметрия/атрибут – последняя дочерняя телеметрия или имя ключа атрибута.  
+- **Attribute scope** - Область действия атрибута - указывает область действия дочернего атрибута в случае, если атрибут используется в качестве источника (последняя телеметрия не проверена).
+- **Default value** - значение по умолчанию - числовое значение, используемое по умолчанию в тех случаях, когда исходный атрибут не определен или отсутствует для дочерней сущности.
+- **Aggregation function** - функция агрегации - математическая функция, используемая для агрегации дочерних значений. Может быть:
+    - **Minimum** - определяет минимальное значение атрибута среди всех дочерних сущностей. 
+    - **Maximum** - - определяет максимальное значение атрибута среди всех дочерних сущностей.
+    - **Sum** - вычисляет сумму значений атрибутов дочерних объектов.
+    - **Average** - вычисляет среднее значение для значений атрибутов дочерних сущностей.
+    - **Count** - выполняет подсчет дочерних сущностей. В этом случае исходная телеметрия/атрибут не используется и может быть пустой. 
+    - **Count unique** - - выполняет подсчет уникальных значений атрибутов дочерних сущностей.
+- **Target telemetry** - имя ключа целевой телеметрии родительской сущности, используемого для хранения результата агрегации.. 
+- **Filter entities** - следует ли выполнять фильтрацию дочерних сущностей до агрегирования их значений атрибутов. 
+- **Entity filter** - фильтр, используемый для фильтрации дочерних сущностей. Он состоит из двух частей:
+    1. Список атрибутов / ключей последних временных рядов сущностей, которые должны быть извлечены и использованы в функции фильтра JavaScript.
+    1. Функция фильтрации JavaScript должна возвращать результат фильтрации в виде логического значения.
+    Она получает карту атрибутов, содержащую извлеченные атрибуты/значения последних временных рядов в качестве входного аргумента. Извлеченные значения атрибутов будут добавлены в атрибуты карты с помощью атрибутов/ключи последних временных рядов префиксом, обозначающим область действия:
+        - общие атрибуты -> <code>shared_</code>
+        - клиентские атрибуты -> <code>cs_</code>
+        - серверные атрибуты -> <code>ss_</code>
+        - телеметрия -> без префикса 
 
-For each parent entity node will generate and forward via **Success** chain new messages of type **POST_TELEMETRY_REQUEST**,
-parent entity itself as originator and json body containing target telemetry with aggregated value.
-In case when aggregation of some child attributes will fail node will generate failure message
-with failure reason and parent entity as originator. Failure message is forwarded via **Failure** chain.
+Для каждой родительской сущности узел будет генерировать и пересылать по цепочке **Success** новые сообщения типа POST_TELEMETRY_REQUEST, саму родительскую сущность в качестве отправителя и тело в формате json, содержащее целевую телеметрию с агрегированным значением. В случае, когда агрегация некоторых дочерних атрибутов завершится неудачей, узел сгенерирует сообщение об ошибке с указанием причины сбоя, и в сообщении передаст родительскую сущность в качестве отправителя. Сообщение об ошибке направляется по цепочке **Failure**.
 
 <br/>
 
 # Aggregate Stream Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-stream.png)
 
-Calculates MIN/MAX/SUM/AVG/COUNT/UNIQUE based on the incoming data stream. 
-Groups incoming data stream based on originator id of the message (i.e. particular device, asset, customer), 
-**aggregation function** (e.g. "Average", "Sum", "Min", "Max"), **aggregation interval value** (e.g. 1 minute, 6 hours) into **Intervals**.
+Вычисляет MIN/MAX/SUM/AVG/COUNT/UNIQUE на основе входящего потока данных. Группирует входящий поток данных в интервалы на основе идентификатора отправителя сообщения (например, конкретного устройства, актива, клиента), функции агрегирования (например, “Average”, “Sum”, “Min”, “Max”), значения интервала агрегирования (например, 1 минута, 6 часов).
 
 
-Intervals are periodically persisted based on **interval persistence policy** and **interval check value**. Intervals are cached in memory based on **Interval TTL value**.
-State of the Intervals are persisted as timeseries entities based on **state persistence policy** and **state persistence value**.
-In case there is no data for certain entity, it might be useful to generate default values for those entities. 
-To lookup those entities one may select **Create intervals automatically** checkbox and configure **Interval entities**.
+Интервалы периодически сохраняются по политике сохранения интервалов и значения проверок интервалов. Интервалы кэшируются в памяти по значению интервала TTL. Состояние интервалов сохраняется в формате объектов временных рядов по политике сохранения состояний и значений сохранения состояний. В случае отсутствия данных для определенных сущностей можно сгенерировать значения по умолчанию для этих сущностей. Для поиска этих сущностей можно установить флажок «Автоматически создавать интервалы» и настроить сущности интервалов.
 
 
-Generates 'POST_TELEMETRY_REQUEST' messages with the results of the aggregation for particular interval.
+Генерирует сообщения типа "POST_TELEMETRY_REQUEST’ с результатами агрегации для определенного интервала.
 
 
-Configuration below will calculate average hourly temperature and will persist it within one minute once the hourly interval is ended. 
-In case some delayed telemetry will arrive for the particular interval, the rule node will lookup it from internal cache or from telemetry values.
+С помощью ниже указанных настроек можно рассчитать среднюю почасовую температуру и сохранить ее в течение одной минуты после окончания часового интервала. В случае, если для определенного интервала телеметрия поступит с задержкой, узел правила будет искать ее во внутреннем кэше или среди значений телеметрии.
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-stream-config.png)
     
-The results of aggregation will be persisted to the database once per minute. Alternatively you can persist the interval on each new message to avoid any data loss in case of server outage.
-In case devices for some building are not reporting any temperature readings, we can generate default value (zero) for such building on each interval by selecting "Create Intervals automatically" and 
-specifying "Buildings" entity group.    
+Результаты агрегирования будут сохраняться в базе данных раз в минуту. Кроме того, вы можете сохранить интервал для каждого нового сообщения, чтобы избежать потери данных в случае отключения сервера. В случае, если приборы для какого-либо здания не сообщают показания температуры, можно сгенерировать значение по умолчанию (равное нулю) для такого здания на каждом интервале, выбрав пункт “Создавать интервалы автоматически” и указав группу сущностей “Здания”.   
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-aggregate-stream-config-2.png)
 
 # Alarms Count Node
 
-<table  style="width:12%">
-   <thead>
-     <tr>
-	 <td style="text-align: center"><strong><em>Since TB Version 2.1</em></strong></td>
-     </tr>
-   </thead>
-</table> 
-
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-alarms-count.png)
 
-Periodically does count of alarms for selected set of entities.
+Узел периодически делает подсчет сигналов тревоги для выбранного набора объектов.
 
-Performs count of alarms for selected entities including their child entities if specified with configurable period.
+Выполняет подсчет сигналов для выбранных объектов, включая их дочерние объекты, если они заданы с настраиваемым периодом.
 
-Result of alarms count then set to specified target timeseries attribute of the entity.
+Предоставляет результаты подсчета сигналов, затем добавляет данные в указанный атрибут временных рядов объекта.
 
-Message of type **POST_TELEMETRY_REQUEST** is generated for each entity and alarms count result.
+Генерирует сообщение типа POST_TELEMETRY_REQUEST для каждого объекта и результата подсчета сигналов.
 
-Configuration:
+Настройки:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-alarms-count-config.png)
 
-- **Execution period value/time unit** - specifies period of alarms count task.
-- **Entities** - specifies set of entities for which alarms count should be performed. Can be: 
-    - **Single entity** - one specific entity. 
-    - **Group of entities** - specific entity group. 
-    - **Relations query** - set of entities found by **Relations query** starting from the **Root entity**.
-- **Count alarms for child entities** - whether to perform alarms count for child entities of each found entity.    
-- **Child entities** - specifies **Relations query** used to find child entities starting from the parent entity.
-Should be specified only when **Count alarms for child entities** is checked and **Single entity** or **Relations query** is selected for entities.
-In case of **Group of entities** child entities selected from the entity group itself.
-- **Alarms count mappings** - table of mapping configurations specifying rules used to count alarms.
+- **Execution period value/time unit** - значение/ единица времени периода выполнения - задает период выполнения задачи подсчета сигналов тревоги.
+- **Entities** - Сущности - задает набор сущностей, для которых должен выполняться подсчет сигналов. Сущности могут быть: 
+    - **Single entity** - одна конкретная сущность. 
+    - **Group of entities** - определенная группа сущностей. 
+    - **Relations query** - sнабор сущностей, найденных запросом отношений, начиная с корневой сущности.
+- **Count alarms for child entities** - подсчет сигналов для дочерних сущностей - следует ли выполнять подсчет тревог для дочерних сущностей каждого найденного объекта.    
+- **Child entities** - Дочерние сущности - задает запрос отношений, используемый для поиска дочерних сущностей, начиная с родительской сущности. Их следует указывать только в том случае, если установлен флажок «Считать сигналы тревоги для дочерних сущностей» и выбраны типа Одиночная сущность или Запрос отношений. В случае группы сущностей дочерние сущности выбираются из самой группы сущностей.
+- **Alarms count mappings** - сопоставление количества сигналов тревоги - таблица настроек отображения, указывающая правила, используемые для подсчета сигналов тревоги.
 
 Mapping Configuration:
 
 ![image](/images/user-guide/rule-engine-2-0/pe/nodes/analytics-alarms-count-mapping-config.png)
 
-- **Target telemetry** - name of the target telemetry key of the entity used to store alarms count result.
-- **Status filter** - list of allowed alarm statuses used to filter alarms. If not specified alarms with any status will be selected. 
-- **Severity filter** - list of allowed alarm severities used to filter alarms. If not specified alarms with any severity will be selected. 
-- **Type filter** - list of allowed alarm types used to filter alarms. If not specified alarms with any type will be selected.
-- **Specify interval** - if checked only alarms created during specified interval will be selected otherwise alarms will be selected for the entire time.
+- **Target telemetry** - целевая телеметрия - имя ключа целевой телеметрии объекта. Ключ используется для хранения результатов подсчета сигналов тревоги.
+- **Status filter** - фильтр статусов - список разрешенных статусов, по которым можно выполнять фильтрацию сигналов. Если фильтр не установлен, то будут выбраны сигналы тревоги с со всеми статусами. 
+- **Severity filter** - фильтр серьезности - список разрешенных значений серьезности, по которым можно выполнять фильтрацию сигналов. Если фильтр не установлен, то будут выбраны сигналы тревоги со всеми степенями серьезности. 
+- **Type filter** - фильтр по типу - список разрешенных типов, по которым можно выполнять фильтрацию сигналов. Если не указано, то будут выбраны сигналы тревоги со всеми типами.
+- **Specify interval** - указать интервал - если установлен флажок, то будут выбраны только те сигналы тревоги, которые были созданы в течение указанного интервала. Если флажок не установлен, в выборку попадут все существующие сигналы тревоги.
 
-For each selected entity node will generate and forward via **Success** chain new messages of type **POST_TELEMETRY_REQUEST** 
-and json body containing target telemetry with alarms count value.
-In case when alarms count for some entity will fail node will generate failure message
-with failure reason and entity as originator. Failure message is forwarded via **Failure** chain.
+Для каждого выбранного узла сущности будут генерироваться и пересылаться по цепочке **Success** новые сообщения типа POST_TELEMETRY_REQUEST, а также тело в формате json, в котором содержится целевая телеметрия со значением количества тревог. В случае, если произойдет сбой при подсчете количества сигналов тревоги для сущности, узел сгенерирует сообщение об ошибке с указанием причины сбоя и передаст сущность в качестве отправителя сообщения. Сообщение об отказе пересылается по цепочке **Failure**
 
 <br/>

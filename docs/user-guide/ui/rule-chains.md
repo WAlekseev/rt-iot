@@ -2,50 +2,50 @@
 layout: docwithnav
 assignees:
 - vparomskiy
-title: Rule Chains
-description: ThingsBoard Rule Chains management
+title: Цепочки правил
+description: Цепочки правил
 
 ---
 
 * TOC
 {:toc}
 
-## Rule Chains page
+## Страница «Цепочки правил»
 
-Rule Chains Administration UI page displays a table of configured tenant rule chains.
-You are able to do following operations:
+Страница «Цепочки правил» в UI администратора отображает таблицу настроенных цепочек правил клиента. Вы можете выполнять следующие операции:
 
- - Import Or Create new Rule Chain
- - Export Rule Chain to JSON
- - Mark Rule Chain as **Root Rule Chain**
- - Delete the Rule Chain
+ - Импорт или создание новой цепочки правил
+ - Экспорт цепочки правил в JSON
+ - Отметить цепочку правил как корневую
+ - Удалить цепочку правил
+
  
-See [**Rule Engine**](/docs/user-guide/rule-engine-2-0/re-getting-started/) documentation for more details.
+Дополнительные сведения см. в [**документации по движку правил**](/docs/user-guide/rule-engine-2-0/re-getting-started/).
 
 ![image](/images/user-guide/ui/rule-chain-page.png)
 
-## Rule Chains import/export
+## Импорт/экспорт цепочек правил
 
-#### Rule Chain export
+#### Экспорт цепочки правил
 
-You are able to export your rule chain to JSON format and import it to the same or another ThingsBoard instance.
+Вы можете экспортировать цепочку правил в формат JSON и импортировать ее в тот же или другой экземпляр IoT-платформы Ростелеком.
 
-In order to export rule chain, you should navigate to the **Rule Chains** page and click on the export button located on the particular rule chain row.
+Для экспорта цепочки правил необходимо перейти на страницу «Цепочки правил» и нажать на кнопку «Экспорт», расположенную в определенной строке цепочки правил.
  
 ![image](/images/user-guide/ui/export-rule-chain.png)
 
-#### Rule import
+#### Импорт цепочки правил
 
-Similar, to import the rule chain you should navigate to the **Rule Chains** page and click on the "+" button located in the top-right corner of the **Rule chains** table and then choose "Import rule chain" option. 
+Аналогично, чтобы импортировать цепочку правил, вам нужно перейти на страницу «Цепочки правил» и нажать на кнопку “+”, расположенную в правом верхнем углу таблицы, а затем выбрать опцию “Импортировать цепочку правил”.
 
 ![image](/images/user-guide/ui/rule-import.png)
 
-**Note 1:** All imported Rule chains are **Not** Root Rule Chains.
+**Примечание 1:** Все импортированные цепочки правил не являются корневыми
  
-**Note 2:** If imported Rule Chain contains references to other Rule Chains (via **Rule Chain** node), then you will need to update those references before saving Rule Chain. 
+**Примечание  2:** Если импортированная цепочка правил содержит ссылки на другие (прописанные через узел «Цепочки правил»), перед её сохранением вам нужно будет обновить эти ссылки. 
 
-#### Troubleshooting
+#### Диагностика
 
-Possible issues while importing the rule:
+Возможные проблемы при импорте цепочки правил:
 
- - References to other Rule Chains via **Rule Chain** node should be updated before saving changes.
+ - Ссылки на другие цепочки правил, прописанные через соответствующий узел, должны быть обновлены перед сохранением изменений.

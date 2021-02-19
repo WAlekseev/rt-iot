@@ -1,24 +1,21 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Widgets Library
-description: ThingsBoard Dashboard Widgets Library
+title: Библиотека Виджетов
+description: Библиотека Виджетов
 
 ---
 
 * TOC
 {:toc}
 
-## Introduction
+## Введение
 
-All [IoT Dashboards](/docs/user-guide/ui/dashboards/) are constructed using **ThingsBoard widgets** that are defined in Widget Library.
-Each widget provides end-user functions such as data visualization, remote device control, alarms management and displaying static custom html content.
+Все IoT-дашборды создаются с использованием виджетов, представленных в библиотеке виджетов. Каждый виджет предоставляет конечным пользователям такие функции, как визуализация данных, дистанционное управление устройствами, управление сигналами тревоги и отображение статического пользовательского html-контента.
 
-## Widget Types
+## Типы виджетов
 
-According to the provided features, each widget definition represents specific widget type.
-At the moment there are five widget types:
+В соответствии с предоставленными функциями каждое определение виджета представляет определенный его тип. 
+На данный момент существует пять типов виджетов:
 
  - [Latest values](#latest-values)
  - [Time-series](#time-series)
@@ -26,184 +23,175 @@ At the moment there are five widget types:
  - [Alarm widget](#alarm-widget)
  - [Static](#static)
  
-Each widget type has own specific datasource configuration and corresponding widget API.
-Each widget requires datasource for data visualization. Types of the available datasource depend on widget type of the widget:
+Каждый тип виджета имеет собственную конфигурацию источника данных и соответствующий API. 
+Каждый виджет требует источника данных для их визуализации. 
+Типы доступных источников данных зависят от типа виджета:
 
- - Target device - this datasource type is used in RPC. Basically, you need to specify target device for RPC widget
- - Alarm source - this datasource type is used in Alarm widgets. This datasource requires source entity to display related alarms and corresponding alarm fields.
- - Entity - this datasource type is used in both time-series and latest values widgets. Basically, you need to specify target entity and timeseries key or attribute name.
- - Function - this datasource type is used in both time-series and latest values widgets for debug purposes. 
-   Basically, you are able to specify a javascript function that will emulate data from a device in order to tune visualization.
+* Целевое устройство - этот тип источника данных используется в RPC. Прежде всего, вам нужно указать целевое устройство для виджета RPC.
+* Источник тревоги – этот тип источника данных используется в виджетах сигнализации. Он требует, чтобы исходная сущность отображала связанные сигналы тревоги и соответствующие поля сигналов тревоги.
+* Сущность – этот тип источника данных используется как в виджетах временных рядов, так и в виджетах последних значений. Прежде всего, вам нужно указать целевую сущность и ключ временных рядов или имя атрибута.
+* Функция – этот тип источника данных используется как в виджетах временных рядов, так и в виджетах последних значений для целей отладки. 
 
-### Latest values
+Прежде всего, вы нужно указать функцию javascript, которая будет эмулировать данные с устройства, чтобы настроить визуализацию.
 
-Displays latest values of particular entity attribute or timeseries data point (for ex. any Gauge Widget or Entities Table widget).
-This kind of widgets uses values of entity attribute(s) or timeseries as datasource.   
+### Последние значения
+
+Отображает последние значения определенного атрибута сущности или точки данных временных рядов (например, любой виджет датчика или виджет таблицы сущностей). Этот вид виджетов использует значения атрибутов сущностей или временных рядов в качестве источника данных. 
  
 ![image](/images/user-guide/ui/widgets/latest-values-datasource.png)
 
-Below is an example of latest values widget - Digital Gauge displaying current power value. 
+Ниже приведен пример виджета последних значений – цифровой датчик, отображающий текущее значение мощности. 
 
 ![image](/images/user-guide/ui/widgets/latest-values-widget-example.png)
 
-### Time-series
+### Временные ряды
 
-Displays historical values for the selected time period or latest values in the certain time window (for ex. "Timeseries - Flot" or "Timeseries table").
-This kind of widgets uses only values of entity timeseries as datasource.
-In order to specify the time frame of displayed values, **Timewindow** settings are used.
-Timewindow can be specified on the dashboard level or on the widget level. It can be either realtime - dynamically changed time frame for some latest interval, or history - fixed historical time frame.
-All these settings are part of **Time-series** widget configuration.          
+Отображение исторических значений за выбранный период времени или последних значений в определенном временном окне (например. "Timeseries-Flot" или "timeseries table"). 
+Этот вид виджетов использует в качестве источника данных только значения временных рядов сущностей.
+
+Для указания временных рамок отображаемых значений используются настройки «Timewindow». «Timewindow» может быть задан на уровне дашборда или виджета. Это может быть либо динамически изменяемый временной фрейм для последнего временного интервала, либо фиксированный исторический временной фрейм. 
+Все эти настройки являются частью конфигурации виджета временных рядов.         
  
 ![image](/images/user-guide/ui/widgets/time-series-datasource.png)
 
-Below is an example of time series widget - "Timeseries - Flot" displaying amperage values of three devices in real-time. 
+Ниже приведен пример виджета временных рядов - "Timeseries-Flot", отображающего значения силы тока трех устройств в режиме реального времени. 
 
 ![image](/images/user-guide/ui/widgets/time-series-widget-example.png)
 
-### RPC (Control widget)
+### RPC (виджет управления)
 
-Allows to send RPC commands to devices and handles/visualize reply from the device (for ex. "Raspberry Pi GPIO Control").
-RPC widgets are configured by specifying target device as target endpoint for RPC commands.
+Позволяет отправлять команды RPC на устройства и обрабатывать/визуализировать ответ с устройства (например. "Raspberry Pi GPIO Control"). 
+Виджеты RPC настраиваются путем указания целевого устройства в качестве конечной точки назначения для команд RPC.
 
 ![image](/images/user-guide/ui/widgets/rpc-datasource.png)
 
-Below is an example of RPC widget - "Basic GPIO Control" - sending GPIO switch commands and detecting current GPIOs switch status.
+Ниже приведен пример виджета RPC - "Basic GPIO Control" - отправка команд коммутатора GPIO и определение текущего состояния коммутатора GPIO.
 
 ![image](/images/user-guide/ui/widgets/rpc-widget-example.png)
 
-### Alarm Widget
+### Виджет сигнализации
 
-Display alarms related to the specified entity in the certain time window (for ex. "Alarms table").
-Alarm widgets are configured by specifying entity as alarms source and corresponding alarm fields.
-Like **Time-series widgets** alarm widgets have the timewindow configuration in order to specify the time frame of displayed alarms.
-Additionally configuration contains "Alarm status" and "Alarms polling interval" parameters.
-"Alarm status" parameter specifies the status of alarms being fetched. "Alarms polling interval" controls alarms fetching frequency in seconds. 
+Отображение сигналов тревоги, связанных с указанным объектом, в определенном временном окне (например. "Таблица аварийных сигналов"). Виджеты тревоги настраиваются путем указания сущности в качестве источника тревоги и заполнения соответствующих полей тревоги. Как и Виджеты временных рядов, виджеты сигнализации имеют конфигурацию «timewindow» для указания временных рамок отображаемых сигналов тревоги. Дополнительно конфигурация содержит параметры «Статус тревоги» и «Интервал опроса сигнала тревоги». 
+Параметр "Статус тревоги" указывает состояние извлекаемых сигналов. “Интервал опроса сигналов тревоги " управляет частотой извлечения сигналов тревоги в секундах.
 
 ![image](/images/user-guide/ui/widgets/alarm-datasource.png) 
 
-Below is an example of Alarm widget - "Alarms table" displaying latest alarms for the asset in real-time. 
+Ниже приведен пример виджета сигнализации - "таблица сигналов тревоги", отображающая последние сигналы для актива в режиме реального времени.
 
 ![image](/images/user-guide/ui/widgets/alarm-widget-example.png)
 
-### Static
+### Статический
 
-Displays static customizable html content (for ex. "HTML card").
-Static widgets don't use any datasources and usually configured by specifying static html content and optionally css styles.
+Отображает статический настраиваемый html-контент (например. "HTML-карта"). Статические виджеты не используют никаких источников данных и обычно настраиваются путем указания статического html-контента и, возможно, стилей css.
 
 ![image](/images/user-guide/ui/widgets/static-html.png)
 
-Below is an example of a Static widget - "HTML card" displaying specified html content. 
+Ниже приведен пример статического виджета - "HTML-карты", отображающей заданный html-контент.
 
 ![image](/images/user-guide/ui/widgets/static-widget-example.png) 
  
-## Widgets Library (Bundles)
+## Библиотека Виджетов (Пакеты)
 
-Widget definitions are grouped into widget bundles according to their purpose. There are System level and Tenant level **Widgets Bundles**.
-Initial ThingsBoard installation is shipped with the basic set of system level **Widgets Bundles**.
-There are more than thirty widgets in seven widget bundles available out-of-the-box.
-System level bundles can be managed by a **System administrator** and are available for use by any tenant in the system.
-Tenant level bundles can be managed by a **Tenant administrator** and are available for use only by this tenant and its customers. 
-You can always implement and add your widgets by following this [guide](/docs/user-guide/contribution/widgets-development/).
+Определения виджетов сгруппированы в пакеты виджетов в соответствии с их назначением. Существуют пакеты виджетов системного уровня и уровня тенанта. Платформа включает в себя базовый набор Пакетов виджетов системного уровня. Существует более тридцати виджетов в семи пакетах. Пакеты системного уровня могут управляться системным администратором и доступны для использования любым клиентом в системе. 
+Пакетами уровня клиента может управлять клиент-администратор, они доступны для использования только этим тенантом и его клиентами. Вы всегда можете реализовать и добавить свои виджеты, следуя этому руководству.
  
 ![image](/images/user-guide/ui/widget-bundles.png)
  
-### Digital Gauges
+### Цифровые Датчики
  
-Useful for visualization of temperature, humidity, speed and other integer or float values.
+Нужны для визуализации температуры, влажности, скорости и других целых или плавающих значений.
 
 ![image](/images/user-guide/ui/digital-gauges.png)
 
-### Analog Gauges
+### Аналоговые Датчики
  
-Similar to digital gauges, but have a different style. 
+Похожи на цифровые датчики, но имеют другой стиль.
 
 ![image](/images/user-guide/ui/analog-gauges.png)
 
 
-### Charts
+### Диаграммы
  
-Useful for visualization of historical or real-time data with a time window.
+Нужны для визуализации исторических или актуальных данных с временным окном.
 
 ![image](/images/user-guide/ui/charts.png)
 
 ### GPIO widgets
  
-Useful for visualization and control of GPIO state for target devices.
+Нужны для визуализации и контроля состояния GPIO целевых устройств.
 
 ![image](/images/user-guide/ui/gpio-widgets.png)
 
-### Control widgets
+### Управление виджетами
  
-Useful for visualization of current state and sending RPC commands to target devices.
+Нужно для визуализации текущего состояния и отправки команд RPC на целевые устройства.
 
 ![image](/images/user-guide/ui/control-widgets.png)
 
-### Maps widgets
+### Виджеты карт
  
-Useful for visualization of devices geo locations and tracking devices routes both in real-time and history mode.
+Нужны для визуализации геолокации устройств и отслеживания их маршрутов как в режиме реального времени, так и в режиме истории.
 
 ![image](/images/user-guide/ui/maps-widgets.png)
 
-### Cards
+### Карточки
  
-Useful for visualization of timeseries data or attributes in a table or card widget.
+Нужны для визуализации данных временных рядов или атрибутов в виджете таблицы или карты.
 
 ![image](/images/user-guide/ui/cards.png)
 
-### Alarm widgets
+### Виджеты сигнализации
 
-Useful for visualization of alarms for specific entities both in real-time and history mode.
+Нужны для визуализации сигналов тревоги от конкретных объектов как в режиме реального времени, так и в режиме истории.
 
 ![image](/images/user-guide/ui/alarm-widgets.png)
 
-### Gateway widgets
+### Виджеты шлюзов
 
-Useful for managing extensions.
+Нужны для управления расширениями.
 
 ![image](/images/user-guide/ui/gateway-widgets.png)
 
-### Input widgets
+### Входные виджеты
 
-Useful for changing entity attributes.
+Нужны для изменения атрибутов сущностей.
 
 ![image](/images/user-guide/ui/input-widgets.png)
 
-## Widgets Bundles import/export
+## Импорт/экспорт пакетов виджетов
 
-#### Widgets Bundle export
+#### Экспорт пакета виджетов
 
-You are able to export widgets bundle to JSON format and import it to the same or another ThingsBoard instance.
+Чтобы экспортировать пакет виджетов, вы должны перейти на страницу «Библиотека виджетов» и нажать на кнопку «Экспорт», расположенную в определенной строке пакета виджетов.
 
-In order to export widgets bundle, you should navigate to the **Widgets Library** page and click on the export button located on the particular widgets bundle row.
  
 ![image](/images/user-guide/ui/export-widgets-bundle.png)
 
-#### Widgets Bundle import
+#### Импорт пакета виджетов
 
-Similar, to import the widgets bundle you should navigate to the **Widgets Library** page and click on the "+" button in the top-right corner of the **Widgets Bundles** table and then choose "Import widgets bundle" option. 
+Аналогично, чтобы импортировать пакет виджетов, вы должны перейти на страницу «Библиотека виджетов» и нажать на кнопку “+” в правом верхнем углу таблицы «Пакетов виджетов», а затем выбрать опцию «Импортировать пакет виджетов».
 
 ![image](/images/user-guide/ui/import-widgets-bundle.png)
 
-The widgets bundle import window should a popup and you will be prompted to upload the json file.
+Появится всплывающее окно импорта пакета виджетов, и вам будет предложено загрузить файл json.
 
 ![image](/images/user-guide/ui/import-widgets-bundle-window.png)
 
-## Widgets Types import/export
+## Импорт/экспорт типов виджетов
 
-#### Widget Type export
+#### Экспорт типа виджета
 
-You are able to export particular widget type from widgets bundle to JSON format and import it to the same or another ThingsBoard instance.
+Чтобы экспортировать тип виджета, вы должны перейти на страницу «Библиотека виджетов», затем открыть нужный пакет виджетов и, наконец, нажать на кнопку Экспорт, расположенную на конкретной карточке типа виджета.
 
-In order to export widget type, you should navigate to the **Widgets Library** page, then open desired widgets bundle and finally click on the export button located on the particular widget type card.
  
 ![image](/images/user-guide/ui/export-widget-type.png)
 
-#### Widget Type import
+#### Импорт типа виджета
 
-Similar, to import the widget type you should navigate to the **Widgets Library** page, then open your widgets bundle and click on the big "+" button in the bottom-right part of the screen and then click on the import button. 
+Аналогично, чтобы импортировать тип виджета, вы должны перейти на страницу «Библиотека виджетов», открыть свой пакет виджетов и нажать на большую кнопку “+” в правой нижней части экрана, а затем –на кнопку импорта.
 
 ![image](/images/user-guide/ui/import-widget-type.png)
 
-The widget type import window will show a popup and you will be prompted to upload the json file.
+Появится всплывающее окно, и вам будет предложено загрузить файл json.
 
 ![image](/images/user-guide/ui/import-widget-type-window.png)

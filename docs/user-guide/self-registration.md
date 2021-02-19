@@ -1,143 +1,65 @@
 ---
 layout: docwithnav
-title: Self-registration
-description:  
+title: Самостоятельная регистрация
+description: Самостоятельная регистрация
 
 ---
-
-{% assign feature = "Self-registration" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
-ThingsBoard self-registration feature allows tenant to configure sign-up page for its customers to be able to simply sign-up and login to the ThingsBoard with predefined permission configurations.
-This feature was introduced in ThingsBoard PE 2.4.1. 
+Функция самостоятельной регистрации платформы позволяет тенанту настроить страницу регистрации для своих клиентов, чтобы они могли просто зарегистрироваться и войти в систему с предопределенными конфигурациями. 
 
-This documentation page contains complete use case configuration example. 
+## Описание вариантов использования
 
-## Use Case description
+Как тенант-администратор, я хотел бы разрешить пользователям регистрировать свою собственную учетную запись на моем экземпляре IoT-платформы. Как только они зарегистрируются, я хотел бы позволить им видеть конкретные даборды и предоставлять свои собственные устройства или подтверждать существующие. Давайте начнем с предварительных действий.
 
-As a Tenant Administrator, I would like to allow users to register their own account on my IoT Platform instance. 
-Once they register, I would like to allow them to see specific dashboards 
-and provisioning their own devices or claim existing devices. 
-Let’s start with the prerequisites.
+### Шаг 1. Настройка почтового сервера
 
-## Prerequisites
-
-### Step 1. Install ThingsBoard in the cloud 
-
-We will need a running ThingsBoard PE instance with white-labeling feature enabled. 
-You can easily deploy your own ThingsBoard PE instance using the [installation instructions](/docs/user-guide/install/pe/installation-options/). 
-Note that your instance should run in the cloud, and have public IP address assigned to it.
-
-### Step 2. Assign DNS record to your ThingsBoard IP address
-
-We also need a valid **DNS name** to be assigned to your ThingsBoard instance.
-You can use any domain registrar, if you don't have a domain.
-If you do have the domain name, contact your system administrator to issue sub-domain, for example iot.mycompany.com. 
-
-### Step 3. Setup HTTPS access to your ThingsBoard instance
-
-Please note the HAProxy installation instructions in the [post install steps](/docs/user-guide/install/pe/ubuntu/#post-installation-steps). 
-They are available for Linux distributions and Docker. You can easily issue a valid Let's Encrypt certificate and setup HTTPS for your ThingsBoard instance.
-
-### Step 4. ReCAPTCHA v2
-
-We need to protect our sign-up form from Robots. 
-Generate the ReCAPTCHA for that purpose. Navigate to the Google ReCaptcha [admin console](https://www.google.com/recaptcha/intro/v3.html) and use your new domain name there.
-Important: use ReCAPTCHA v2 only. See example configuration below.
-
-![image](/images/user-guide/self-registration/reCAPTCHA.png)
-
-Copy-paste the site key and secret to the safe place.
-
-### Prerequisites summary
-
-We have prepared a ThingsBoard Prototype instance running on DigitalOcean. 
-Specific domain name: srd.thingsboard.io (srd stands for “self registration demo”) to server’s IP address: 46.101.146.242.
-
-![image](/images/user-guide/self-registration/digitalocean.png)
-
-## ThingsBoard configuration
-
-### Step 5. Mail Server settings
-
-Login to your instance as a tenant administrator and navigate to Whitelabeling —> Mail server.
-Configure ThingsBoard using your SMTP server settings. If you don't have one, the easiest way is to use [SendGrid](https://sendgrid.com/).
-See more info in mail settings [guide](/docs/user-guide/ui/mail-settings/).
-
-Don't forget to validate the mail server settings using "Send Test Mail" button.
+Войдите в свой экземпляр платформы в качестве тенант-администратора и перейдите в раздел Whitelabeling —> Mail server. Настройте платформу, используя настройки вашего SMTP-сервера. Если у вас его нет, проще всего использовать SendGrid. Дополнительные сведения см. в руководстве по настройкам почты.
+Не забудьте проверить настройки почтового сервера с помощью кнопки “Отправить тестовое письмо”.
 
 ![image](/images/user-guide/self-registration/mailserver.png)
 
-### Step 6. Create new User Roles
+### Шаг 2. Создайте новые пользовательские роли
 
-Create the “Customer Administrator” Role. Navigate to "Roles" and click on "+" button.
-This role is auto-generated when you create first Customer entity in scope of your Tenant. 
-If you don’t have this Role yet, you can easily add it. 
-The Role type is “Generic” and it allows “All” operations for “All” entities.
+Создайте роль «клиент-администратор». Перейдите в раздел «роли» и нажмите кнопку “+”. Эта роль автоматически генерируется при создании первой сущности «Клиент» в области действий вашего клиента. Если у вас еще нет этой роли, вы можете легко добавить ее. Тип роли является “общим” и позволяет выполнять все операции для всех сущностей.
 
 ![image](/images/user-guide/self-registration/customer-admin-role.png)
 
-So, when you apply this role to your customer user, Customer User can control every entity in scope of the Customer. 
-Of course, you may create different role. For example, we may create a Role that is read-only.
+Таким образом, когда вы применяете эту роль к своему пользователю-клиенту, он может контролировать каждую сущность в своей области действия. Конечно, вы можете создавать разные роли. Например, мы можем создать read-only роль.
 
-“Read-Only” Group Role. We will use this Role to allow read-only access to the specific dashboard. 
-This Dashboard will be the same for all our Self-Registered Customers.
+Групповая read-only роль. Мы будем использовать эту роль, чтобы предоставить read-only доступ к конкретному дашборду. Этот дашборд будет одинаковым для всех наших самостоятельно зарегистрированных клиентов.
 
 ![image](/images/user-guide/self-registration/read-only-role.png)
 
-### Step 6. Create shared dashboard
+### Шаг 3. Создайте общий дашборд
 
-First, navigate to "Device Groups"->"All" and create sample device with name "Device A" and type "sensor". 
-This is necessary to pass certain validation while importing the dashboard. 
+Сначала перейдите в раздел “Группы устройств” -> ”все” и создайте образец устройства с именем “устройство A” и типом “датчик”. Это необходимо для прохождения определенной проверки при импорте дашборда.
+Теперь давайте перейдем к группам дашбордов и создадим новую под названием “Общий дашборд". Импортируйте простой дашборд, который показывает список устройств. Этот дашборд предоставляет возможность добавлять/редактировать/удалять устройства. Кстати, мы используем новый виджет из пакета Entity Admin Widgets Bundle.
 
-Now, let’s navigate to the Dashboard Groups and create a new Group called “Shared Dashboards”.
-Import a [simple dashboard](/docs/user-guide/resources/my_smart_devices_dashboard.json) that shows you a list of devices. 
-This dashboard provides the ability to add/edit/remove devices. 
-BTW, we use new widget from Entity Admin Widgets Bundle.
-
-Few things to notice here. 
+Есть несколько вещей, на которые нужно обратить внимание.
 
 ![image](/images/user-guide/self-registration/dashboard.gif)
 
-Let’s see what happens when we want to add a device. 
-This and other UI forms are configured in the widget configuration. 
-Open an Edit mode, Click on Edit widget and navigate to “Actions”.
-Here you can see three custom actions. 
-Delete action is as simple as that, but Add and Edit Device actions uses brand new feature called “HTML Templates”. 
-Now you can completely control the UI and logic of your dialogs. 
-Let’s open an “Add” action and expand it to full screen.
+Давайте посмотрим, что происходит, когда мы хотим добавить устройство. Эта и другие формы пользовательского интерфейса настраиваются в кофигурациях виджета. Откройте режим редактирования, нажмите кнопку «Изменить виджет» и перейдите в раздел «Действия». Здесь вы можете увидеть три пользовательских действия. Удалить действие легко, но для их добавления и редактирования используется совершенно новая функция под названием “HTML шаблоны”. Теперь вы можете полностью контролировать пользовательский интерфейс и логику ваших диалогов. Давайте откроем действие “добавить” и развернем его на весь экран.
 
 ![image](/images/user-guide/self-registration/dashboard-config.png)
  
-You can see custom Resources, CSS, HTML and JS tabs. 
-This is the exact place where Add/Edit dialogs are configured.
-See more on the custom actions and forms in a separate video tutorial.
+Вы можете увидеть пользовательские ресурсы, вкладки CSS, HTML и JS. Это именно то место, где настраиваются Add/Edit-диалоги. Подробнее о пользовательских действиях и формах смотрите в отдельном видео-руководстве.
 
 ![image](/images/user-guide/self-registration/action-config.png)
 
-### Step 7. Signup Form to open Dashboard on Full Screen 
+### Шаг 4. Заполните форму, чтобы открыть дашборд в полноэкранном режиме
 
-Finally, we can provision our Signup Form. 
-Use your domain and ReCAPTCHA credentials.  
-
-Add two User Group Roles. 
-One is for Customer Administrator. It is important that our new User will be able to create and edit any entities within this Customer.
-Second is the Read-Only access to the shared dashboard that we have just created. We also select this dashboard as default and mark “Always Full Screen”.
-
-Change the text message and privacy policy (optional).
+Наконец, мы можем предоставить нашу регистрационную форму. Используйте свой домен и учетные данные ReCAPTCHA.
+Добавьте две групповые пользовательские роли. Одну – для клиента-администратора. Важно, чтобы наш новый пользователь мог создавать и редактировать любые сущности внутри «Клиента». Вторая дает read-only доступ к общей панели мониторинга, которую мы только что создали. Мы делаем эту панель мониторинга панелью по умолчанию и отмечаем пункт “Всегда полный экран”
+Измените текстовое сообщение и Политику конфиденциальности (опционально).
 
 ![image](/images/user-guide/self-registration/signup-form-config.png)
 
-Congratulations! We have completed our self-registration form setup. Save now and navigate to sign-up form. 
-Create a new user and see that they are completely isolated and control their own devices.
+Поздравляем! Вы завершили настройку формы самостоятельной регистрации. Теперь сохраняйте её и перейдите к форме регистрации. Создайте нового пользователя и убедитесь, что он полностью изолирован и контролирует собственные устройства.
 
-See signup form example below:
+См. пример формы регистрации ниже:
 
 ![image](/images/user-guide/self-registration/signup-form.png)
-
-
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}

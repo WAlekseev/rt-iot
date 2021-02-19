@@ -1,118 +1,92 @@
 ---
 layout: docwithnav
-title: Platform Integrations
-description: Platform Integrations Documentation 
-
+title: Интеграция платформы
+description: Интеграция платформы 
 ---
-
-{% assign feature = "Platform Integrations" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
-### Overview
+### Обзор
 
-ThingsBoard Platform integrations feature was designed for two primary use cases / deployment options:
+Функция интеграции IoT платформы Ростелеком была разработана для двух основных вариантов использования / развертывания:
 
-  - Connect existing NB IoT, LoRaWAN, SigFox and other devices with specific payload formats directly to ThingsBoard platform.
-  - Stream data from devices connected to existing IoT Platforms to enable real-time interactive dashboards and efficient data processing.
-  
-Both use cases have few things in common. There is a server-side component in the deployment topology that prevents direct access to device and provides set of APIs to interact with the device in the field instead.
-The payload format of the device is not well defined. Often two devices that have similar sensors have different payload formats depending on a vendor or even software version.  
+- Подключения существующих устройств NB IoT, LoRaWAN, SigFox и других устройств с определенными форматами полезной нагрузки непосредственно к платформе.
+- Потоковой передачи данных с устройств, подключенных к существующим IoT-платформам, чтобы предоставить обновляющиеся в режиме реального времени интерактивные дашборды, а также эффективную обработку данных.
+Оба варианта использования имеют кое-что общее. В топологии развертывания есть серверный компонент, который предотвращает прямой доступ к устройству и предоставляет набор API для взаимодействия с устройством в полевых условиях. Формат полезной нагрузки устройства четко не определен. Часто два устройства, имеющие одинаковые датчики, имеют разные форматы полезной нагрузки в зависимости от поставщика или даже от версии ПО.
 
-The job of ThingsBoard Integration is to provide secure and reliable API bridge between core platform features (telemetry collection, attributes and RPC calls) and specific third-party platform APIs.    
+Задача интеграции платформы состоит в том, чтобы обеспечить безопасный и надежный API-мост между основными функциями платформы (сбор телеметрии, атрибуты и RPC-вызовы) и конкретными API-интерфейсами сторонних приложений.    
 
-### How it works?
+### Как это работает?
 
-At the moment ThingsBoard supports various integration protocols. Most popular are HTTP, MQTT and OPC-UA. 
-Platform also support integration with specific LoRaWAN Network servers, Sigfox backend, various NB IoT devices using raw UDP and TCP integrations. 
-AWS IoT, IBM Watson and Azure Event Hub allows to subscribe to the data feed from devices via MQTT or AMQP.
+На данный момент платформа поддерживает различные интеграционные протоколы. Наиболее популярные: HTTP, MQTT и OPC-UA. Также платформа поддерживает интеграцию с определенным серверам LoRaWAN Network, Sigfox backend, различными устройствами NB IoT с помощью RAW UDP и TCP интеграции. Возможности интеграции с другими платформами позволяют подписаться на канал данных от устройства через MQTT или AMQP.
 
-The list of platform integrations is constantly growing, however, the general integration concepts are the same and explained below.  
+Как только сообщение поступает из внешней платформы в IoT платформу Ростелеком, оно проходит проверку в соответствии с форматом полезной нагрузки платформы и правилами безопасности. После проверки сообщения интеграция платформы вызывает преобразователь uplink-данных для извлечения значимой информации из входящего сообщения. Сообщение в основном преобразуется из полезной нагрузки, специфичной для устройства и платформы, в формат, используемый платформой.
 
-Once message arrives from External Platform to ThingsBoard it passes validation according to platform specific payload format and security rules. 
-Once message is validated ThingsBoard Integration invokes assigned [**Uplink Data Converter**](/docs/user-guide/integrations/#uplink-data-converter) to extract sub-set of meaningful information out of the incoming message. 
-The message is basically transformed from device and platform specific payload to the format that ThingsBoard uses.
+Частые случаи использования:
+- изменение частоты загрузки данных с помощью изменения значения общего атрибута
+- запуск процедуры обновления прошивки с помощью изменения значения общего атрибута
+- изменение состояния устройства с помощью RPC-вызова;
 
-Since TB PE v2.0, Rule Engine is also able to push Downlink messages to the integrations. The example of such message may be:
- 
- - notification about [shared attribute](/docs/user-guide/attributes/#device-specific-attribute-types) (configuration) update;
- - notification about [oneway RPC call](/docs/user-guide/rpc/#server-side-rpc-api) to trigger some action on the device;
- - any custom message from the rule engine.
- 
-The most common use cases are:
- 
- - changing data upload frequency based on shared attribute value change
- - triggering firmware update procedure based on shared attribute value change
- - changing device state based on rpc call;    
- 
-Once message is pushed by the rule engine, ThingsBoard invokes assigned [**Downlink Data Converter**](/docs/user-guide/integrations/#downlink-data-converter) and transforms the rule engine message to the specific data format that is used by the Integration.  
+Как только сообщение посылается механизмом правил, платформа вызывает преобразователь downlink-данных и преобразовывает сообщение в определенный формат, используемый интеграцией.
 
 <br/>
 
- ![image](/images/user-guide/integrations/integrations-overview.svg)
+<object width="80%" data="/images/user-guide/integrations/integrations-overview.svg"></object>
  
  
-### Deployment options
+### Варианты развертывания
  
-ThingsBoard Integration has two deployment options: embedded and remote. See details and architecture diagrams below.
+Интеграция IoT платформы Ростелеком имеет два варианта развертывания: встроенный и удаленный. Подробные сведения и архитектурные схемы показаны ниже.
 
-#### Embedded integrations
+#### Встроенные интеграции
+Встроенная интеграция выполняется в основном процессе сервера платформы. В основном это часть сценария монолитного деплоя.
 
-Embedded integration is running in the main ThingsBoard server process. Basically it is part of a monolith deployment scenario.
+Плюсы:
+- упрощает развертывание новой интеграции (всего несколько кликов в пользовательском интерфейсе платформы)
+- минимальная задержка доставки сообщения
 
-Pros:
-  * simplifies deployment of new integration (just few clicks on ThingsBoard UI);
-  * minimize latency for message delivery;
+Минусы:
+- потребление ресурсов, выделяемых на основные процессы платформы: сетевые подключения, потоки ОС и циклы процессора;
+- низкий уровень изоляции;
+- невозможность получить доступ к локальным брокерам MQTT или серверам OPC-UA, если платформа развернута в облаке.
   
-Cons:
-  * consume resources allocated to main ThingsBoard process: network connections, OS threads and CPU cycles;
-  * low level of isolation;
-  * can't access local MQTT brokers or OPC-UA servers if ThingsBoard is deployed in the cloud.
+<object width="60%" data="/images/user-guide/integrations/embeded-integrations-overview.svg"></object> 
   
-![image](/images/user-guide/integrations/embeded-integrations-overview.jpg)  
-  
-#### Remote integrations
+#### Удаленная интеграция
  
-Remote integration become available since ThingsBoard PE v2.4.1 and enables new deployment scenario. 
-One can install remote integration in the local network and stream data to the cloud.   
+Можно установить удаленную интеграцию в локальной сети и передавать данные в облако.
+Предположим, что у вас есть локальный брокер MQTT или сервер OPC-UA, развернутый локально. Эти брокеры и серверы не имеют выделенного внешнего IP-адреса, поэтому облачная платформа не может подключиться к ним напрямую. Однако вы можете установить удаленную интеграцию в той же локальной сети, в которой находится сервер. Эта интеграция будет подключаться к брокеру/серверу, извлекать данные и хранить их в локальной файловой системе. Удаленная интеграция будет передавать данные в облачную платформу, когда будет доступно подключение к интернету.
 
-Let's assume you have local MQTT broker or OPC-UA server deployed on-premises. 
-Those brokers and/or servers don't have dedicated external IP address, so ThingsBoard instance in the cloud can't connect to them directly. 
-However, you can install remote integration close to this server, in the same local network. 
-This integration will connect to the broker/server, pull the data and store it in the local file system.
-Remote integration will stream the data to the ThingsBoard instance deployed in the cloud once the internet connection is available.
+Плюсы:
 
-Pros:
-  * enables integration with servers deployed in the local network;
-  * isolates the integration process from main ThingsBoard process;
-  
-Cons:
-  * requires installation of a separate package;
+- реализует интеграцию с серверами, развернутыми в локальной сети;
+- изолирует процесс интеграции от основных процессов платформы;
 
-Learn how to configure integration to run remotely using [this guide](/docs/user-guide/integrations/remote-integrations).
+Минусы:
 
-![image](/images/user-guide/integrations/remote-integrations-overview.jpg)  
+- требуется установка отдельного пакета;
+Как настроить интеграцию для удаленного запуска
 
-### Data Converters
+<object width="70%" data="/images/user-guide/integrations/remote-integrations-overview.svg"></object> 
 
-Data Converters is a part of the Platform Integrations feature. There are Uplink and Downlink data converters.
+### Конвертеры данных
+
+Это часть функции интеграции платформы. Существуют восходящие и нисходящие преобразователи данных.
  
-#### Uplink Data Converter
+#### Uplink конвертер данных
 
-The main function of Uplink Data Converter is to parse payload of the incoming message and transform it to format that ThingsBoard uses.
-  
-Uplink Converter is basically a user defined function with the following signature:
+Основная функция данного конвертора заключается в анализе полезной нагрузки входящего сообщения и в преобразовании его в формат, используемый платформой.
+Это пользовательская функция:
 
 ```javascript
 function Decoder(payload, metadata);
 ```
 
-##### Payload
+##### Полезная нагрузка
 
-Payload is one of the following content types: JSON, TEXT, Binary(Base64) and is specific to your Integration type.
-
-Default Uplink Converter is dummy, but contains few helper functions to transform incoming payload:
+Это данные, сохраняющиеся в форматах: JSON, TEXT, Binary(Base64). Специфичны для вашего типа интеграции.
+В шаблоне восходящего конвертора содержатся вспомогательные функции для преобразования входящей полезной нагрузки:
 
 ```javascript
 function decodeToString(payload) {
@@ -127,16 +101,15 @@ function decodeToJson(payload) {
 }
 ```
 
-There are also **btoa** and **atob** functions available to decode Binary(Base64) payload.  
+Существуют также функции btoa и atob, доступные для декодирования полезной нагрузки, хранящейся в двоичном формате (Base64).  
 
-##### Metadata
+##### Метаданные
 
-Metadata is a key-value map with some integration specific fields. You can configure additional metadata for each integration in the integration details.
-For example, you can put device type as an additional Integration metadata parameter and use it to automatically assign corresponding device type to new devices.
+Это карта, хранящаяся в формате «ключ-значение», с некоторыми полями, специфичными для интеграции. Дополнительные метаданные для каждой интеграции можно настроить в разделе «Сведения об интеграции». Например, вы можете указать тип устройства в качестве дополнительного параметра метаданных интеграции и использовать его для автоматического назначения соответствующего типа новым устройствам
 
-##### Converter output
+##### Результаты конвертации
  
-Converter output should be a valid JSON document with the following structure:
+Результаты конвертации должны сохраняться документом в формате JSON со следующей структурой:
 
 ```json
 {
@@ -156,13 +129,11 @@ Converter output should be a valid JSON document with the following structure:
 }
 ```
 
-**NOTE**: The only mandatory parameters in the output JSON are **deviceName** and **deviceType**. 
-Starting version 2.4.2, ThingsBoard also supports **assetName** and **assetType** instead of deviceName and deviceType.
+**Примечание**:единственными обязательными параметрами в данном JSON являются deviceName и deviceType, платформа также поддерживает assetName и assetType вместо deviceName и deviceType.
 
-**NOTE**: Starting version 2.4.2, ThingsBoard also support optional **customerName** and **groupName**. 
-Those parameters will cause ThingsBoard to automatically create customer and/or entity group and assign those entities to the customer and/or group.     
+**Примечание**: платформа также поддерживает необязательные параметры customerName и groupName. Они используются для автоматического создания группы клиентов и сущностей и назначения этих сущностей клиенту и группе.
 
-Converter may also output array of device values and/or contain timestamps in the telemetry values. For example:
+Конвертер может также выводить массив значений устройств и содержать временные метки в телеметрических значениях. Например:
 
 ```json
 [
@@ -206,17 +177,15 @@ Converter may also output array of device values and/or contain timestamps in th
 ]
 ```
  
-##### Example
+##### Пример
 
-Let's assume a complex example where payload is encoded in hex "value" field and there is a timestamp associated with each record. 
-First two bytes of "value" field contain battery and second two bytes contain temperature. See payload example and metadata on a screen shoot below:
+Рассмотрим сложный пример, где полезная нагрузка кодируется в шестнадцатеричном поле “Значение” и каждой записи присваивается временная метка. Первые два байта поля содержат показания аккумулятора, а вторые два – показания температуры. Пример полезной нагрузки и метаданных:
 
 ![image](/images/user-guide/integrations/uplink-converter-example.png) 
 
+Полный исходный код функции javascript, используемой в конвертере, доступен здесь [ссылка](/docs/user-guide/resources/uplink-data-converter-example.js).
 
-The full source code of javascript function used in converter is available [**here**](/docs/user-guide/resources/uplink-data-converter-example.js). 
-
-See video tutorial below for step-by-step instruction how to setup Uplink Data Converter.
+В видео-инструкции ниже показано, как запустить восходящий конвертор данных
 
 <br/>
 <div id="video">  
@@ -225,27 +194,26 @@ See video tutorial below for step-by-step instruction how to setup Uplink Data C
     </div>
 </div> 
 
-#### Downlink Data Converter
+#### Downlink дата конвертер
  
-The main function of Downlink Data Converter is to transform the incoming rule engine message and its metadata 
-to the format that is used by corresponding Integration. 
+Основная функция данного конвертора заключается в преобразовании входящего сообщения движка правил и его метаданных в формат, используемый соответствующей интеграцией.
 
-Downlink Converter is basically a user defined function with the following signature:
+Это пользовательская функция:
 
 ```javascript
 function Decoder(msg, metadata, msgType, integrationMetadata);
 ```
 
-Where
+В которой
 
- - **msg** - JSON with rule engine msg
- - **metadata** - list of key-value pairs with additional data about the message (produced by the rule engine)
- - **msgType** - Rule Engine message type. See [predefined message types](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types) for more details.
- - **integrationMetadata** - key-value map with some integration specific fields. You can configure additional metadata for each integration in the integration details.
+ - **msg** - JSON с msg движка правил
+ - **metadata** - список пар «ключ-значение» с дополнительными данными о сообщении (создается движком правил)
+ - **msgType** - тип сообщения движка правил. Подробнее в разделе [Предопределенные типы сообщений](/docs/user-guide/rule-engine-2-0/overview/#predefined-message-types).
+ - **integrationMetadata** - карта в формате «ключ-значение» с некоторыми специфичными для интеграции полями. Дополнительные метаданные для каждой интеграции можно настроить в разделе Сведения об интеграции..
   
-##### Converter output
+##### Результаты конвертации
 
-Converter output should be a valid JSON document with the following structure:
+Должны сохраняться в формате JSON-документа:
 
 ```json
 {
@@ -257,83 +225,76 @@ Converter output should be a valid JSON document with the following structure:
 }
 ```
 
-Where 
+где
 
- - **contentType** - JSON, TEXT or BINARY (Base64 string) and is specific to your Integration type.
- - **data** - data string according to the content type
- - **metadata** - list of key-value pairs with additional data about the message. For example, topic to use for MQTT integration, etc.
+ - **contentType** - значение JSON, TEXT или BINARY (Base64 string). Оно специфично для вашего типа интеграции.
+ - **data** - строка данных по типу контента.
+ - **metadata** - список пар «ключ-значение» с дополнительными данными о сообщении. Например, тема для использования для интеграции MQTT и т. д.
 
-##### Example
+##### Пример
 
-Let's assume an example where temperature and humidity upload frequency attributes are updated via ThingsBoard REST API and 
-you would like to push this update to an external MQTT broker (TTN, Mosquitto, AWS IoT, etc). 
-You may also want to include the "firmwareVersion" attribute value that was configured long time ago and is not present in this particular request.
-The topic to push the update should contain the device name.
+Рассмотрим пример, когда атрибуты, отвечающие за частоту загрузки показателей температуры и влажности, обновляются через REST API платформы. И, предположим, вы хотите отправить эти обновленные данные внешнему брокеру MQTT (TTN, Mosquitto, AWS IoT и т.д.). 
+Вы также можете включить значение атрибута “firmwareVersion”, который был ранее настроен и сейчас отсутствует в этом конкретном запросе. 
+Тема для отправки обновления должна содержать имя устройства.
 
 ![image](/images/user-guide/integrations/downlink-converter-example.png) 
 
 
-The full source code of javascript function used in converter is available [**here**](/docs/user-guide/resources/downlink-data-converter-example.js). 
+Полный исходный код функции javascript, используемой в конвертере, доступен [**здесь**](/docs/user-guide/resources/downlink-data-converter-example.js). 
 
-In order to invoke the downlink processing by the integration, tenant administrator should configure the rule chain similar to the one below:
+Чтобы вызвать нисходящую обработку интеграцией, тенант-администратор должен настроить цепочку правил таким образом:
 
 ![image](/images/user-guide/integrations/downlink-rule-chain-example.png)
 
-The full rule chain configuration is available [**here**](/docs/user-guide/resources/downlink_example_rule_chain.json).
+Полная настройка цепочки правил доступна [**здесь**](/docs/user-guide/resources/downlink_example_rule_chain.json).
 
-##### Synchronous vs Asynchronous Downlinks 
+##### Синхронный и асинхронный Downlinks 
 
-Most of the integrations are able to process downlink messages to devices asynchronously. 
-For example, each message pushed by the rule engine to MQTT based integration is immediately pushed to the corresponding external MQTT broker.
+Большинство интеграций способны обрабатывать нисходящие сообщения на устройства асинхронно. Например, каждое сообщение, передаваемое движдком правил для интеграции на основе MQTT, немедленно передается соответствующему внешнему брокеру MQTT.
+Однако некоторые интеграции, такие как SigFox или generic HTTP, не могут передавать сообщения асинхронно. Эти интеграции, из-за особенностей базового протокола HTTP, способны только синхронно передавать информацию по нисходящей линии связи в ответ на запрос сообщения по восходящей линии связи. В этом случае последнее сообщение по нисходящей линии связи, созданное движком правил, будет храниться в очереди до тех пор, пока новое сообщение по восходящей линии не будет получено устройством.
 
-However, some integrations, like SigFox or generic HTTP integration are not able to push message asynchroniously. 
-These integrations, due to the nature of underlying HTTP protocol, are only able to push downlink information synchronously in reply to uplink message request. 
-In this case, the last downlink message originated by rule engine will be stored in the queue until the new uplink message arrives for particular device.
+### Режим отладки
+
+Эта функция позволяет сохранять:
+
+- входящие сообщения от сторонней системы;
+- значения метаданных;
+- результаты преобразования данных;
+- результаты обработки полезной нагрузки.
+Режим позволяет быстро разрабатывать конверторы и конфигурировать интеграционные системы. Также с помощью него можно проверять настройки конфигурации, и данный режим следует использовать только для отладки, так как она значительно влияет на производительность.
 
 
-### Debug mode
+### Интеграция платформы и IoT-шлюз
 
-This feature allows to persis: 
+Продвинутые пользователи платформы могут заметить, что функционал Интеграций частично пересекается с функционалом [IoT-шлюза](/docs/iot-gateway/what-is-iot-gateway/).
+Однако существуют определенные различия между этими двумя системами:
 
-  - incoming messages from thirdparty system;
-  - metadata values;
-  - the results of data converter;
-  - results of the payload processing. 
-  
-It enables rapid development of converters and configuration of integrations. 
-This feature allows to validate your configuration setup and should be used only for debug purposes, since it dramatically impacts performance.
+- IoT-шлюз предназначен для деплоя локальной сети, интеграции - для межсерверной интеграции.
+- IoT-шлюз предназначен для поддержки < 1000 устройств, в то время как для интеграции предусмотрена высокая пропускная способность, масштабируемость и деплой кластеров в составе сервера платформы.
+- Перекомпиляция шлюза и перезапуск требуются для добавления пользовательского декодера полезной нагрузки. В то время как интеграционный конвертер - это функция JS, которая может быть изменена в режиме реального времени. 
 
-### Platform Integrations vs IoT Gateway
+Обе системы по-своему важны и применимы в разных ситуациях.
 
-Experienced ThingsBoard users may notice that functionality of Integrations feature partially overlap with functionality of [IoT Gateway](/docs/iot-gateway/what-is-iot-gateway/).
-However, there are key differences between these two systems/features:
 
-  - IoT Gateway is designed for local network deployments, Integrations are designed for server-to-server integrations.
-  - IoT Gateway is designed to support < 1000 devices, while Integrations are designed for high throughput, scalability and cluster deployments as part of ThingsBoard server.
-  - Gateway recompilation and restart is required to add custom payload decoder while Integration Converter is a JS function that may be modified in real time. 
-  
-As you can see, both systems are important and applicable in different use cases.
+### Функция «Дорожная карта»
 
-### Feature Roadmap
-
-#### Usage statistics
+#### Статистика использования
  
-We plan to log statistics for amount of messages processed by each integration with possible limitations of messages processed on a tenant / system levels.
+Мы планируем собирать статистику по количеству сообщений, обработанных каждой интеграцией, с возможными ограничениями на сообщения, обработанные на уровне клиента / системы.
 
 #### More integrations and protocols
 
-We plan to provide specific integrations for different platforms, and also for different communication protocols, like gRPC.
+Мы планируем обеспечить специальные интеграции для различных платформ, а также для различных коммуникационных протоколов, таких как gRPC.
 
-#### More data converters
+#### Больше конверторов данных
 
-We plan to collect and maintain data converters for most popular devices on the market to simplify integration path even more. 
-Please note that you can share your converters with community and send them to us to make part of official ThingsBoard distributive.   
-
-[Contact us](/docs/contact-us/) to suggest missing feature for your use case.
-
+Мы планируем собирать и обслуживать конверторы данных для самых популярных устройств на рынке, чтобы еще больше упростить путь интеграции. 
+Вы можете поделиться своими конвертерами с сообществом и отправить их нам, чтобы сделать их частью официального дистрибутива IoT платформы Ростелеком.
+Свяжитесь с нами, чтобы предложить недостающую.
+   
 ### See Also
 
-Explore guides and video tutorials related to specific integrations:
+Руководства и видеоуроки, связанные с конкретными интеграциями:
 
  - [HTTP](/docs/user-guide/integrations/http/)
  - [MQTT](/docs/user-guide/integrations/mqtt/)
@@ -351,13 +312,3 @@ Explore guides and video tutorials related to specific integrations:
  - [UDP](/docs/user-guide/integrations/udp/)
  - [Kafka](/docs/user-guide/integrations/kafka/)
  - [Custom](/docs/user-guide/integrations/custom/)
-
-
-
-## Next steps
-
-{% assign currentGuide = "ConnectYourDevice" %}{% include templates/guides-banner.md %}
-
-
-
-

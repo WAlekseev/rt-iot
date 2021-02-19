@@ -1,29 +1,24 @@
 ---
 layout: docwithnav
-title: Reporting
-description: Reporting Guide 
+title: Отчеты
+description: Отчеты 
 
 ---
-
-{% assign feature = "Reporting" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
 
-### Overview
+### Обзор
 
-ThingsBoard allows you to generate reports using existing dashboards.
+Вы можете создавать отчеты с помощью виджетов платформы. Отчеты генерируются как из открытого виджета в конкретный момент времени, так и по определенному графику с помощью [Планировщика](/docs/user-guide/scheduler/#generate-report).
 
-Reports can be generated either from the currently opened dashboard or scheduled using the [Scheduler](/docs/user-guide/scheduler/#generate-report) capabilities.
-
-<br/>
 
 ![image](/images/user-guide/reporting.svg)
 
-### Video tutorial
+### Видеоинструкция
 
-See video tutorial below for step-by-step instruction how to use this feature.
+В данном видео можно ознакомиться с тем, как работает эта функция.
 
 <br/>
 <div id="video">  
@@ -32,76 +27,53 @@ See video tutorial below for step-by-step instruction how to use this feature.
     </div>
 </div> 
 
-### Reports Server
+### Сервер отчетов
 
-The Reports Server is a standalone service used to generate reports by rendering dashboards in a headless browser.
+Это автономный сервис, который используется для генерирования отчетов путем визуализации виджетов в headless-браузере.
+При каждом запросе на создание отчета узел платформы отправляет запрос на сервер отчетов с помощью настроенного URL-адреса конечной точки.
+Сервер отчетов открывает веб-страницу с целевым URL-адресом виджета в headless-браузере и ждет, пока страница не будет отрисована. Затем он сохраняет содержимое веб-страницы в выбранном формате (PDF | PNG | JPEG) и отправляет отчет с данными на платформу.
 
-On each generate report request, ThingsBoard node sends a request to the Reports Server using the configured endpoint URL.
+### Генерация отчетов из дашборда
 
-The Reports Server opens a web page with the target dashboard URL in the headless browser and waits until the page renders,
-then it captures the dashboard web page into the specified format (*PDF \| PNG \| JPEG*) and sends the captured data as a response to ThingsBoard.
+Тенант-администратор или клиент могут генерировать отчет из дашборда. 
 
-The system administrator can configure the Reports Server endpoint URL using [thingsboard.yml](/docs/user-guide/install/config/).
-
-The following is a sample configuration:
-
-```yaml
-# Reports parameters
-reports:
-  server:
-    endpointUrl: "${REPORTS_SERVER_ENDPOINT_URL:http://localhost:8383}"
-```
-
-### Generate Report from Dashboard
-
-The Tenant Administrator or Customer User can generate a report from the currently opened dashboard.
-
-- Click the **Export Dashboard** button located at the right side of the dashboard toolbar
+Для этого нужно нажать кнопку **Экспорт дашборда**, расположенную справа на панели инструментов дашборда.
 
 ![image](/images/user-guide/ui/reporting-export-dashboard-button.png)
 
-- In the expanded drop-down menu, select the desired dashboard export option
+В открывшемся меню надо выбрать формат для экспорта данных.
 
 ![image](/images/user-guide/ui/reporting-export-dashboard-options.png)
 
-- The report generation will start.
+Затем запустится генерирование отчета.
 
 ![image](/images/user-guide/ui/reporting-export-dashboard-progress.png)
 
-- And finally, the report file will be automatically downloaded in the format selected.
+По завершении генерирования, отчет будет автоматически скачан в выбранном формате.
 
-### Generate Report by schedule
+### Генерирование запланированных отчетов
 
-Report generation can be invoked by a schedule using the [**Generate Report** Scheduler Event](/docs/user-guide/scheduler/#generate-report).
+•	Генерирование отчетов может быть запущено с помощью события [**Generate Report**](/docs/user-guide/scheduler/#generate-report).
 
-### Generate Report Rule Chain
+### Цепочка правил генерирования отчетов
 
-Scheduled reports generation is supported by the default **Root Rule Chain** of ThingsBoard PE.
-By default, a message of type **Generate Report** is routed to the **Generate Report Rule Chain**.
+Генерирование запланированных отчетов поддерживается корневой цепочкой правил. По умолчанию сообщение типа «Генерировать отчет» отправляется в цепочку правил «Генерирование отчетов».
 
 ![image](/images/user-guide/ui/reporting-pe-root-rule-chain-switch.png)
 
-The **Generate Report Rule Chain** has a [**Generate Report** Rule Node](/docs/user-guide/rule-engine-2-0/pe/action-nodes/#generate-report-node)
-that performs the report generation according to the report configuration retrieved from the message body.
-
-If the message body has a field ```sendEmail``` and its value is set to ```true```,
-the message with a report file reference in the ```attachments``` field of the metadata will be routed to the email related Rule Nodes.
-The Email Rule Nodes will prepare the email message with a report file in the attachments and send it to the configured recipients.
+В этой цепочке есть узел правил «Генерирование отчетов», который выполняет генерацию отчета в соответствии с его конфигурацией, которая передается в теле сообщения.
+Если в теле сообщения есть поле «sendEmail» и его значение равно «true», сообщение со ссылкой на файл отчета, который находится в метаданных в поле «attachments», будет отправлено на почту, которая относится к узлу правил. Почта подготовит электронное письмо с файлом отчета во вложении и отправит его пользователям, выбранным в настройках.
 
 ![image](/images/user-guide/ui/reporting-generate-report-rule-chain.png)
 
-### Reports Widget
+### Виджет отчетов
 
-ThingsBoard provides access to the generated report files via the **Reports** Widget that is a part of the **Files** Widgets Bundle.
+С помощью виджета отчетов можно получить доступ к файлам отчетов. Данный виджет входит в состав пакета виджетов.
 
 ![image](/images/user-guide/ui/reporting-reports-widget.png)
  
-The widget has the ability to filter the reports using the time range component.
+В виджете есть функция фильтрации отчетов с помощью компонента «интервал времени».
 
-Also, the widget has the ability to search the reports by name.
+Также в нём доступна функция поиска отчетов по названию.
 
-Each report can be downloaded by clicking on the **Download file** button.
-
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
+Отчет можно скачать, нажав кнопку «Скачать файл».

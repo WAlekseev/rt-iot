@@ -2,70 +2,54 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Remote Integrations
-description: Remote Integrations Documentation 
-
+title: Удаленные интеграции
+description: Удаленные интеграции
 ---
-
-{% assign feature = "Platform Integrations" %}{% include templates/pe-feature-banner.md %}
 
 * TOC
 {:toc}
 
-## Introduction
+## Введение
 
-It is possible to execute any ThingsBoard Integration remotely from main ThingsBoard instance.
-This guide contains step-by-step instructions how to launch ThingsBoard integration remotely.
-For example, we will launch MQTT integration that connects to the local MQTT Broker and pushes data to 
-[cloud.thingsboard.io](https://cloud.thingsboard.io/signup).  
+Любую интеграцию IoT платформы Ростелеком можно выполнить удаленно из основной версии платформы. Это руководство содержит пошаговые инструкции по удаленному запуску интеграции платформы. В качестве примера мы запустим интеграцию MQTT, которая подключается к локальному брокеру MQTT и отправляет данные в облако. 
 
-See [deployment options](/docs/user-guide/integrations/#deployment-options) for more general information.
+## Шаги для настройки платформы
 
-## Prerequisites
+### Step 1. Создание дефолтных Uplink и Downlink конвертеров
 
-We assume you already have a tenant administrator account on your own ThingsBoard PE v2.4.1+ instance or
-[cloud.thingsboard.io](https://cloud.thingsboard.io/signup).  
-
-## ThingsBoard configuration steps
-
-### Step 1. Create default Uplink and Downlink Converters
-
-Let's create dummy uplink and downlink converters and will set them to work in debug mode.
-While running in debug mode, those converters will record all incoming events. 
-This will help us to tune the converters once we start receiving the data.
+Создайте шаблоны конвертеров по восходящей и нисходящей линий связи и настройте их для работы в режиме отладки. 
+Во время работы в данном отладки эти конвертеры будут записывать все входящие события, что поможет настроить преобразователи, как только вы начнете получать данные.
 
 ![image](/images/user-guide/integrations/remote/default-converters.gif)  
 
-### Step 2. Create Remote Integration 
+### Шаг 2. Создание удаленной интеграции
 
-Let's create remote integration that will connect to the local broker using port 1883 and subscribe to all topics. 
-Notice that we enable "Debug" and "Execute remotely".   
+Создайте удаленную интеграцию, которая будет подключаться к локальному брокеру через порт 1883 и подписываться на все темы. Обратите внимание, что нужно выставить флаги “Отладка” и “Выполнить удаленно”.  
 
 ![image](/images/user-guide/integrations/remote/mqtt-integration.gif)
 
-### Step 3. Save Remote Integration credentials.
+### Шаг 3. Сохранение учетных данных удаленной интеграции.
 
-Let's copy-paste the integration key and secret from the integration details.
+Скопируйте и вставьте ключ интеграции и пароль из раздела интеграции.
 
 ![image](/images/user-guide/integrations/remote/copy-integration-credentials.gif)
 
-## Remote integration installation steps
+## Шаги установки удаленной интеграции
 
-### Choose your platform and install
+### Выберите свою платформу и установите
 
-One can install ThingsBoard Integration via Docker, Debian or RPM packages.
-Please use one of the next steps.
+Можно установить интеграции платформы через Doker, Debian и rpm пакеты. Используйте один из следующих шагов
 
- * [Docker on Linux or Mac OS](/docs/user-guide/integrations/remote-integrations/#docker-on-linuxmac)
- * [Docker on Windows](/docs/user-guide/integrations/remote-integrations/#docker-on-windows) 
+ * [Docker на Linux или Mac OS](/docs/user-guide/integrations/remote-integrations/#docker-on-linuxmac)
+ * [Docker на Windows](/docs/user-guide/integrations/remote-integrations/#docker-on-windows) 
  * [Ubuntu](/docs/user-guide/integrations/remote-integrations/#ubuntu-server)
  * [CentOS/RHEL Server](/docs/user-guide/integrations/remote-integrations/#centosrhel-server)
 
-### Docker on Linux/Mac
+### Docker на Linux/Mac
 
 - **[Install Docker CE](https://docs.docker.com/engine/installation/)**
 
-- **Choose Integration to install**
+- **Выберите интеграцию для установки**
 
 
 {% capture contenttogglespec %}
@@ -82,24 +66,23 @@ TCP/UDP<br/> Integration<br/>%,%tcpudp%,%templates/install/integration/tcpudp-do
 {% include templates/install/integration/advanced-config-docker.md %} 
 
 
-- **Troubleshooting**
+- **Диагностика**
 
 
-**Note** If you observe errors related to DNS issues, for example
+**Примечание** если вы столкнулись с ошибками, связанными с проблемами DNS, например
 
 ```bash
 127.0.1.1:53: cannot unmarshal DNS message
 ```
 {: .copy-code}
 
-You may configure your system to use Google public DNS servers. 
-See corresponding [Linux](opc-uas://developers.google.com/speed/public-dns/docs/using#linux) and [Mac OS](opc-uas://developers.google.com/speed/public-dns/docs/using#mac_os) instructions.
+Вы можете настроить свою систему на использование общедоступных DNS-серверов Google. См.соответствующие инструкции для [Linux](opc-uas://developers.google.com/speed/public-dns/docs/using#linux) и [Mac OS](opc-uas://developers.google.com/speed/public-dns/docs/using#mac_os)
 
-### Docker on Windows
+### Docker на Windows
 
-- **[Install Docker Toolbox for Windows](https://docs.docker.com/toolbox/toolbox_install_windows/)**
+- **[Установка Docker Toolbox for Windows](https://docs.docker.com/toolbox/toolbox_install_windows/)**
 
-- **Choose Integration to install**
+- **Выберите интеграцию для установки**
 
 
 {% capture contenttogglespecwin %}
@@ -116,25 +99,25 @@ TCP/UDP<br/> Integration<br/>%,%tcpudp%,%templates/install/integration/tcpudp-do
 {% include templates/install/integration/advanced-config-docker.md %} 
 
 
-- **Troubleshooting**
+- **Диагностика**
 
 
-**Note** If you observe errors related to DNS issues, for example
+**Примечание** Примечание: если вы столкнулись с ошибками, связанными с проблемами DNS, например
 
 ```bash
 127.0.1.1:53: cannot unmarshal DNS message
 ```
 
-You may configure your system to use [Google public DNS servers](https://developers.google.com/speed/public-dns/docs/using#windows)
+Вы можете настроить свою систему на использование общедоступных DNS-серверов  [Google](https://developers.google.com/speed/public-dns/docs/using#windows)
 
 
-### Ubuntu Server
+### сервер Ubuntu
 
- - Install Java 8 (OpenJDK) 
+ - Установка Java 8 (OpenJDK) 
 
 {% include templates/install/ubuntu-java-install.md %}
 
- - **Choose Integration package to install**
+ - **Выберите пакет интеграции для установки**
  
 {% capture ubuntuinstallspec %}
 HTTP Integrations<br/><small>(HTTP, Sigfox, ThingPark, OceanConnect and <br/> T-Mobile IoT CDP)</small>%,%http%,%templates/install/integration/http-ubuntu.md%br%
@@ -148,11 +131,11 @@ TCP/UDP<br/> Integration<br/>%,%tcpudp%,%templates/install/integration/tcpudp-ub
 
 ### CentOS/RHEL Server
 
- - Install Java 8 (OpenJDK) 
+ - Установите Java 8 (OpenJDK)
 
 {% include templates/install/rhel-java-install.md %}
 
- - **Choose Integration package to install**
+ - **•	Выберите интеграцию для установки**
  
 {% capture rhelinstallspec %}
 HTTP Integrations<br/><small>(HTTP, Sigfox, ThingPark, OceanConnect and <br/> T-Mobile IoT CDP)</small>%,%http%,%templates/install/integration/http-rhel.md%br%
@@ -164,10 +147,9 @@ TCP/UDP<br/> Integration<br/>%,%tcpudp%,%templates/install/integration/tcpudp-rh
 
 {% include content-toggle.html content-toggle-id="remoteintegrationinstallrhel" toggle-spec=rhelinstallspec %} 
 
-## Remote integration configuration
+## Удаленная настройка интеграции
 
-Remote integration configuration is done via ThingsBoard UI and there is no specific steps.
-Explore guides and video tutorials related to specific integrations:
+Настройка удаленной интеграции выполняется с помощью пользовательского интерфейса платформы, для чего не предусмотрена пошаговая инструкция. Изучите руководства и видеоуроки, связанные с конкретными интеграциями:
 
  - [HTTP](/docs/user-guide/integrations/http/)
  - [MQTT](/docs/user-guide/integrations/mqtt/)
@@ -184,14 +166,7 @@ Explore guides and video tutorials related to specific integrations:
  - [Custom](/docs/user-guide/integrations/custom/)
 
   
-## Remote integration troubleshooting
+## Устранение неполадок при удаленной интеграции
 
-Please review the log files. Their location is specific to the platform and installation package you have used and is mentioned in the installation steps. 
-
-## Next steps
-
-{% assign currentGuide = "ConnectYourDevice" %}{% include templates/guides-banner.md %}
-
-
-
-
+Посмотрите файлы журнала. Их расположение зависит от используемой платформы и установочного пакета и упоминается в шагах установки.
+ 

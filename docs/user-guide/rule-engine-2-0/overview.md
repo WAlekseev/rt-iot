@@ -1,174 +1,136 @@
 ---
 layout: docwithnav
-title: Rule Engine Overview
-description: Rule Engine Overview
-
+title: Обзор движка правил
+description: Документация к IoT платформе Ростелеком
 ---
-
 * TOC
 {:toc}
 
-ThingsBoard Rule Engine is a highly customizable and configurable system for complex event processing. 
-With rule engine you are able to filter, enrich and transform incoming messages originated by IoT devices and related assets. 
-You are also able to trigger various actions, for example, notifications or communication with external systems.
+Система движка правил настраивается для обработки сложных событий. С помощью узла правил вы сможете фильтровать, пополнять и изменять входящие сообщения от IoT-устройств и связанных объектов. Также вы можете инициировать разные действия, например, получение уведомлений или установку связи со внешней системой.
   
-## Key Concepts
+## Ключевые концепции
 
-#### Rule Engine Message 
+#### Сообщения движка правил
 
-Rule Engine Message is a serializable, immutable data structure that represent various messages in the system. For example:
+Это упорядоченная, неизменяемая структура данных, в которой можно просмотреть разные системные сообщения. 
 
-  * Incoming [telemetry](/docs/user-guide/telemetry/), [attribute update](/docs/user-guide/attributes/) or [RPC call](/docs/user-guide/rpc/) from device;
-  * Entity life-cycle event: created, updated, deleted, assigned, unassigned, attributes updated;
-  * Device status event: connected, disconnected, active, inactive, etc;
-  * Other system events.
+  * Поступающая с устройств [телеметрия](/docs/user-guide/telemetry/), [обновление атрибутов](/docs/user-guide/attributes/) или [RPC-вызовы](/docs/user-guide/rpc/);
+  * События жизненного цикла сущностей: создан, обновлен, назначен, не назначен, обновление атрибутов;
+  * События статусов устройств: подключен, отключен, активен, неактивен и т.д.;
+  * Другие системные события.
   
-Rule Engine Message contains the following information:
+Rule Engine Message содержит следующую информацию:
 
-  * Message ID: time based, universally unique identifier;
-  * Originator of the message: Device, Asset or other [Entity](/docs/user-guide/entities-and-relations/) identifier;
-  * Type of the message: "Post telemetry" or "Inactivity Event", etc;
-  * Payload of the message: JSON body with actual message payload;
-  * Metadata: List of key-value pairs with additional data about the message. 
+  * ID сообщения: генерируется на базе времени, универсальный уникальный идентификатор;
+  * Источник, откуда поступило сообщение: идентификатор Устройства, Объекта или другой  [сущности](/docs/user-guide/entities-and-relations/);
+  * Тип сообщения: "Post telemetry" или "Inactivity Event" и т.д.;
+  * Полезная нагрузка сообщения: JSON-тело с актуальной нагрузкой сообщения;
+  * Метаданные: список пар «ключ-значение» с дополнительными данными о сообщении. 
 
-#### Rule Node
+#### Узел правил
 
-Rule Node is a basic component of Rule Engine that process single incoming message at a time and produce one or more outgoing messages. 
-Rule Node is a main logical unit of the Rule Engine. Rule Node can filter, enrich, transform incoming messages, perform action or communicate with external systems.
+Это базовый компонент движка правил, который обрабатывает поступающие сообщения и генерирует одно и более исходящих сообщений. Rule Node -  основная логическая единица движка правил. Он может фильтровать, дополнять, менять входящие сообщения, выполнять действия или устанавливать связь со внешними системами.
 
-#### Rule Node Relation
+#### Отношение узла правил
 
-Rule Nodes may be related to other rule nodes. Each relation has relation type, a label used to identify logical meaning of the relation. 
-When rule node produces the outgoing message it always specifies the relation type which is used to route message to next nodes.
+Узлы правил могут быть связаны с другими узлами правил. У каждой связи есть тип, лэйбл, с помощью которого определяется логическое значение связи. Когда узел генерирует исходящие сообщения, система всегда установит тип связи, чтобы направить сообщение к соответствующим узлам.
  
-Typical rule node relations are "Success" and "Failure". 
-Rule nodes that represent logical operations may use "True" or "False". 
-Some specific rule nodes may use completely different relation types, for example: "Post Telemetry", "Attributes Updated", "Entity Created", etc. 
+Отношения узла правил имеют статус либо «Success», либо "Failure". Узлы, которые представляют собой логические операции могут использовать значения «True» или «False». Некоторые специфичные rule nodes могут использовать разные типы связей, например: «Post Telemetry», «Attributes Updated» («Обновление атрибутов»), «Entity Created» («Сущность создана») и т.д.
 
-#### Rule Chain
+#### Цепочка правил
 
-Rule Chain is a logical group of rule nodes and their relations. For example, the rule chain below will:
+Это логическая группа, состоящая из rule nodes и их связей. Например, на приведенной далее схеме rule chain выполняет следующие функции:
 
-  * save all telemetry messages to the database;
-  * raise "High Temperature Alarm" if temperature field in the message will be higher then 50 degrees;
-  * raise "Low Temperature Alarm" if temperature field in the message will be lower then -40 degrees;
-  * log failure to execute the temperature check scripts to console in case of logical or syntax error in the script. 
+  * сохраняет все сообщения с телеметрией в базу данных;
+  * поднимает "High Temperature Alarm" ("Сигнализация о высокой температуре"), если в сообщении передается отметка выше 50 градусов;
+  * поднимает "Low Temperature Alarm" ("Сигнализация о низкой температуре"), если в сообщении передается отметка ниже -40 градусов;
+  * логирует сбои в проверках температуры для выявления логических или синтаксических ошибок в скрипте. 
 
 ![image](/images/user-guide/rule-engine-2-0/rule-node-relations.png)
 
-Tenant administrator is able to define one **Root Rule Chain** and optionally multiple other rule chains. 
-Root rule chain handles all incoming messages and may forward them to other rule chains for additional processing.
-Other rule chains may also forward messages to different rule chains.
+Тенант-администратор может установить одну **Root Rule Chain** ("Корневую цепочку правил") и, опционально, множество других цепочек правил.  
+Root rule chain обрабатывает все входящие сообщения и может отправить их в другие цепочки правил для дополнительной обработки.
+Другие rule chains также могут отправлять сообщения разным rule chains.
 
-For example, the rule chain below will:
+Например, нижеприведенная цепочка правил выполняет следующие функции:
 
-  * raise "High Temperature Alarm" if temperature field in the message will be higher then 50 degrees;
-  * clear "High Temperature Alarm" if temperature field in the message will be less then 50 degrees;
-  * forward events about "Created" and "Cleared" alarms to external rule chain that handles notifications to corresponding users.
+  * поднимает "High Temperature Alarm", если в сообщении передается отметка выше 50 градусов;
+  * удаляет событие "High Temperature Alarm", если отметка в сообщении опустится ниже 50 градусов;
+  * отправит события о "Created" ("Созданных") и "Cleared" ("Удаленных") сигналах тревоги во внешнюю rule chain, которая обработает уведомления для показа соответствующим пользователям.
  
 ![image](/images/user-guide/rule-engine-2-0/rule-chain-references.png)
 
-#### Message Processing Result
+#### Результат обработки сообщений
 
-There are three possible results of message processing: Success, Failure and Timeout.
-The message processing attempt is marked as "Success" when the last rule node in the processing chain successfully process the message.
-The message processing attempt is marked as "Failure" if one of the rule nodes produce "Failure" of message processing, 
-and there is no rule nodes to handle that failure. 
-The message processing attempt is marked as "Timeout" when overall time of processing exceed configurable threshold.
+Существует 3 возможных результата обработки сообщений: Success ("Успешно"), Failure ("Ошибка") и Timeout ("Превышено время ожидания"). 
+Попытка обработки сообщения помечается статусом "Failure", если один из rule nodes возвращает для нее статус "Failure", и нет других rule nodes, которые могут её обработать. 
+В случае, когда общее время обработки превышает установленный лимит, присваивается статус "Timeout".
 
-See diagram below and let's review the possible scenarios:
+Ниже представлена диаграмма с возможными сценариями:
 
 ![image](/images/user-guide/rule-engine-2-0/not-a-failure.png)
 
-If the "Transformation" script fails, the message is not marked as "Failed", because there is a "Save to DB" node connected with "Failure" relation.
-If the "Transformation" script is successful, it will be pushed to "External System" with the REST API call.
-If the external system is overloaded, the REST API call may "hang" for some time. 
-Let's assume the overall timeout for message pack processing is 20 seconds. Let's ignore Transformation script execution time because it is < 1ms.
-So, if the "External System" will reply within 20 seconds, the message will be successfully processed. 
-Similar, if "Save to DB" call will succeed, the message will be successfully processed. 
-However, if the external system will not reply within 20 seconds, the message processing attempt will be marked as "timed-out".
-Similar, if "Save to DB" call will fail, the message will be marked as failed.
+Если «Transformation» («Преобразование») скрипта завершается ошибкой, сообщению не присваивается статус «Failed», так как (???).
+Если «Transformation» скрипт завершается успешно, он будет отправлен в «External System» («Внешнюю систему») с помощью REST API. Если внешняя система перегружена, запрос может «повисеть» некоторое время. Предположим, что общее время ожидания обработки пакета сообщений составляет 20 секунд. Опустим время выполнения transformation-скрипта, поскольку его значение < 1ms. Если внешняя система вернет ответ в течение 20 секунд, сообщение успешно обработается. То же самое и для вызова «Save to DB» («Сохранить в БД»): если он выполнится успешно, сообщение успешно обработается. Но если внешняя система не вернет ответ в течение 20 секунд, то попытке обработки сообщения присвоится статус «time-out». То же и в случае неудачного выполнения вызова «Save to DB»: сообщению присвоится статус failed.
 
-#### Rule Engine Queue
+#### Очередь движка правил
 
-Rule Engine subscribe to queues on startup and polls for new messages. 
-There is always "Main" topic that is used as a main entry point for new incoming messages. 
-You may configure multiple queues using thingsboard.yml or environment variables.
-Once configured, you may put message to the other topic using "Checkpoint" node. 
-This automatically acknowledges corresponding message in the current topic.
+Движок правил при запуске подписывается на очереди и запрашивает новые сообщения. «Главная» тема используется в качестве основной точки входа для новых входящих сообщений. Вы можете настроить множество очередей с помощью thingsboard.yml или переменных окружения. Затем вы можете переместить сообщение в другую тему с помощью “Checkpoint” node. Он автоматически подтвердит, что сообщение перемещено.
 
-The definition of the queue consists of the following parameters:
+Очередь состоит из следующих параметров:
 
- * name - used for statistics and logging;
- * topic - used by Queue implementations to produce and consume messages;
- * poll-interval - duration in milliseconds between polling of the messages if no new messages arrive;
- * partitions - number of partitions to associate with this queue. Used for scaling the number of messages that can be processed in parallel;
- * pack-processing-timeout - interval in milliseconds for processing of the particular pack of messages returned by consumer;
- * submit-strategy - defines logic and order of submitting messages to rule engine. See separate paragraph below.
- * processing-strategy - defines logic of acknowledgement of the messages. See separate paragraph below.
+ * name - используется для статистики и логирования;
+ * topic - для выполнения очереди (генерирование и получение сообщений).
+ * poll-interval - период между запросами сообщений, если не были получены новые сообщения, изменяется в миллисекундах;
+ * partitions - число разделов, связанной с этой очередью. Используется для масштабирования количества сообщений, которые могут быть обработаны параллельно;
+ * pack-processing-timeout - интервал для обработки пакета сообщений, которые вернулись от потребителей, измеряется в миллисекундах;
+ * submit-strategy - определяет логику и порядок отправки сообщений в rule engine. Подробнее в отдельном параграфе ниже.
+ * processing-strategy - определяет логику подтверждения сообщений. Подробнее в отдельном параграфе ниже.
   
-##### Queue submit strategy
+##### Стратегия очереди отправки
 
-Rule Engine service constantly polls messages for specific topic and once the Consumer returns a list of messages it creates the TbMsgPackProcessingContext object.
-Queue submit strategy controls how messages from TbMsgPackProcessingContext are submitted to rule chains. There are 5 available strategies:
+Сервис Rule Engine постоянно запрашивает сообщения, относящиеся к определенной теме. И когда Клиент отправляет список сообщений, создается объект TbMsgPackProcessingContext. Queue submit strategy контролирует процесс передачи сообщений из TbMsgPackProcessingContext в rule chains. Есть 5 доступных стратегий:
 
- * BURST - all messages are submitted to the rule chains in the order they arrive.  
- * BATCH - messages are grouped to batches using "queue.rule-engine.queues\[queue index\].batch-size" configuration parameter. 
- New batch is not submitted until previous batch is acknowledged.
- * SEQUENTIAL_BY_ORIGINATOR - messages are submitted sequentially within particular entity (originator of the message). 
- New message for e.g. device A is not submitted until previous message for device A is acknowledged. 
- * SEQUENTIAL_BY_TENANT - messages are submitted sequentially within tenant (owner of the originator of the message). 
- New message for e.g tenant A is not submitted until previous message for tenant A is acknowledged.
- * SEQUENTIAL  - messages are submitted sequentially. New message is not submitted until previous message is acknowledged. This makes processing quite slow.
+ * BURST - все сообщения передаются в цепочка правил в порядке их поступления.  
+ * BATCH - сообщения группируются в пакеты с помощью параметра конфигурации "queue.rule-engine.queues[queue index].batch-size". Новый пакет не будет передан до тех пор, пока не будет получено подтверждение получения предыдущего.
+ * SEQUENTIAL_BY_ORIGINATOR - сообщения передаются последовательно от разных сущностей (источников, откуда поступают сообщения). Новое сообщение для устройства А не передается до тех пор, пока не будет получено предыдущее. 
+ * SEQUENTIAL_BY_TENANT - сообщения передаются последовательно от разных тенантов (владельцев источников, откуда поступают сообщения). Новое сообщение для тенанта А не будет передаваться до тех пор, пока не будет получено предыдущее). 
+ * SEQUENTIAL  - сообщения отправляются последовательно.  Новое сообщение не будет передано до тех пор, пока не будет получено предыдущее. В связи с этим процесс обработки длится достаточно долго.
  
-See this [guide](/docs/user-guide/rule-engine-2-5/tutorials/queues-for-synchronization/) for an example of submit strategy use case.
+В [руководстве](/docs/user-guide/rule-engine-2-5/tutorials/queues-for-synchronization/) можно ознакомиться с примерами использования submit strategy.
 
-##### Queue processing strategy
+##### Стратегия обработки очереди
   
-Processing Strategy controls how failed or timed out messages are re-processed. There are 5 available strategies:
+Processing Strategy контролирует процесс повторной обработки сообщений, первая обработка которых завершилась ошибкой или таймаутом. Есть 5 доступных стратегий:
 
- * SKIP_ALL_FAILURES - simply ignore all failures and timeouts. Will cause messages to be "lost". 
- For example, if DB is down, the messages will not be persisted but will be still marked as "acknowledged" and deleted from queue.
- This strategy is created mostly for backward-compatibility with previous releases and development/demo environments.
- * RETRY_ALL - retry all messages from processing pack. 
- If 1 out of 100 messages will fail, strategy will still reprocess (resubmit to Rule Engine) 100 messages. 
- * RETRY_FAILED - retry all failed messages from processing pack. 
- If 1 out of 100 messages will fail, strategy will reprocess(resubmit to Rule Engine) only 1 message. 
- Timed-out messages will not be reprocessed.
- * RETRY_TIMED_OUT - retry all timed-out messages from processing pack. 
- If 1 out of 100 messages will timeout, strategy will reprocess(resubmit to Rule Engine) only 1 message.
- Failed messages will not be reprocessed.
- * RETRY_FAILED_AND_TIMED_OUT - retry all failed and timed-out messages from processing pack.
+ * SKIP_ALL_FAILURES - позволяет игнорировать все ошибки и таймауты, что приведет к потере всех сообщений. Например, если БД перестала работать, сообщения не будут сохраняться, но будут помечаться как "подтвержденные" и затем удаляться из очереди. Эта стратегия нацелена скорее на обратную совместимость с предыдущими релизами и средой разработки и демонстрационной средой
+ * RETRY_ALL - повторить попытку получения всех сообщений из пакета обработки. Если обработка 1 из 100 сообщений завершится ошибкой, стратегия снова обработает 100 сообщений и повторно отправит их в Rule Engine. 
+ * RETRY_FAILED - повторить обработку всех сообщений, которая при первой попытке завершилась ошибкой. Если обработка 1 из 100 сообщений завершится ошибкой, стратегия снова обработает 1 сообщение и повторно отправит пакет в Rule Engine. Если обработка завершится таймаутом, то повторная обработка выполняться не будет.
+ * RETRY_TIMED_OUT - повторить обработку сообщений, которая при первой попытке завершилась таймаутом. Если 1 из 100 сообщений вернет таймаут, стратегия снова обработает только 1 сообщение и повторно отправит пакет в Rule Engine. Если обработка завершится таймаутом, то повторная обработка выполняться не будет.
+ * RETRY_FAILED_AND_TIMED_OUT - rповторить попытку обработки всех сообщений, которая ранее завершилась ошибкой или таймаутом.
  
-All "RETRY*" strategies support important configuration parameters:  
+Все "RETRY*" стратегии поддерживают важные параметры конфигурации:
  
- * retries - Number of retries, 0 is unlimited
- * failure-percentage - Skip retry if failures or timeouts are less then X percentage of messages;
- * pause-between-retries - Time in seconds to wait in consumer thread before retries;
+ * retries - Число повторных попыток, 0 не ограничено;
+ * failure-percentage - Пропустить повторные попытки, если процент завершившихся ошибкой или таймаутом сообщений меньше определенного процента сообщений;
+ * pause-between-retries - Время ожидания ответа от Клиента до выполнения повторных попыток, измеряется в секундах;
  
- See this [guide](/docs/user-guide/rule-engine-2-5/tutorials/queues-for-message-reprocessing/) for an example of processing strategy use case.
+ В следующем [руководстве](/docs/user-guide/rule-engine-2-5/tutorials/queues-for-message-reprocessing/) можно ознакомиться с примерами использования стратегии обработки.
 
-##### Default queues
+##### Очереди по умолчанию
 
-There are three default queues configured: Main, HighPriority and SequentialByOriginator.
-They differ based on submit and processing strategy.
-Basically, rule engine process messages from Main topic and may optionally put them to other topics using "Checkpoint" rule node. 
-Main topic simply ignores failed messages by default. This is done for backward compatibility with previous releases. 
-However, you may reconfigure this at your own risk. 
-Note that if one message is not processed due to some failure in your rule node script, it may prevent next messages from being processed.
-We have designed specific [dashboard](/docs/user-guide/rule-engine-2-0/overview/#rule-engine-statistics) to monitor Rule Engine processing and failures. 
+По умолчанию настроены три очереди: Main, HighPriority и SequentialByOriginator. Они различаются стратегиями отправки и обработки. Как правило, движок правил обрабатывает сообщения из Main-темы и может дополнительно помещать их в другие темы, используя «Checkpoint» rule node. 
+Main-тема по умолчанию игнорирует сообщения, обработка которых завершилась ошибкой. Это сделано для обратной совместимости с предыдущими релизами. Однако вы можете изменить настройки, что подразумевает возможные риски.  
+Стоит иметь ввиду, что, если обработка одного сообщения не выполнится из-за какой-либо ошибки в вашем rule node-скрипте, это может помешать обработке следующих сообщений.
+С помощью специального [дашборда](/docs/user-guide/rule-engine-2-0/overview/#rule-engine-statistics) можно следить за обработкой данных и ошибками в движке правил. 
 
-The HighPriority topic may be used for delivery of alarms or other critical processing steps. 
-The messages in HighPriority topic are constantly reprocessed in case of failure until the message processing succeeds. 
-This is useful if you have an outage of the SMTP server or external system. The Rule Engine will retry sending the message until it is processed.   
+HighPriority-тема может быть использована для отправки сигналов тревоги и других критичных этапов обработки. Сообщения в теме HighPriority постоянно перерабатываются в случае сбоя до тех пор, пока обработка не завершится успешно. Это может быть полезно в тех случаях, если ваш SMTP-сервер или внешняя система вышли из строя. The Rule Engine будет повторять попытку отправки сообщения, пока оно не будет обработано. 
 
-The SequentialByOriginator topic is important if you would like to make sure that messages are processed in correct order.
-Messages from the same entity will be processed with the order they arrive to the queue. 
-Rule Engine will not submit new message to the rule chain until the previous message for the same entity id is acknowledged. 
+С помощью темы SequentialByOriginator вы убедитесь в том, что сообщения обработались в правильном порядке. Сообщения от одной и той же сущности будут обработаны в том порядке, в котором они попадают в очередь. Rule Engine не отправит новое сообщение в rule chain до тех пор, пока предыдущее сообщение от той же сущности не будет получено.
 
-## Predefined Message Types
+## Предопределенные типы сообщений
 
-List of the predefined Message Types is presented in the following table:
+Список предопределенных Типов Сообщений представлен в таблице:
 
 <table>
   <thead>
@@ -343,101 +305,95 @@ List of the predefined Message Types is presented in the following table:
    </tbody>
 </table>
  
-## Rule Node Types
+## Типы узлов правил
 
-All available rule nodes are grouped in correspondence with their nature:
+Все доступные узлы правил сгруппированы в соответствии с их типами:
 
-  * [**Filter Nodes**](/docs/user-guide/rule-engine-2-0/filter-nodes/) are used for message filtering and routing;
-  * [**Enrichment Nodes**](/docs/user-guide/rule-engine-2-0/enrichment-nodes/) are used to update meta-data of the incoming Message;
-  * [**Transformation Nodes**](/docs/user-guide/rule-engine-2-0/transformation-nodes/) are used for changing incoming Message fields like Originator, Type, Payload, Metadata;
-  * [**Action Nodes**](/docs/user-guide/rule-engine-2-0/action-nodes/) execute various actions based on incoming Message;
-  * [**External Nodes**](/docs/user-guide/rule-engine-2-0/external-nodes/) are used to interact with external systems.
+  * [**Узлы фильтрации**](/docs/user-guide/rule-engine-2-0/filter-nodes/) используются для фильтрации и маршрутизации сообщений;
+  * [**Узлы насыщения**](/docs/user-guide/rule-engine-2-0/enrichment-nodes/) используются для обновления мета-данных входящих сообщений;
+  * [**Узлы преобразования**](/docs/user-guide/rule-engine-2-0/transformation-nodes/) используются для изменения полей входящих сообщений (например, Originator, Type, Payload, Metodata);
+  * [**Узлы действий**](/docs/user-guide/rule-engine-2-0/action-nodes/) выполняют разные действия в зависимости от получаемых сообщений;
+  * [**Сторонние узлы**](/docs/user-guide/rule-engine-2-0/external-nodes/) используются для взаимодействия со внешними системами.
 
-## Configuration
+## Настройки узлов
 
-Each Rule Node may have specific configuration parameters that depend on the Rule Node Implementation. 
-For example, "Filter - script" rule node is configurable via custom JS function that process incoming data. 
-"External - send email" node configuration allows to specify mail server connection parameters.
+У любого Rule Node могут иметь определенные параметры конфигурации, которые зависят от Rule Node Implementation (реализация узла правил). 
+Например, «Filter – script» rule node настраивается через кастомную JS-функцию, которая обрабатывает поступающие данные. «External – send email» node конфигурация позволяет задавать настройки параметров соединения с почтовым сервером
   
-Rule Node configuration window may be opened by double-clicking on the node in the Rule Chain editor:    
+Окно конфигурации Rule Node можно открыть двойным щелчком по node в редакторе цепочки правил:  
   
 ![image](/images/user-guide/rule-engine-2-0/rule-node-configuration.png)
 
-### Test JavaScript functions
+### Тестовые JavaScript-функции
 
-Some rule nodes have specific UI feature that allow users to test JS functions. 
-Once you click on the **Test Filter Function** you will see the JS Editor that allows you to substitute input parameters and verify the output of the function.
+Некоторые rule nodes имеют определенные UI-функции, с помощью которых пользователи могут тестировать JS-функции.  
+Кликнув на **Test Filter Function**, вы запустите редактор JS. В нем вы можете подменить входные параметры и проверить результаты функции.
     
 ![image](/images/user-guide/rule-engine-2-0/rule-node-test-function.png)
 
-You can define:
+Вы можете установить:
 
-- **Message Type** in the top left field.
-- **Message payload** in the left Message section.
-- **Metadata** in right Metadata section.
-- Actual **JS script** in Filter section.
+- **Тип сообщения** слева вверху.
+- **Полезную нагрузку сообщения** слева на странице редактирования сообщения.
+- **Metadata** справа в разделе Метаданные.
+- Текущий **JS script** разделе Фильтрация.
 
-After pressing **Test** output will be returned in right **Output** section.
+Нажав **Test**, вы увидите результаты теста в разделе **Результат** справа.
 
-## Rule Engine Statistics
+## Статистика узла правил
 
-ThingsBoard Team have prepared the "default" dashboard for Rule Engine statistics. 
-This dashboard is automatically loaded for each tenant. The statistics collection is enabled by default and is controlled via configuration properties.
+С помощью дефолтного дашборда вы можете отслеживать статистику по Rule Engine. Он автоматически подгружается для каждого тенанта. Сбор статистики включен по умолчанию и контролируется с помощью настроек конфигурации.
 
-You may notice insights about errors in processing and what causes them on the dashbaord below: 
+На скриншоте показано, как визуализируются данные из статистики по ошибкам обработки и причинам этих ошибок:
 
 ![image](/images/user-guide/rule-engine-2-0/rule-engine-stats-dashboard.png)
 
-## Debugging
+## Отладка
 
-ThingsBoard provides ability to review incoming and outgoing messages for each Rule Node.
-To enable debug, user need to ensure that "Debug mode" checkbox is selected in the main configuration window 
-(see first image in the [Configuration](/docs/user-guide/rule-engine-2-0/overview/#configuration) section). 
+С помощью ThingsBoard вы можете просматривать входящие и исходящие сообщения для каждого Rule Node. Чтобы включить режим отладки, пользователь должен убедиться, что в главном окне конфигурации выставлен значок «Режим отладки».
 
-Once debug is enabled, user is able to see incoming and outgoing messages info as long as corresponding relation types.
-See image below for a sample debug messages view:
+Включив режим отладки, пользователь может просматривать информацию о входящих и исходящих сообщениях до тех пор (????). На скриншоте показан пример того, как выглядит режим отладки сообщений:
   
 ![image](/images/user-guide/rule-engine-2-0/rule-node-debug.png)  
 
-## Import/Export
+## Импорт/экспорт
 
-You are able to export your rule chain to JSON format and import it to the same or another ThingsBoard instance.
+Вы можете экспортировать и импортировать свою цепочку правил в формате JSON, а также импортировать её в уже заведенную карточку для цепочки правил или создать новую и импортировать в неё.
 
-In order to export rule chain, you should navigate to the **Rule Chains** page and click on the export button located on the particular rule chain card.
+Чтобы экспортировать цепочку правил, надо перейти на страницу **Цепочки правил** и нажать на кнопку Экспорт, расположенную на нужной вам карточке цепочки правил.
  
 ![image](/images/user-guide/rule-engine-2-0/rule-chain-export.png)
 
-Similar, to import the rule chain you should navigate to the **Rules Chains** page and click on the big "+" button in the bottom-right part of the screen and then click on the import button. 
+Чтобы импортировать цепочку правил, надо перейти на страницу **Цепочки правил** и нажать на кнопку "+" в правом нижнем углу экрана, а затем нажать на кнопку импорта.
 
-## Architecture
+## Архитектура
 
-To learn more about internals of the rule engine, see [architecture](/docs/user-guide/rule-engine-2-0/architecture/) page.
+На следующей [странице](/docs/user-guide/rule-engine-2-0/architecture/) вы сможете узнать подробности о внутренних компонентах механизма правил. 
 
-## Custom REST API calls to Rule Engine
+## Пользовательские вызовы REST API в движок правил
 
-{% assign feature = "Custom Rule Engine REST API calls" %}{% include templates/pe-feature-banner.md %}
 
-ThingsBoard provides API to send custom REST API calls to the rule engine, process the payload of the request and return result of the processing in response body. 
-This is useful for a number of use cases. For example:
+В системе платформы есть API для отправки кастомных REST API вызовов в движок правил, обработки полезной нагрузки запроса и возврата результата обработки в теле ответа. Эти функции могут быть полезны в следующих случаях:
  
- - extend existing REST API of the platform with custom API calls;
- - enrich REST API call with the attributes of device/asset/customer and forward to external system for complex processing;
- - provide custom API for your custom widgets.
+ - чтобы расширить существующий REST API с помощью кастоманых API-вызовов;
+ - чтобы добавлять в REST API-вызовы атрибуты устройств/объектов и отправлять их во внешние системы для сложной обработки;
+ - чтобы предоставить ваш кастоманый API для ваших кастомных виджетов.
  
-To execute the REST API call, you may use rule-engine-controller [REST APIs](/docs/reference/rest-api/): 
+Чтобы выполнить REST API-вызов, вы можете использовать rule-engine-controller [REST APIs](/docs/reference/rest-api/): 
  
 ![image](/images/user-guide/rule-engine-2-0/rest-api.png) 
 
-Note: the entity id you have specified in the call will be the originator of Rule Engine message. If you do not specify the entity id parameters, your user entity will become an originator of the message.
+Примечание: id сущности, указанный в вызове, будет использоваться в качестве источника, откуда отправляется сообщение движка правил. Если вы не зададите параметр id для сущности, то в качестве отправителя выступит id пользователя, под которым вы используете платформу.
 
-## Tutorials
+## Руководства
 
-ThingsBoard authors have prepared several tutorials to help you get started with designing rule chains by example:
+С помощью следующих инструкций вы сможете создать цепочи правил на конкретном примере:
 
-  * [**Transform incoming messages from device**](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/) 
-  * [**Transform incoming messages using previous messages from device**](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/) 
-  * [**Create and clear alarms on incoming device messages**](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
-  * [**Send emails to customer on device alarm**](/docs/user-guide/rule-engine-2-0/tutorials/send-email/) 
-  * [**Send messages between related devices**](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/)
+  * [**Преобразование входящих сообщений с устройств**](/docs/user-guide/rule-engine-2-0/tutorials/transform-incoming-telemetry/) 
+  * [**Преобразование входящих сообщений на основе предыдущих сообщений с устройств**](/docs/user-guide/rule-engine-2-0/tutorials/transform-telemetry-using-previous-record/) 
+  * [**Создание и удаление сигналов тревоги при поступлении сообщений с устройств**](/docs/user-guide/rule-engine-2-0/tutorials/create-clear-alarms/)
+  * [**Отправка электронных писем клиенту по сигналу тревоги с устройства**](/docs/user-guide/rule-engine-2-0/tutorials/send-email/) 
+  * [**Отправка сообщений между связанными устройствами**](/docs/user-guide/rule-engine-2-0/tutorials/rpc-reply-tutorial/)
   
-See more tutorials [here](https://thingsboard.io/docs/guides/).
+Больше туториалов доступно по ссылке [ссылке](https://thingsboard.io/docs/guides/).
+ 

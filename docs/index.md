@@ -24,7 +24,6 @@ description: Документация к IoT платформе Ростелек
         <li><b><a href="/docs/user-guide/integrations/http/">HTTP</a></b></li>
         <li><b><a href="/docs/user-guide/integrations/mqtt/">MQTT</a></b></li>
         <li><b><a href="/docs/user-guide/integrations/opc-ua/">OPC-UA</a></b></li>
-        <li><b><a href="/docs/user-guide/integrations/sigfox/">SigFox</a></b></li>
     </ul>
 <li><b><a href="/docs/user-guide/groups/">Группировка устройств и объектов</a></b> - возможность настройки множества групп устройств и объектов.</li>
 <li><b><a href="/docs/user-guide/scheduler/">Планировщик</a></b> - возможность планирования различных событий (обновление конфигурации, формирования отчетов, rpc-команды) с гибкими параметрами настройки.</li>
@@ -44,7 +43,7 @@ description: Документация к IoT платформе Ростелек
 
 <h2>IoT шлюзы</h2>
 
-<p>Здесь содержится документация о<b><a href="/docs/iot-gateway/">IoT шлюзах платформы</a></b>.</p>
+<p>Здесь содержится документация о <b><a href="/docs/iot-gateway/">IoT шлюзах платформы</a></b>.</p>
 
 <h2>Видеоуроки</h2>
 

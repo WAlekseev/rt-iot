@@ -1,78 +1,51 @@
 ---
 layout: docwithnav
-assignees:
-- ashvayka
-title: Entity Views
-description: IoT device and asset entity views
+title: Представления сущностей (Entity Views, EVs)
+description: Представления сущностей (Entity Views, EVs)
 redirect_from: "/docs/user-guide/ui/entity-views"
 ---
 
 * TOC
 {:toc}
 
-## Feature Overview
+## Возможности
 
-ThingsBoard(TB) Entity Views (EVs) are available since v2.2. This feature was requested by many TB users. 
-Similar to SQL database views, that limit the degree of exposure of the underlying tables to the outer world, 
-TB EVs limit the degree of exposure of the Device or Asset [telemetry](/docs/user-guide/telemetry/) and [attributes](/docs/user-guide/attributes/) to the [Customers](/docs/user-guide/ui/customers/).
-As a Tenant Administrator, you are able to create multiple EVs per Device or Asset and assign them to different Customers.
+Представления сущностей разграничивают данные и атрибуты с устройств и объектов на клиентов. Тенант админ может создать несколько EVs для каждого устройства или объекта и назначить их разным клиентам.
 
-Supported use cases:
+Поддерживаемые варианты использования:
  
- - **Share** specific device or asset data with multiple Customers simultaneously. Prior EVs feature it was not possible due to restrictions of TB security model.
- - Allow particular Customer users to see collected data (e.g. sensor readings) but **hide debug info** like battery level, system errors, etc.
- - Device-as-a-Service (**DaaS**) model where data collected by the device at different periods of time belongs to different Customers.
+ - **Расшарьте** данные об устройстве или объекте нескольким пользователям одновременно.
+ - Разрешите отдельным пользователям видеть собранные данные (например, показания датчиков), но **скройте от них отладочную информацию**, такую как уровень заряда батареи, системные ошибки и т. д..
+ - Используйте модель "устройство как услуга" (**DaaS**), в которой данные, собранные устройством в разные периоды времени, принадлежат разным клиентам.
 
-## Architecture
+## Архитектура
 
-Entity View contains the following information:
+Entity View содержит следующие данные:
 
- - **TenantId** - represents link to the owner of the view;
- - **CustomerId** - represents link to the customer that has access to the the view;
- - **EntityId** - represents link to the target device or asset;
- - **Name and type** - regular ThingsBoard entity fields that are used for display and search purposes;
- - **Start and end time** - represents time interval that is used to limit access to target device telemetry. Customer will not be able to see entity telemetry that is outside the specified interval; 
- - **Timeseries keys** - list of timeseries data keys that will be accessible to the viewer;
- - **Attribute keys** - list of attribute names that will be accessible to the viewer;
+ - **TenantId** - ссылка на владельца представления;
+ - **CustomerId** - ссылка на клиента, имеющего доступ к представлению;
+ - **EntityId** - ссылка на целевое устройство или объект;
+ - **Имя и тип** - поля сущностей платформы, используемые для отображения и поиска;
+ - **Время начала и окончания** - интервал времени, используемый для ограничения доступа к данным целевого устройства. Клиент не сможет увидеть данные с объекта, вне указанного интервала; 
+ - **Timeseries keys** - список ключей временных рядов данных, которые будут доступны для наблюдателя;
+ - **Attribute keys** - список имен атрибутов, которые будут доступны для наблюдателя;
 
 ![image](/images/user-guide/entity-views/new-entity-view.png) 
  
-It is important to understand how TB handles telemetry and attribute update and how this changes affect Entity Views.
+Важно понимать, как платформа обрабатывает данные и обновляет атрибуты и как эти изменения влияют на EVs.
   
-#### Timeseries data view
+#### Просмотр временных рядов данных
  
-All timeseries data is stored in the database on behalf of target entity. There is no timeseries data duplication to any of the Entity Views. 
-When user opens a dashboard or perform a REST API call on behalf of the entity view id, the following actions take place:
-     
- - Request start and end time stamps are validated and adjusted to fit into Entity View start and end time. 
- Thus, if Dashboard is trying to fetch 1 year of data, but EV is configured to access only 6 month of data.
- - Request timeseries data keys are validated and adjusted based on timeseries data keys provisioned in the Entity View.
- Thus, if Dashboard is trying to fetch the telemetry keys that are forbidden for this particular view, it will fail to do so. 
+Все временные ряды данных хранятся в базе данных от имени целевого объекта. Дублирование временных рядов данных не происходит ни в одном из Entity Views. Когда пользователь открывает дашборд или выполняет вызов REST API от имени entity view-идентификатора, выполняются следующие действия:
+
+ - Метки времени начала и окончания запроса проверяются и корректируются таким образом, чтобы они соответствовали времени начала и окончания Entity View. Например, если дашборд пытается получить данные за 1 год, но EV настроен на доступ только к данным за 6 месяцев.
+
+ - Ключи данных временных рядов запроса проверяются и корректируются на основе ключей данных временных рядов, подготовленных в Entity View. Так, если дашборд пытается получить ключи телеметрии, которые запрещены для этого конкретного представления, он не сможет этого сделать.
+
  
-#### Attributes view
+#### Представления атрибутов
  
-Entity View will automatically copy specified attributes from Target Entity each time you save or update this entity view. 
-For performance reasons target entity attributes are not propagated to entity view on each attribute change. 
-You can enable automatic propagation by configuring "copy to view" rule node in your rule chain and linking "Post attributes" and "Attributes Updated" 
-messages to the new rule node. 
+Entity View автоматически копирует указанные атрибуты из целевого объекта при каждом сохранении или обновлении этого entity view. По соображениям производительности целевые атрибуты объектов не распространяются в entity view при каждом изменении атрибутов. Вы можете включить автоматическое распространение, настроив узел правил “копировать для просмотра” в цепочку правил и связав сообщения “Post attributes” и “Attributes Updated” с новым узлом правил:
  
 ![image](/images/user-guide/entity-views/rule-chain.png) 
 
-## Future improvements
-
-There are following features in ThingsBoard Road Map:
-
- - Add ability to enable/disable RPC requests to the device view;
- - Add ability to configure list of alarms that are accessible(propagated) for particular view.
-
-## Next steps
-
-{% assign currentGuide = "AdvancedFeatures" %}{% include templates/guides-banner.md %}
-
-
-
- 
-
-
- 
-    
