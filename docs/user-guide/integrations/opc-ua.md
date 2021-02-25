@@ -12,7 +12,7 @@ description: OPC-UA интеграция
 
 Интеграция OPC UA позволяет передавать данные с сервера OPC UA на платформу и преобразовывать полезную нагрузку устройства в предусмотренный платформой формат
 
-![image](/images/user-guide/integrations/opc-ua-integration.svg)
+![image](/images/user-guide/integrations/opc-ua-integration.png)
 
 ### Видео-урок
 

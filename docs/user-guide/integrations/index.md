@@ -32,7 +32,7 @@ description: Интеграция платформы
 
 <br/>
 
-<object width="80%" data="/images/user-guide/integrations/integrations-overview.svg"></object>
+<object width="80%" data="/images/user-guide/integrations/integrations-overview.jpg"></object>
  
  
 ### Варианты развертывания

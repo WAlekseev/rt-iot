@@ -20,7 +20,4 @@ tion: Диаграмма подключений платформы
 </tr>
 </table>
 
-{% include mermaid-graph.html 
-graphId="connectivityGraph" 
-file="resources/connectivity.mm" 
-links-json="resources/connectivity-links.json" %}
+<img src="/images/user-guide/connectivity-diagram.png">

@@ -1,19 +1,19 @@
-title: RT Platform
-name: RT Platform
-author: ThingsBoard
+title: Портал документации
+name: Портал документации
+author: МИТ
 logo: /images/thingsboard_logo.png
-url: https://rt.ru
+url: https://www.rt.ru
 
 twitter:
-  username: thingsboard
+  username: none
 
 social:
-  name: ThingsBoard
+  name: none
   links:
-    - https://twitter.com/thingsboard
-    - https://github.com/thingsboard/thingsboard
-    - https://www.facebook.com/thingsboard
-    - https://www.youtube.com/channel/thingsboard
+    - https://twitter.com/none
+    - https://github.com/none
+    - https://www.facebook.com/none
+    - https://www.youtube.com/channel/none
 
 seo:
   type: WebSite

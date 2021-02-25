@@ -12,7 +12,7 @@ description: Архитектура движка правил
 
 <br/>
 
-![image](/images/user-guide/rule-engine-2-0/rule-engine-architecture.svg)
+![image](/images/user-guide/rule-engine-2-0/rule-engine-architecture.png)
  
 ### Модель актора
 

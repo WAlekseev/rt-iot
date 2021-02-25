@@ -27,13 +27,13 @@ RPC платформы делятся на два типа: RPC с устрой�
 
    
    {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/one-way-rpc.svg)
+   ![image](/images/user-guide/one-way-rpc.png)
    {: refdef}
    
  - Two-way RPC-запрос отправляется на устройство, которое затем отправляет ответ в течение определенного времени. Серверный запрос блокируется до тех пор, пока не получит ответ от устройства.
 
    {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/two-way-rpc.svg)
+   ![image](/images/user-guide/two-way-rpc.png)
    {: refdef}
 
 

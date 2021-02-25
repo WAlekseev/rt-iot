@@ -29,7 +29,7 @@ description: Работа с атрибутами IoT-устройств
    Некоторые конфиденциальные данные, которые могут использоваться платформой, но не должны быть доступны устройству. Любая сущность платформы поддерживает server-side атрибуты: устройство, объект, клиент, тенант, правила  и т. д.
    
    {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/server-side-attributes.svg)
+   ![image](/images/user-guide/server-side-attributes.png)
    {: refdef}  
 
  - **client-side** - см. раздел специфические атрибуты устройств
@@ -47,13 +47,13 @@ description: Работа с атрибутами IoT-устройств
  - **client-side** - атрибутом управляет и обменивается с ним данными приложение устройства. Например, текущая версия прошивки, спецификация оборудования и т. д.     
 
    {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/client-side-attributes.svg)
+   ![image](/images/user-guide/client-side-attributes.png)
    {: refdef}  
         
  - **shared** - атрибутом управляет и обменивается с ним данными серверное приложение, видимое для приложения устройства. Например, план подписки клиента, целевая версия прошивки.
    
    {:refdef: style="text-align: center;"}
-   ![image](/images/user-guide/shared-attributes.svg)
+   ![image](/images/user-guide/shared-attributes.png)
    {: refdef}  
 
 ## API атрибутов устройства

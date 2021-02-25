@@ -13,7 +13,7 @@ UDP интеграция позволяет передавать данные с
 
 Для получения большей информации изучите диаграмму интеграции.
 
-![image](/images/user-guide/integrations/udp-integration.svg)
+![image](/images/user-guide/integrations/udp-integration.png)
 
 ## Настройка UDP интеграции
 

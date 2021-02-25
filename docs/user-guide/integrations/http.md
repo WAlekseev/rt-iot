@@ -12,7 +12,7 @@ HTTP интеграция позволяет конвертировать сущ
  
  Для получения подробной информации изучите диаграмму и видео-урок.
 
- ![image](/images/user-guide/integrations/http-integration.svg)
+ ![image](/images/user-guide/integrations/http-integration.png)
  
  В данном видео-уроке вы увидите пошаговую инструкцию по запуске HTTP интеграции.
 

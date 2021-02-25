@@ -14,7 +14,7 @@ description: Отчеты
 Вы можете создавать отчеты с помощью виджетов платформы. Отчеты генерируются как из открытого виджета в конкретный момент времени, так и по определенному графику с помощью [Планировщика](/docs/user-guide/scheduler/#generate-report).
 
 
-![image](/images/user-guide/reporting.svg)
+![image](/images/user-guide/reporting.png)
 
 ### Видеоинструкция
 
